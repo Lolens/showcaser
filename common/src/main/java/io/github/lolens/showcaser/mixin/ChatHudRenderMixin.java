@@ -2,12 +2,12 @@ package io.github.lolens.showcaser.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.lolens.showcaser.client.render.RenderableHoverEvent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.ChatHud;
-import net.minecraft.item.ItemStack;
 import net.minecraft.text.HoverEvent;
 import net.minecraft.text.OrderedText;
 import org.spongepowered.asm.mixin.Final;
@@ -22,6 +22,9 @@ public abstract class ChatHudRenderMixin {
 
     @Shadow @Final private MinecraftClient client;
 
+    @Unique
+    private float showcaser$currentAlpha = 1.0f;
+
     @WrapOperation(
             method = "render",
             at = @At(
@@ -31,15 +34,17 @@ public abstract class ChatHudRenderMixin {
     )
     private int renderItemInline(DrawContext context, TextRenderer textRenderer, OrderedText originalText, int x, int y, int color, Operation<Integer> original) {
 
+        this.showcaser$currentAlpha = ((color >> 24) & 0xFF) / 255.0f;
+
         int result = original.call(context, textRenderer, originalText, x, y, color);
 
-        showcaser$renderIcons(context, originalText, x, y);
+        showcaser$renderIcons(context, originalText, x, y, showcaser$currentAlpha);
 
         return result;
     }
 
     @Unique
-    private void showcaser$renderIcons(DrawContext context, OrderedText originalText, int baseX, int baseY) {
+    private void showcaser$renderIcons(DrawContext context, OrderedText originalText, int baseX, int baseY, float alpha) {
         final float[] currentX = {0};
         final float scale = (float) getChatScale();
 
@@ -51,7 +56,9 @@ public abstract class ChatHudRenderMixin {
                     float renderX = baseX + currentX[0] * scale;
                     float renderY = baseY;
 
+                    RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, alpha);
                     renderableHover.getRenderer().render(context, renderX, renderY, scale);
+                    RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
                 }
                 return true;
             }
