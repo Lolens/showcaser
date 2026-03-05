@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import dev.architectury.fluid.FluidStack;
 import dev.architectury.hooks.fluid.FluidStackHooks;
 import dev.architectury.platform.Platform;
+import io.github.lolens.showcaser.Showcaser;
 import io.github.lolens.showcaser.config.ConfigManager;
 import io.github.lolens.showcaser.util.RenderUtils;
 import net.minecraft.client.gui.DrawContext;
@@ -29,6 +30,7 @@ public class ShareableFluidStack implements ShareableResource {
     public Object get() {
         return fluidStack;
     }
+
     @Override
     public boolean isEmpty() {
         return fluidStack.isEmpty();
@@ -64,10 +66,7 @@ public class ShareableFluidStack implements ShareableResource {
         tooltip.add(nameText);
 
         if (showAmount) {
-            tooltip.add(buildFluidAmountText(
-                    amount,
-                    false
-            ));
+            tooltip.add(getFluidAmountText(amount));
         }
 
         if (fluidStack.hasTag()) {
@@ -80,21 +79,49 @@ public class ShareableFluidStack implements ShareableResource {
         return buildTooltip(fluidStack.getFluid(), convertToMillibuckets(fluidStack.getAmount()), showAmount);
     }
 
-    public Text buildFluidAmountText(boolean alwaysInMillibuckets) {
-        return buildFluidAmountText(convertToMillibuckets(fluidStack.getAmount()), alwaysInMillibuckets);
+    public Text getFluidAmountText() {
+        return getFluidAmountText(convertToMillibuckets(fluidStack.getAmount()));
     }
 
-    // TODO add option to shrink count by thousands/millions etc
     // convert to mBs before using this method
-    public static Text buildFluidAmountText(long mbAmount, boolean alwaysInMillibuckets) {
+    public static Text getFluidAmountText(long mbAmount) {
         String blankSpace = ConfigManager.getConfig().addEmptySpaceAfterFluidAmount ? " " : "";
 
-        if (mbAmount < 1000 || alwaysInMillibuckets) {
-            return Text.of(String.format("%d%smB", mbAmount, blankSpace));
-        } else {
-            return Text.of(String.format("%d%sB", mbAmount / 1000, blankSpace));
-        }
+        return Text.of(blankSpace + formatFluid(mbAmount));
     }
+
+    private static final String[] UNITS = {
+            "mB", "B", "K B", "M B", "G B", "T B"
+    };
+
+    public static String formatFluid(long mbAmount) {
+        Showcaser.LOGGER.warn("in format fluid with {}", mbAmount);
+        long value = mbAmount;
+        long divisor = 1;
+        int unit = 0;
+
+        while (value >= 1000 && unit < UNITS.length - 1) {
+            value /= 1000;
+            divisor *= 1000;
+            unit++;
+        }
+
+        if (value < 10 && unit > 0) {
+
+            long whole = mbAmount / divisor;
+            long decimal = (mbAmount % divisor) * 10 / divisor;
+
+            if (decimal > 0) {
+                return whole + "." + decimal + " " + UNITS[unit];
+            }
+
+            return whole + " " + UNITS[unit];
+        }
+
+        return value + " " + UNITS[unit];
+    }
+
+
 
     public static long convertToMillibuckets(long amount) {
         if (Platform.isFabric()) {
@@ -129,7 +156,7 @@ public class ShareableFluidStack implements ShareableResource {
                 sprite
         );
 
-        RenderSystem.setShaderColor(1f,1f,1f,1f);
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
         context.getMatrices().pop();
 
     }
