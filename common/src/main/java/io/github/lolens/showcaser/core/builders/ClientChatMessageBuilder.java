@@ -208,7 +208,7 @@ public final class ClientChatMessageBuilder {
         }
 
         if (resource instanceof ShareableFluidStack fluidStack) {
-            return fluidStack.buildFluidAmountText(false)
+            return fluidStack.getFluidAmountText()
                     .copy()
                     .append(" ")
                     .append(name);
