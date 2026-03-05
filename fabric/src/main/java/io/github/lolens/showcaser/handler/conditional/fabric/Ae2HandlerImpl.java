@@ -107,6 +107,7 @@ public class Ae2HandlerImpl {
                     MutableText text = ClientChatMessageBuilder.create(context, player, resource)
                             .setVerified(VERIFIED)
                             .withWidth(12)
+                            .showAmount(true)
                             .build();
 
                     MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(text);
