@@ -12,6 +12,8 @@ import net.minecraft.util.Formatting;
 
 public final class ClientChatMessageBuilder {
 
+    private static final String VERIFIED_KEY = "showcaser_verified";
+
     public static final Text UNVERIFIED_MESSAGE =
             Text.translatable("showcaser.chat.share_message.tooltip.unverified")
                     .formatted(Formatting.RED, Formatting.BOLD);
@@ -141,20 +143,17 @@ public final class ClientChatMessageBuilder {
 
     public MutableText build() {
 
-        Text fullTooltip = Texts.join(resource.getTooltip(), Text.literal("\n"));
 
-        fullTooltip = buildTooltip(fullTooltip);
-
-        RenderableHoverEvent hoverEvent = new RenderableHoverEvent(
-                iconWidth,
-                resource,
-                fullTooltip
-        );
+        RenderableHoverEvent hoverEvent = buildHoverEvent();
 
         MutableText marker = Text.literal(String.valueOf(MARKER))
                 .styled(style -> style
                         .withClickEvent(clickEvent)
                         .withHoverEvent(hoverEvent)
+                        // full message should be colored or it looks bad
+                        .withFormatting(resource instanceof ShareableItemStack stack
+                                ? stack.getRarity().formatting
+                                : Formatting.WHITE)
                 );
 
         MutableText content = buildContent();
@@ -163,7 +162,7 @@ public final class ClientChatMessageBuilder {
             content = content.styled(style -> style.withParent(contentStyle));
         }
 
-        MutableText displayText = buildMessage(content);
+        MutableText displayText = useBrackets ? Texts.bracketed(content) : content;
 
         return Text.translatable(
                 translationKey,
@@ -174,20 +173,35 @@ public final class ClientChatMessageBuilder {
 
     // === HELPERS ===
 
-    private MutableText buildMessage(MutableText content) {
-        MutableText displayText = useBrackets ? Texts.bracketed(content) : content;
 
-        // if stack has rarity then set message content rarity to stack's
-        if (resource instanceof ShareableItemStack stack) {
-            ItemStack actualStack = (ItemStack) stack.get();
-            displayText.formatted(actualStack.getRarity().formatting);
+    private RenderableHoverEvent buildHoverEvent() {
+
+        if (resource instanceof ShareableItemStack shareableItemStack) {
+
+            ItemStack stack = prepareRenderStack(shareableItemStack);
+            return new RenderableHoverEvent(
+                    iconWidth,
+                    resource,
+                    stack
+            );
         }
-        return displayText;
+
+        Text fullTooltip = buildTooltip();
+        return new RenderableHoverEvent(
+                iconWidth,
+                resource,
+                fullTooltip
+        );
     }
 
     private MutableText buildContent() {
-        Text name = resource.getDisplayName();
         long amount = resource.getAmount();
+
+        Text name = resource.getDisplayName().copy();
+
+        if (resource instanceof ShareableItemStack itemStack && itemStack.hasCustomName()) {
+            name = name.copy().formatted(Formatting.ITALIC);
+        }
 
         if (!showAmount || amount <= 1) {
             return name.copy();
@@ -195,25 +209,29 @@ public final class ClientChatMessageBuilder {
 
         if (resource instanceof ShareableFluidStack fluidStack) {
             return fluidStack.buildFluidAmountText(false)
-                    .copy().append(" ").append(name);
+                    .copy()
+                    .append(" ")
+                    .append(name);
         }
-        if (resource instanceof ShareableItemStack itemStack) {
-            ItemStack actualStack = ((ItemStack) itemStack.get());
 
-            // if stack has custom name then display italic todo fix italic overwriting by rarity
-            name = actualStack.hasCustomName()
-                    ? actualStack.getName().copy().formatted(Formatting.ITALIC)
-                    : actualStack.getName().copy();
-
-
-            return Text.literal("x" + amount + " ").append(name);
+        if (resource instanceof ShareableItemStack) {
+            return Text.literal("x")
+                    .append(String.valueOf(amount))
+                    .append(" ")
+                    .append(name);
         }
 
         throw new IllegalStateException("Tried building content for unknown resource");
     }
 
 
-    private Text buildTooltip(Text tooltip) {
+
+    private Text buildTooltip() {
+        Text tooltip = Texts.join(
+                resource.getTooltip(),
+                Text.literal("\n")
+        );
+
         if (verifiedType == VerifiedType.VERIFIED) {
             return markAsVerified(tooltip);
         }
@@ -221,6 +239,22 @@ public final class ClientChatMessageBuilder {
             return markAsUnverified(tooltip);
         }
         return tooltip;
+    }
+
+    // modifies resource's itemStack's copy to contain verified marker in nbt
+    private ItemStack prepareRenderStack(ShareableItemStack resource) {
+        ItemStack copy = ((ItemStack) resource.get()).copy();
+
+        if (ConfigManager.getConfig().ignoreCustomNames) copy.setCustomName(null);
+
+        if (verifiedType == VerifiedType.VERIFIED) {
+            copy.getOrCreateNbt().putBoolean(VERIFIED_KEY, true);
+        }
+        if (verifiedType == VerifiedType.UNVERIFIED) {
+            copy.getOrCreateNbt().putBoolean(VERIFIED_KEY, false);
+        }
+
+        return copy;
     }
 
     public static Text markAsVerified(Text text) {

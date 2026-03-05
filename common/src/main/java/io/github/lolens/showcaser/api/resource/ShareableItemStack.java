@@ -1,12 +1,12 @@
 package io.github.lolens.showcaser.api.resource;
 
-import io.github.lolens.showcaser.Showcaser;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
+import net.minecraft.util.Rarity;
 
 import java.util.List;
 
@@ -52,8 +52,16 @@ public class ShareableItemStack implements ShareableResource {
         return amount;
     }
 
+    public boolean hasCustomName() {
+        return itemStack.hasCustomName();
+    }
+
     public List<Text> getTooltip() {
         return itemStack.getTooltip(client.player, TooltipContext.BASIC);
+    }
+
+    public Rarity getRarity() {
+        return itemStack.getRarity();
     }
 
     @Override
