@@ -34,7 +34,7 @@ public abstract class ChatHudRenderMixin {
     )
     private int renderItemInline(DrawContext context, TextRenderer textRenderer, OrderedText originalText, int x, int y, int color, Operation<Integer> original) {
 
-        this.showcaser$currentAlpha = ((color >> 24) & 0xFF) / 255.0f;
+        this.showcaser$currentAlpha = ((color >> 24) & 0xFF) / 255.0f; // 0f to 1f
 
         int result = original.call(context, textRenderer, originalText, x, y, color);
 
