@@ -1,5 +1,6 @@
 package io.github.lolens.showcaser.core.builders;
 
+import io.github.lolens.showcaser.Showcaser;
 import io.github.lolens.showcaser.api.resource.ShareableFluidStack;
 import io.github.lolens.showcaser.api.resource.ShareableItemStack;
 import io.github.lolens.showcaser.api.resource.ShareableResource;
@@ -143,7 +144,6 @@ public final class ClientChatMessageBuilder {
 
     public MutableText build() {
 
-
         RenderableHoverEvent hoverEvent = buildHoverEvent();
 
         MutableText marker = Text.literal(String.valueOf(MARKER))
@@ -155,6 +155,7 @@ public final class ClientChatMessageBuilder {
                                 ? stack.getRarity().formatting
                                 : Formatting.WHITE)
                 );
+
 
         MutableText content = buildContent();
 

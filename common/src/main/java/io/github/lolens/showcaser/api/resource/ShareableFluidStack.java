@@ -19,7 +19,6 @@ import java.util.List;
 
 public class ShareableFluidStack implements ShareableResource {
 
-    // private final Identifier id = Identifier.of(Showcaser.MOD_ID, "fluid_stack");
     private final FluidStack fluidStack;
 
     public ShareableFluidStack(FluidStack fluidStack) {
@@ -85,13 +84,11 @@ public class ShareableFluidStack implements ShareableResource {
 
     // convert to mBs before using this method
     public static Text getFluidAmountText(long mbAmount) {
-        String blankSpace = ConfigManager.getConfig().addEmptySpaceAfterFluidAmount ? " " : "";
-
-        return Text.of(blankSpace + formatFluid(mbAmount));
+        return Text.of(formatFluid(mbAmount));
     }
 
     private static final String[] UNITS = {
-            "mB", "B", "K B", "M B", "G B", "T B"
+            " mB", " B", "K B", "M B", "G B", "T B"
     };
 
     public static String formatFluid(long mbAmount) {
@@ -112,13 +109,13 @@ public class ShareableFluidStack implements ShareableResource {
             long decimal = (mbAmount % divisor) * 10 / divisor;
 
             if (decimal > 0) {
-                return whole + "." + decimal + " " + UNITS[unit];
+                return whole + "." + decimal + UNITS[unit];
             }
 
-            return whole + " " + UNITS[unit];
+            return whole + UNITS[unit];
         }
 
-        return value + " " + UNITS[unit];
+        return value + UNITS[unit];
     }
 
 

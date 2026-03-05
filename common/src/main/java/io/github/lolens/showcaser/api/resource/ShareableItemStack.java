@@ -11,7 +11,6 @@ import net.minecraft.util.Rarity;
 import java.util.List;
 
 public class ShareableItemStack implements ShareableResource {
-    // private final Identifier id = Identifier.of(Showcaser.MOD_ID, "item_stack");
     private MinecraftClient client = MinecraftClient.getInstance();
 
     private final ItemStack itemStack;
