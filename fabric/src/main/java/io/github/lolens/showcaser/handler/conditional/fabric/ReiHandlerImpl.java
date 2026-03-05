@@ -95,7 +95,6 @@ public class ReiHandlerImpl {
                     MutableText text = Text.empty();
 
                     if (entryType == VanillaEntryTypes.ITEM) {
-                        ItemStack itemStack = entryStack.castValue();
                         text = ClientChatMessageBuilder.create(context, player, resource)
                                 .withWidth(12)
                                 .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
@@ -106,7 +105,6 @@ public class ReiHandlerImpl {
                                 .build();
                     }
                     if (entryType == VanillaEntryTypes.FLUID) {
-                        FluidStack fluidStack = entryStack.castValue();
                         text = ClientChatMessageBuilder.create(context, player, resource)
                                 .showAmount(false)
                                 .withWidth(12)
