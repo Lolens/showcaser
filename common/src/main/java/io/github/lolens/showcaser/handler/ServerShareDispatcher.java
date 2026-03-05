@@ -33,7 +33,7 @@ public class ServerShareDispatcher {
         }
 
         if (out != null) {
-            new ShareDisplayMessage(out).sendToAll(GameInstance.getServer());
+            new ShareDisplayMessage(out, player.getDisplayName().getString()).sendToAll(GameInstance.getServer());
         } else {
             // can happen when screens override vanilla slot logic and client thinks that slot is not empty and sends this slot id to the server
             // but server cant get slot by handler.getSlot(slotIndex) or gets wrong slot

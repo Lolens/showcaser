@@ -51,9 +51,6 @@ public class CreativeInventoryHandler {
         ClientHandlerBuilder.<CreativeInventoryScreen>create(ID)
                 .forScreen(CreativeInventoryScreen.class)
                 .createContext((screen, contextConsumer) -> {
-
-                    Showcaser.LOGGER.info(screen.getClass().getName());
-
                     CreativeInventoryScreen.CreativeScreenHandler handler = screen.getScreenHandler();
 
                     ItemGroup.Type type = ((CreativeInventoryScreenMixin) screen).showcaser$getSelectedTab().getType();

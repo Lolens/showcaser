@@ -60,8 +60,6 @@ public class FallbackHandler {
         ClientHandlerBuilder.<HandledScreen>create(ID)
                 .forScreen(HandledScreen.class)
                 .createContext((screen, contextConsumer) -> {
-                    Showcaser.LOGGER.info(screen.getClass().getName());
-
                     Slot slot = ((HandledScreenMixin) screen).showcaser$getFocusedSlot();
 
                     if (slot == null || !slot.hasStack()) return HandlerResult.PASS;

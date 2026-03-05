@@ -11,14 +11,17 @@ import net.minecraft.network.PacketByteBuf;
 
 public class ShareDisplayMessage extends BaseS2CMessage {
 
+    String senderName;
     ShareContext shareContext;
 
     public ShareDisplayMessage(PacketByteBuf buf) {
-        shareContext = ShareContext.deserialize(buf);
+        this.shareContext = ShareContext.deserialize(buf);
+        this.senderName = buf.readString();
     }
 
-    public ShareDisplayMessage(ShareContext context) {
+    public ShareDisplayMessage(ShareContext context, String senderName) {
         this.shareContext = context;
+        this.senderName = senderName;
         Showcaser.LOGGER.info("new S2C DisplayMessage: {}", shareContext);
     }
 
@@ -30,6 +33,7 @@ public class ShareDisplayMessage extends BaseS2CMessage {
     @Override
     public void write(PacketByteBuf buf) {
         shareContext.serialize(buf);
+        buf.writeString(senderName);
     }
 
     @Override

@@ -1,8 +1,8 @@
 package io.github.lolens.showcaser.handler.conditional.fabric;
 
-import dev.architectury.fluid.FluidStack;
 import dev.architectury.platform.Platform;
 import dev.architectury.utils.Env;
+import io.github.lolens.showcaser.Showcaser;
 import io.github.lolens.showcaser.adapter.AdapterFactory;
 import io.github.lolens.showcaser.api.HandlerResult;
 import io.github.lolens.showcaser.api.resource.ShareableResource;
@@ -19,7 +19,6 @@ import me.shedaniel.rei.api.common.entry.type.EntryType;
 import me.shedaniel.rei.api.common.entry.type.VanillaEntryTypes;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.MutableText;
@@ -70,6 +69,11 @@ public class ReiHandlerImpl {
 
                     EntryType<?> entryType = entryStack.getType();
                     NbtCompound entryNbt = entryStack.saveStack();
+
+                    if (entryNbt == null) {
+                        Showcaser.LOGGER.warn("Tried creating context for stack that cannot be saved to nbt. Screen: {}",
+                                screen.getClass().getName());
+                    }
 
                     if (entryType == VanillaEntryTypes.ITEM) {
                         entryNbt.putString("type", "minecraft:item");
