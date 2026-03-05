@@ -3,8 +3,9 @@ package io.github.lolens.showcaser.handler.vanilla;
 import dev.architectury.platform.Platform;
 import dev.architectury.utils.Env;
 import io.github.lolens.showcaser.Showcaser;
+import io.github.lolens.showcaser.adapter.AdapterFactory;
 import io.github.lolens.showcaser.api.HandlerResult;
-import io.github.lolens.showcaser.client.render.icon.ItemStackIconRenderer;
+import io.github.lolens.showcaser.api.resource.ShareableResource;
 import io.github.lolens.showcaser.core.builders.ClientChatMessageBuilder;
 import io.github.lolens.showcaser.core.builders.handler.ClientHandlerBuilder;
 import io.github.lolens.showcaser.core.builders.handler.ServerHandlerBuilder;
@@ -12,11 +13,8 @@ import io.github.lolens.showcaser.mixin.CreativeInventoryScreenHandlerMixin;
 import io.github.lolens.showcaser.mixin.CreativeInventoryScreenMixin;
 import io.github.lolens.showcaser.mixin.HandledScreenMixin;
 import io.github.lolens.showcaser.model.ShareContext;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
-import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
@@ -49,7 +47,6 @@ public class CreativeInventoryHandler {
                 .register();
     }
 
-    @Environment(EnvType.CLIENT)
     private static void registerClient() {
         ClientHandlerBuilder.<CreativeInventoryScreen>create(ID)
                 .forScreen(CreativeInventoryScreen.class)
@@ -108,21 +105,14 @@ public class CreativeInventoryHandler {
                     return HandlerResult.STOP;
                 })
                 .display((player, context) -> {
-                    MutableText text = ClientChatMessageBuilder.create(context, player, "item")
+                    ShareableResource resource = AdapterFactory.fromContext(context);
+
+                    MutableText text = ClientChatMessageBuilder.create(context, player, resource)
                             .setVerified(VERIFIED)
                             .withWidth(12)
-                            .withDisplayStack(context.getItemStack("stack"))
                             .build();
 
                     MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(text);
-                })
-                .withIcon("item", context -> {
-                    ItemStack stack = context.getItemStack("stack");
-                    return new ItemStackIconRenderer(stack);
-                })
-                .withTooltip("item", (context, player) -> {
-                    ItemStack stack = context.getItemStack("stack");
-                    return stack.getTooltip(player, TooltipContext.BASIC);
                 })
                 .register();
     }

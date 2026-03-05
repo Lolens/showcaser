@@ -1,10 +1,7 @@
 package io.github.lolens.showcaser.handler.conditional.forge;
 
 import appeng.api.config.Actionable;
-import appeng.api.stacks.AEFluidKey;
-import appeng.api.stacks.AEItemKey;
 import appeng.api.stacks.AEKey;
-import appeng.api.stacks.AEKeyType;
 import appeng.client.gui.implementations.UpgradeableScreen;
 import appeng.client.gui.me.common.MEStorageScreen;
 import appeng.client.gui.me.common.RepoSlot;
@@ -13,12 +10,11 @@ import appeng.menu.me.common.GridInventoryEntry;
 import appeng.menu.me.common.MEStorageMenu;
 import appeng.menu.slot.FakeSlot;
 import appeng.menu.slot.PatternTermSlot;
-import dev.architectury.fluid.FluidStack;
 import dev.architectury.platform.Platform;
 import dev.architectury.utils.Env;
+import io.github.lolens.showcaser.adapter.AdapterFactory;
 import io.github.lolens.showcaser.api.HandlerResult;
-import io.github.lolens.showcaser.client.render.icon.FluidStackIconRenderer;
-import io.github.lolens.showcaser.client.render.icon.ItemStackIconRenderer;
+import io.github.lolens.showcaser.api.resource.ShareableResource;
 import io.github.lolens.showcaser.core.builders.ClientChatMessageBuilder;
 import io.github.lolens.showcaser.core.builders.handler.ClientHandlerBuilder;
 import io.github.lolens.showcaser.core.builders.handler.ServerHandlerBuilder;
@@ -26,13 +22,10 @@ import io.github.lolens.showcaser.exception.ServerShareProcessingException;
 import io.github.lolens.showcaser.forge.mixin.MEStorageMenuInvoker;
 import io.github.lolens.showcaser.model.ShareContext;
 import io.github.lolens.showcaser.registry.CachedPriorityRegistry;
-import io.github.lolens.showcaser.util.FluidUtils;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.item.TooltipContext;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 import static io.github.lolens.showcaser.Showcaser.MOD_ID;
@@ -109,51 +102,14 @@ public class Ae2HandlerImpl {
                     return HandlerResult.PASS;
                 })
                 .display((player, context) -> {
-                    NbtCompound keyCompound = context.getCompound("key");
-                    long amount = context.getAmount();
-                    AEKey key = AEKey.fromTagGeneric(keyCompound);
+                    ShareableResource resource = AdapterFactory.fromContext(context);
 
-                    var type = key.getType();
-                    MutableText text = Text.empty();
+                    MutableText text = ClientChatMessageBuilder.create(context, player, resource)
+                            .setVerified(VERIFIED)
+                            .withWidth(12)
+                            .build();
 
-                    if (type == AEKeyType.items()) {
-                        AEItemKey itemKey = (AEItemKey) key;
-                        text = ClientChatMessageBuilder.create(context, player, "item")
-                                .withCustomStack(itemKey.getDisplayName(), amount)
-                                .setVerified(VERIFIED)
-                                .withWidth(12)
-                                .build();
-                    }
-
-                    if (type == AEKeyType.fluids()) {
-                        AEFluidKey fluidKey = (AEFluidKey) key;
-                        text = ClientChatMessageBuilder.create(context, player, "fluid")
-                                .withCustomStack(fluidKey.getDisplayName(), FluidUtils.convertToMillibuckets(amount))
-                                .setVerified(VERIFIED)
-                                .withWidth(12)
-                                .displayAsFluid(true)
-                                .build();
-                    }
                     MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(text);
-                })
-                .withIcon("item", context -> {
-                    AEItemKey key = (AEItemKey) AEKey.fromTagGeneric(context.getCompound("key"));
-                    return new ItemStackIconRenderer(key.toStack());
-                })
-                .withTooltip("item", (context, player) -> {
-                    AEItemKey key = (AEItemKey) AEKey.fromTagGeneric(context.getCompound("key"));
-                    return key.toStack().getTooltip(player, TooltipContext.BASIC);
-                })
-                .withIcon("fluid", context -> {
-                    AEFluidKey key = (AEFluidKey) AEKey.fromTagGeneric(context.getCompound("key"));
-                    FluidStack fluidStack = FluidStack.create(key.getFluid(), 1000);
-                    return new FluidStackIconRenderer(fluidStack);
-                })
-                .withTooltip("fluid", (context, player) -> {
-                    AEFluidKey key = (AEFluidKey) AEKey.fromTagGeneric(context.getCompound("key"));
-                    long amount = context.getLong("amount");
-                    FluidStack fluidStack = FluidStack.create(key.getFluid(), amount);
-                    return FluidUtils.buildTooltip(fluidStack, player, true);
                 })
                 .register();
     }

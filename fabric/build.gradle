@@ -43,7 +43,9 @@ dependencies {
     modImplementation("curse.maven:applied-energistics-2-223794:7148494")
 
     // TODO remove later
-    modLocalRuntime("me.shedaniel:RoughlyEnoughItems-fabric:$rei_version")
+    // adding rei api with runtime to platform build.gradle crashes the game upon opening ae2 screen
+    modCompileOnly("me.shedaniel:RoughlyEnoughItems-api-fabric:${rei_version}")
+
 
     modCompileOnly("dev.emi:emi-fabric:${emi_version}")
 

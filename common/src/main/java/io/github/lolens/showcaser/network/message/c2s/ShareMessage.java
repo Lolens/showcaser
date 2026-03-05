@@ -3,6 +3,7 @@ package io.github.lolens.showcaser.network.message.c2s;
 import dev.architectury.networking.NetworkManager;
 import dev.architectury.networking.simple.BaseC2SMessage;
 import dev.architectury.networking.simple.MessageType;
+import io.github.lolens.showcaser.Showcaser;
 import io.github.lolens.showcaser.handler.ServerShareDispatcher;
 import io.github.lolens.showcaser.model.ShareContext;
 import io.github.lolens.showcaser.network.Networking;
@@ -14,6 +15,7 @@ public class ShareMessage extends BaseC2SMessage {
 
     public ShareMessage(ShareContext shareContext) {
         this.shareContext = shareContext;
+        Showcaser.LOGGER.info("new S2C ShareMessage: {}", shareContext);
     }
 
     public ShareMessage(PacketByteBuf buf) { // deserializer

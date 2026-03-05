@@ -21,7 +21,6 @@ public class ShareContext {
         this.id = id;
         this.syncId = syncId;
         this.data = data;
-        Showcaser.LOGGER.info("new C2S ShareContext: {}", this);
     }
 
     protected ShareContext(Identifier id, NbtCompound data) {

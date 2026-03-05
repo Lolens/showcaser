@@ -1,4 +1,4 @@
-package io.github.lolens.showcaser.client.render.icon;
+package io.github.lolens.showcaser.api.resource;
 
 import net.minecraft.client.gui.DrawContext;
 

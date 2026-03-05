@@ -13,5 +13,4 @@ public interface HandlerRegistrationEvent {
     void registerClient(ClientHandlerBuilder.ClientSummary<?> summary);
     void registerServer(ServerHandlerBuilder.ServerSummary<?> summary);
 
-
 }

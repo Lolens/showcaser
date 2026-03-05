@@ -1,6 +1,6 @@
 package io.github.lolens.showcaser.client.render;
 
-import io.github.lolens.showcaser.client.render.icon.IconRenderer;
+import io.github.lolens.showcaser.api.resource.IconRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.HoverEvent;
 import net.minecraft.text.Text;

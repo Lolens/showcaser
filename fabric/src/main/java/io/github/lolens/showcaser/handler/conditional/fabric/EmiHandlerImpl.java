@@ -1,32 +1,23 @@
 package io.github.lolens.showcaser.handler.conditional.fabric;
 
-import dev.architectury.fluid.FluidStack;
 import dev.architectury.platform.Platform;
 import dev.architectury.utils.Env;
 import dev.emi.emi.api.EmiApi;
 import dev.emi.emi.api.stack.*;
 import dev.emi.emi.registry.EmiIngredientSerializers;
 import dev.emi.emi.screen.RecipeScreen;
-import io.github.lolens.showcaser.Showcaser;
+import io.github.lolens.showcaser.adapter.AdapterFactory;
 import io.github.lolens.showcaser.api.HandlerResult;
-import io.github.lolens.showcaser.client.render.icon.FluidStackIconRenderer;
-import io.github.lolens.showcaser.client.render.icon.ItemStackIconRenderer;
+import io.github.lolens.showcaser.api.resource.ShareableResource;
 import io.github.lolens.showcaser.command.ServerCommands;
 import io.github.lolens.showcaser.core.builders.ClientChatMessageBuilder;
 import io.github.lolens.showcaser.core.builders.handler.ClientHandlerBuilder;
 import io.github.lolens.showcaser.core.builders.handler.ServerHandlerBuilder;
 import io.github.lolens.showcaser.model.ShareContext;
 import io.github.lolens.showcaser.network.Networking;
-import io.github.lolens.showcaser.util.FluidUtils;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.item.TooltipContext;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.ItemStack;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
@@ -57,7 +48,6 @@ public class EmiHandlerImpl {
                 .register();
     }
 
-    @Environment(EnvType.CLIENT)
     private static void registerClient() {
         ClientHandlerBuilder.create(ID)
                 .forScreen(null)
@@ -104,7 +94,8 @@ public class EmiHandlerImpl {
                     return HandlerResult.PASS;
                 })
                 .display((player, context) -> {
-                    EmiIngredient emiIngredient = EmiIngredientSerializers.deserialize(context.getJsonElement());
+                    ShareableResource resource = AdapterFactory.fromContext(context);
+
                     String clickEventString;
 
                     if (context.hasIdentifier()) {
@@ -114,53 +105,16 @@ public class EmiHandlerImpl {
                         clickEventString = String.format("/showcaser emi open %s", context.getJsonAsNbt());
                     }
 
-                    MutableText text = Text.empty();
-
-                    if (emiIngredient instanceof ItemEmiStack itemEmiStack) {
-
-                        text = ClientChatMessageBuilder.create(context, player, "item")
-                                .withDisplayStack(itemEmiStack.getItemStack())
-                                .showAmount(false)
-                                .withWidth(12)
-                                .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, clickEventString))
-                                .withFormatting(Formatting.UNDERLINE)
-                                .setVerified(NONE)
-                                .withTranslationKey("showcaser.chat.share_message.recipe")
-                                .build();
-                    }
-
-                    if (emiIngredient instanceof FluidEmiStack fluidEmiStack) {
-                        FluidStack fluidStack = FluidStack.create((Fluid) fluidEmiStack.getKey(), 1000);
-                        text = ClientChatMessageBuilder.create(context, player, "fluid")
-                                .withCustomStack(fluidStack.getName(), 1000) // amount does not matter probably
-                                .withWidth(12)
-                                .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, clickEventString))
-                                .withFormatting(Formatting.UNDERLINE)
-                                .showAmount(false)
-                                .setVerified(NONE)
-                                .withTranslationKey("showcaser.chat.share_message.recipe")
-                                .build();
-                    }
+                    MutableText text = ClientChatMessageBuilder.create(context, player, resource)
+                            .withWidth(12)
+                            .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, clickEventString))
+                            .withFormatting(Formatting.UNDERLINE)
+                            .showAmount(false)
+                            .setVerified(NONE)
+                            .withTranslationKey("showcaser.chat.share_message.recipe")
+                            .build();
 
                     MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(text);
-                })
-                .withIcon("item", context -> {
-                    ItemEmiStack itemEmiStack = (ItemEmiStack) EmiIngredientSerializers.deserialize(context.getJsonElement());
-                    return new ItemStackIconRenderer(itemEmiStack.getItemStack());
-                })
-                .withTooltip("item", (context, player) -> {
-                    ItemEmiStack fluidEmiStack = (ItemEmiStack) EmiIngredientSerializers.deserialize(context.getJsonElement());
-                    return fluidEmiStack.getItemStack().getTooltip(player, TooltipContext.BASIC);
-                })
-                .withIcon("fluid", context -> {
-                    FluidEmiStack fluidEmiStack = (FluidEmiStack) EmiIngredientSerializers.deserialize(context.getJsonElement());
-                    FluidStack fluidStack = (FluidStack.create((Fluid) fluidEmiStack.getKey(), 1000));
-                    return new FluidStackIconRenderer(fluidStack);
-                })
-                .withTooltip("fluid", (context, player) -> {
-                    FluidEmiStack fluidEmiStack = (FluidEmiStack) EmiIngredientSerializers.deserialize(context.getJsonElement());
-                    FluidStack fluidStack = (FluidStack.create((Fluid) fluidEmiStack.getKey(), 1000));
-                    return FluidUtils.buildTooltip(fluidStack, player, false);
                 })
                 .register();
     }

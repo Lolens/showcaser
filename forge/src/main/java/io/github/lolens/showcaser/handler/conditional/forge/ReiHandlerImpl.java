@@ -1,7 +1,6 @@
-package io.github.lolens.showcaser.handler.conditional;
+package io.github.lolens.showcaser.handler.conditional.forge;
 
 import dev.architectury.fluid.FluidStack;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.platform.Platform;
 import dev.architectury.utils.Env;
 import io.github.lolens.showcaser.adapter.AdapterFactory;
@@ -33,7 +32,7 @@ import java.util.Optional;
 import static io.github.lolens.showcaser.Showcaser.MOD_ID;
 import static io.github.lolens.showcaser.core.builders.ClientChatMessageBuilder.VerifiedType.NONE;
 
-public class ReiHandler {
+public class ReiHandlerImpl {
 
     private static final Identifier ID = Identifier.of(MOD_ID, "rei");
 

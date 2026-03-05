@@ -5,14 +5,9 @@ import io.github.lolens.showcaser.api.ClientShareHandler;
 import io.github.lolens.showcaser.api.DisplayHandler;
 import io.github.lolens.showcaser.api.HandlerResult;
 import io.github.lolens.showcaser.api.event.HandlerRegistrationEvent;
-import io.github.lolens.showcaser.client.render.icon.IconRenderer;
-import io.github.lolens.showcaser.client.render.icon.IconRendererRegistry;
-import io.github.lolens.showcaser.client.render.tooltip.TooltipProvider;
-import io.github.lolens.showcaser.client.render.tooltip.TooltipProviderRegistry;
+import io.github.lolens.showcaser.api.resource.IconRenderer;
 import io.github.lolens.showcaser.model.ShareContext;
 import io.github.lolens.showcaser.registry.ShareHandlerRegistrar;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
@@ -26,14 +21,13 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-@Environment(EnvType.CLIENT)
+
 public class ClientHandlerBuilder<T extends Screen> {
     private final Identifier id;
     private Class<T> screenClass;
     private BiFunction<T, Consumer<ShareContext>, HandlerResult> contextCreator;
     private BiConsumer<PlayerEntity, ShareContext> display;
     private final Map<String, Function<ShareContext, IconRenderer>> iconRenderers = new HashMap<>();
-    private final Map<String, TooltipProvider> tooltipProviders = new HashMap<>();
 
     private ClientHandlerBuilder(Identifier id) {
         this.id = id;
@@ -58,16 +52,6 @@ public class ClientHandlerBuilder<T extends Screen> {
         return this;
     }
 
-    public ClientHandlerBuilder<T> withIcon(String type, Function<ShareContext, IconRenderer> factory) {
-        iconRenderers.put(type, factory);
-        return this;
-    }
-
-    public ClientHandlerBuilder<T> withTooltip(String type, TooltipProvider provider) {
-        tooltipProviders.put(type, provider);
-        return this;
-    }
-
     public void register() {
         HandlerRegistrationEvent.EVENT.invoker().registerClient(build());
     }
@@ -78,8 +62,7 @@ public class ClientHandlerBuilder<T extends Screen> {
                 screenClass,
                 contextCreator,
                 display,
-                new HashMap<>(iconRenderers),
-                new HashMap<>(tooltipProviders)
+                new HashMap<>(iconRenderers)
         );
     }
 
@@ -88,11 +71,9 @@ public class ClientHandlerBuilder<T extends Screen> {
             @Nullable Class<T> screenClass,
             @Nullable BiFunction<T, Consumer<ShareContext>, HandlerResult> contextCreator,
             @Nullable BiConsumer<PlayerEntity, ShareContext> display,
-            Map<String, Function<ShareContext, IconRenderer>> iconRenderers,
-            Map<String, TooltipProvider> tooltipProviders
+            Map<String, Function<ShareContext, IconRenderer>> iconRenderers
     ) {
 
-        @Environment(EnvType.CLIENT)
         public void registerHandlers() {
             if (contextCreator != null) {
                 ShareHandlerRegistrar.register(new ClientShareHandler<T>() {
@@ -135,11 +116,7 @@ public class ClientHandlerBuilder<T extends Screen> {
                     }
                 });
             }
-
-            iconRenderers.forEach((type, factory) ->
-                    IconRendererRegistry.registerRendererFactory(id, type, factory::apply));
-            tooltipProviders.forEach((type, provider) ->
-                    TooltipProviderRegistry.registerProvider(id, type, provider));
+            
         }
     }
 }
