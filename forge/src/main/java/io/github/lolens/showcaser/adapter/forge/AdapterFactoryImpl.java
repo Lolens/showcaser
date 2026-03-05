@@ -1,4 +1,4 @@
-package io.github.lolens.showcaser.adapter.forge;
+package io.github.lolens.showcaser.adapter.fabric;
 
 import appeng.api.stacks.AEFluidKey;
 import appeng.api.stacks.AEItemKey;
@@ -54,7 +54,7 @@ public class AdapterFactoryImpl {
             long amount = context.getAmount();
 
             if (key instanceof AEItemKey itemKey) {
-                return new ShareableItemStack(itemKey.toStack());
+                return new ShareableItemStack(itemKey.toStack(), amount);
             }
             if (key instanceof AEFluidKey fluidKey) {
                 FluidStack fluidStack = FluidStack.create(fluidKey.getFluid(), amount);
@@ -102,6 +102,7 @@ public class AdapterFactoryImpl {
             }
             if (ingredient instanceof FluidEmiStack emiStack) {
                 FluidStack fluidStackArch = FluidStack.create((Fluid) emiStack.getKey(), 1000);
+                Showcaser.LOGGER.info(fluidStackArch.getName().toString());
                 return new ShareableFluidStack(fluidStackArch);
             }
         } catch (Exception e) {

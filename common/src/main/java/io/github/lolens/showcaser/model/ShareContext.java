@@ -139,7 +139,7 @@ public class ShareContext {
     }
 
     public long getAmount() {
-        return data.getInt("amount");
+        return data.getLong("amount");
     }
 
     public ShareContext withAmount(long value) {

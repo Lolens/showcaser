@@ -39,6 +39,6 @@ public class ShareDisplayMessage extends BaseS2CMessage {
     @Override
     public void handle(NetworkManager.PacketContext context) {
         Showcaser.LOGGER.info("Client received ShareDisplayMessage");
-        ClientHandlerRegistry.getClientDisplayHandler(shareContext.getId()).display(context.getPlayer(), shareContext);
+        ClientHandlerRegistry.getClientDisplayHandler(shareContext.getId()).display(senderName, shareContext);
     }
 }

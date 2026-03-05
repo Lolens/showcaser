@@ -38,6 +38,7 @@ public abstract class ChatHudRenderMixin {
 
         int result = original.call(context, textRenderer, originalText, x, y, color);
 
+        // todo fix to work with sodium / embeddium etc
         showcaser$renderIcons(context, originalText, x, y, showcaser$currentAlpha);
 
         return result;

@@ -6,7 +6,6 @@ import io.github.lolens.showcaser.api.resource.ShareableResource;
 import io.github.lolens.showcaser.client.render.RenderableHoverEvent;
 import io.github.lolens.showcaser.config.ConfigManager;
 import io.github.lolens.showcaser.model.ShareContext;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
@@ -24,7 +23,7 @@ public final class ClientChatMessageBuilder {
     private static final char MARKER = '\uE670';
 
     private final ShareContext context;
-    private final PlayerEntity sender;
+    private final String senderName;
     private final ShareableResource resource;
 
     private final int iconWidth;
@@ -43,7 +42,7 @@ public final class ClientChatMessageBuilder {
 
     private ClientChatMessageBuilder(
             ShareContext context,
-            PlayerEntity sender,
+            String senderName,
             ShareableResource resource,
             int iconWidth,
             boolean useBrackets,
@@ -54,7 +53,7 @@ public final class ClientChatMessageBuilder {
             String translationKey
     ) {
         this.context = context;
-        this.sender = sender;
+        this.senderName = senderName;
         this.resource = resource;
         this.iconWidth = iconWidth;
         this.useBrackets = useBrackets;
@@ -67,7 +66,7 @@ public final class ClientChatMessageBuilder {
 
     public static ClientChatMessageBuilder create(
             ShareContext context,
-            PlayerEntity sender,
+            String sender,
             ShareableResource resource
     ) {
         return new ClientChatMessageBuilder(
@@ -86,7 +85,7 @@ public final class ClientChatMessageBuilder {
 
     public ClientChatMessageBuilder withWidth(int width) {
         return new ClientChatMessageBuilder(
-                context, sender, resource,
+                context, senderName, resource,
                 width, useBrackets, showAmount, verifiedType,
                 clickEvent, contentStyle, translationKey
         );
@@ -94,7 +93,7 @@ public final class ClientChatMessageBuilder {
 
     public ClientChatMessageBuilder useBrackets(boolean use) {
         return new ClientChatMessageBuilder(
-                context, sender, resource,
+                context, senderName, resource,
                 iconWidth, use, showAmount, verifiedType,
                 clickEvent, contentStyle, translationKey
         );
@@ -102,7 +101,7 @@ public final class ClientChatMessageBuilder {
 
     public ClientChatMessageBuilder showAmount(boolean show) {
         return new ClientChatMessageBuilder(
-                context, sender, resource,
+                context, senderName, resource,
                 iconWidth, useBrackets, show, verifiedType,
                 clickEvent, contentStyle, translationKey
         );
@@ -110,7 +109,7 @@ public final class ClientChatMessageBuilder {
 
     public ClientChatMessageBuilder withClickEvent(ClickEvent event) {
         return new ClientChatMessageBuilder(
-                context, sender, resource,
+                context, senderName, resource,
                 iconWidth, useBrackets, showAmount, verifiedType,
                 event, contentStyle, translationKey
         );
@@ -118,7 +117,7 @@ public final class ClientChatMessageBuilder {
 
     public ClientChatMessageBuilder withFormatting(Formatting... formatting) {
         return new ClientChatMessageBuilder(
-                context, sender, resource,
+                context, senderName, resource,
                 iconWidth, useBrackets, showAmount, verifiedType,
                 clickEvent, Style.EMPTY.withFormatting(formatting), translationKey
         );
@@ -126,7 +125,7 @@ public final class ClientChatMessageBuilder {
 
     public ClientChatMessageBuilder setVerified(VerifiedType verifiedType) {
         return new ClientChatMessageBuilder(
-                context, sender, resource,
+                context, senderName, resource,
                 iconWidth, useBrackets, showAmount, verifiedType,
                 clickEvent, contentStyle, translationKey
         );
@@ -134,7 +133,7 @@ public final class ClientChatMessageBuilder {
 
     public ClientChatMessageBuilder withTranslationKey(String key) {
         return new ClientChatMessageBuilder(
-                context, sender, resource,
+                context, senderName, resource,
                 iconWidth, useBrackets, showAmount, verifiedType,
                 clickEvent, contentStyle, key
         );
@@ -168,7 +167,7 @@ public final class ClientChatMessageBuilder {
 
         return Text.translatable(
                 translationKey,
-                sender.getDisplayName(),
+                senderName,
                 marker.append(displayText)
         );
     }
@@ -201,7 +200,7 @@ public final class ClientChatMessageBuilder {
         if (resource instanceof ShareableItemStack itemStack) {
             ItemStack actualStack = ((ItemStack) itemStack.get());
 
-            // if stack has custom name then display italic
+            // if stack has custom name then display italic todo fix italic overwriting by rarity
             name = actualStack.hasCustomName()
                     ? actualStack.getName().copy().formatted(Formatting.ITALIC)
                     : actualStack.getName().copy();

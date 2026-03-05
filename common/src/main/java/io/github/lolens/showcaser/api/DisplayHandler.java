@@ -7,7 +7,7 @@ import net.minecraft.util.Identifier;
 public interface DisplayHandler {
 
     Identifier getIdentifier();
-    void display(PlayerEntity player, ShareContext context);
+    void display(String senderName, ShareContext context);
 
 
 

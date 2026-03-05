@@ -26,7 +26,7 @@ public class ClientHandlerBuilder<T extends Screen> {
     private final Identifier id;
     private Class<T> screenClass;
     private BiFunction<T, Consumer<ShareContext>, HandlerResult> contextCreator;
-    private BiConsumer<PlayerEntity, ShareContext> display;
+    private BiConsumer<String, ShareContext> display;
     private final Map<String, Function<ShareContext, IconRenderer>> iconRenderers = new HashMap<>();
 
     private ClientHandlerBuilder(Identifier id) {
@@ -47,7 +47,7 @@ public class ClientHandlerBuilder<T extends Screen> {
         return this;
     }
 
-    public ClientHandlerBuilder<T> display(BiConsumer<PlayerEntity, ShareContext> display) {
+    public ClientHandlerBuilder<T> display(BiConsumer<String, ShareContext> display) {
         this.display = display;
         return this;
     }
@@ -70,7 +70,7 @@ public class ClientHandlerBuilder<T extends Screen> {
             Identifier id,
             @Nullable Class<T> screenClass,
             @Nullable BiFunction<T, Consumer<ShareContext>, HandlerResult> contextCreator,
-            @Nullable BiConsumer<PlayerEntity, ShareContext> display,
+            @Nullable BiConsumer<String, ShareContext> display,
             Map<String, Function<ShareContext, IconRenderer>> iconRenderers
     ) {
 
@@ -107,11 +107,11 @@ public class ClientHandlerBuilder<T extends Screen> {
                     }
 
                     @Override
-                    public void display(PlayerEntity player, ShareContext context) {
+                    public void display(String senderName, ShareContext context) {
                         try {
-                            display.accept(player, context);
+                            display.accept(senderName, context);
                         } catch (Exception e) {
-                            Showcaser.LOGGER.error("Encountered error while displaying ShareContext from {}. Context Id: {}", player.getName(), context.getId(), e);
+                            Showcaser.LOGGER.error("Encountered error while displaying ShareContext from {}. Context Id: {}", senderName, context.getId(), e);
                         }
                     }
                 });
