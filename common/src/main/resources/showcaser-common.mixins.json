@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "package": "io.github.lolens.showcaser.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "minVersion": "0.8",
+  "mixins": [
+  ],
+  "client": [
+    "ChatHudRenderMixin",
+    "CreativeInventoryScreenHandlerMixin",
+    "CreativeInventoryScreenMixin",
+    "HandledScreenMixin",
+    "ItemStackMixin",
+    "TextRendererDrawerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

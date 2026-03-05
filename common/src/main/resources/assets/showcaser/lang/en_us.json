@@ -1,0 +1,11 @@
+{
+  "showcaser.chat.share_message": "%s shared %s",
+  "showcaser.chat.share_message.recipe": "%s shared recipe %s",
+  "showcaser.chat.share_message.tooltip.unverified": "This item is not verified by the server",
+  "showcaser.chat.share_message.tooltip.verified": "This item is verified by the server",
+  "showcaser.commands.sharing.ban": "Player %s is now banned from sharing things",
+  "showcaser.commands.sharing.unban": "Player %s can share things again",
+  "showcaser.commands.reload": "Showcaser storage and config reloaded successfully",
+  "showcaser.chat.banned": "Server has restricted chat sharing for you"
+
+}

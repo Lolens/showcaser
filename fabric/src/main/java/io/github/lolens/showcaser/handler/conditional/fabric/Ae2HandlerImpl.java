@@ -1,0 +1,163 @@
+package io.github.lolens.showcaser.handler.conditional.fabric;
+
+import appeng.api.config.Actionable;
+import appeng.api.stacks.AEFluidKey;
+import appeng.api.stacks.AEItemKey;
+import appeng.api.stacks.AEKey;
+import appeng.api.stacks.AEKeyType;
+import appeng.client.gui.implementations.UpgradeableScreen;
+import appeng.client.gui.me.common.MEStorageScreen;
+import appeng.client.gui.me.common.RepoSlot;
+import appeng.menu.AEBaseMenu;
+import appeng.menu.me.common.GridInventoryEntry;
+import appeng.menu.me.common.MEStorageMenu;
+import appeng.menu.slot.FakeSlot;
+import appeng.menu.slot.PatternTermSlot;
+import dev.architectury.fluid.FluidStack;
+import dev.architectury.platform.Platform;
+import dev.architectury.utils.Env;
+import io.github.lolens.showcaser.api.HandlerResult;
+import io.github.lolens.showcaser.client.render.icon.FluidStackIconRenderer;
+import io.github.lolens.showcaser.client.render.icon.ItemStackIconRenderer;
+import io.github.lolens.showcaser.core.builders.ClientChatMessageBuilder;
+import io.github.lolens.showcaser.core.builders.handler.ClientHandlerBuilder;
+import io.github.lolens.showcaser.core.builders.handler.ServerHandlerBuilder;
+import io.github.lolens.showcaser.exception.ServerShareProcessingException;
+import io.github.lolens.showcaser.fabric.mixin.MEStorageMenuInvoker;
+import io.github.lolens.showcaser.model.ShareContext;
+import io.github.lolens.showcaser.registry.CachedPriorityRegistry;
+import io.github.lolens.showcaser.util.FluidUtils;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.item.TooltipContext;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.screen.slot.Slot;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
+
+import static io.github.lolens.showcaser.Showcaser.MOD_ID;
+import static io.github.lolens.showcaser.core.builders.ClientChatMessageBuilder.VerifiedType.VERIFIED;
+import static io.github.lolens.showcaser.util.HandlerUtils.getHandler;
+import static io.github.lolens.showcaser.util.HandlerUtils.isValidSyncId;
+
+@SuppressWarnings("rawtypes")
+public class Ae2HandlerImpl {
+    private static final Identifier ID = Identifier.of(MOD_ID, "ae2");
+
+    public static void register() {
+
+        registerServer();
+
+        if (Platform.getEnvironment() == Env.CLIENT) {
+            CachedPriorityRegistry.blacklistWithInheritors(UpgradeableScreen.class);
+            registerClient();
+        }
+    }
+
+    private static void registerServer() {
+        ServerHandlerBuilder.<AEBaseMenu>create(ID)
+                .forContainer(AEBaseMenu.class)
+                .process((player, context) -> {
+                    if (!isValidSyncId(player, context.getSyncId()))
+                        throw new ServerShareProcessingException(context, player, ServerShareProcessingException.SYNC_ID_NOT_VALID);
+
+                    MEStorageMenu menu = (MEStorageMenu) getHandler(player);
+
+                    long serial = context.getLong("serial");
+
+                    AEKey key = ((MEStorageMenuInvoker) menu).showcaser$getStackBySerial(serial);
+
+                    long amount = menu.getHost().getInventory().extract(
+                            key,
+                            Long.MAX_VALUE,
+                            Actionable.SIMULATE,
+                            menu.getActionSource()
+                    );
+
+                    NbtCompound keyCompound = key.toTagGeneric();
+                    return ShareContext.of(ID)
+                            .with("key", keyCompound)
+                            .withAmount(amount); // amount in droplets on fabric. Gets converted at display
+                })
+                .register();
+    }
+
+    @Environment(EnvType.CLIENT)
+    private static void registerClient() {
+        ClientHandlerBuilder.<MEStorageScreen>create(ID)
+                .forScreen(MEStorageScreen.class)
+                .createContext((screen, contextConsumer) -> {
+                    Slot slot = screen.getSlotUnderMouse();
+
+                    // prevent fallback handler handling for slots that can be filled with ghost items
+                    if (slot instanceof FakeSlot || slot instanceof PatternTermSlot) return HandlerResult.STOP;
+
+                    if (slot instanceof RepoSlot repoSlot && repoSlot.hasStack()) {
+
+                        GridInventoryEntry entry = repoSlot.getEntry();
+
+                        // for cases when "something" is 0 and displayed for crafting availability reason
+                        if (entry.getStoredAmount() == 0) return HandlerResult.STOP;
+
+                        ShareContext context = ShareContext.of(
+                                ID,
+                                screen.getScreenHandler().syncId
+                        ).with("serial", entry.getSerial());
+
+                        contextConsumer.accept(context);
+                        return HandlerResult.SUCCESS;
+                    }
+                    return HandlerResult.PASS;
+                })
+                .display((player, context) -> {
+                    NbtCompound keyCompound = context.getCompound("key");
+                    long amount = context.getAmount();
+                    AEKey key = AEKey.fromTagGeneric(keyCompound);
+
+                    var type = key.getType();
+                    MutableText text = Text.empty();
+
+                    if (type == AEKeyType.items()) {
+                        AEItemKey itemKey = (AEItemKey) key;
+                        text = ClientChatMessageBuilder.create(context, player, "item")
+                                .withCustomStack(itemKey.getDisplayName(), amount)
+                                .setVerified(VERIFIED)
+                                .withWidth(12)
+                                .build();
+                    }
+
+                    if (type == AEKeyType.fluids()) {
+                        AEFluidKey fluidKey = (AEFluidKey) key;
+                        text = ClientChatMessageBuilder.create(context, player, "fluid")
+                                .withCustomStack(fluidKey.getDisplayName(), FluidUtils.convertToMillibuckets(amount))
+                                .setVerified(VERIFIED)
+                                .withWidth(12)
+                                .displayAsFluid(true)
+                                .build();
+                    }
+                    MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(text);
+                })
+                .withIcon("item", context -> {
+                    AEItemKey key = (AEItemKey) AEKey.fromTagGeneric(context.getCompound("key"));
+                    return new ItemStackIconRenderer(key.toStack());
+                })
+                .withTooltip("item", (context, player) -> {
+                    AEItemKey key = (AEItemKey) AEKey.fromTagGeneric(context.getCompound("key"));
+                    return key.toStack().getTooltip(player, TooltipContext.BASIC);
+                })
+                .withIcon("fluid", context -> {
+                    AEFluidKey key = (AEFluidKey) AEKey.fromTagGeneric(context.getCompound("key"));
+                    FluidStack fluidStack = FluidStack.create(key.getFluid(), 1000);
+                    return new FluidStackIconRenderer(fluidStack);
+                })
+                .withTooltip("fluid", (context, player) -> {
+                    AEFluidKey key = (AEFluidKey) AEKey.fromTagGeneric(context.getCompound("key"));
+                    long amount = context.getLong("amount");
+                    FluidStack fluidStack = FluidStack.create(key.getFluid(), amount);
+                    return FluidUtils.buildTooltip(fluidStack, player, true);
+                })
+                .register();
+    }
+}
