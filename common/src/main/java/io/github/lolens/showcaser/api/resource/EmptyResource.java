@@ -6,7 +6,7 @@ import net.minecraft.text.Text;
 
 import java.util.List;
 
-public class EmptyResource implements ShareableResource{
+public class EmptyResource implements ShareableResource {
     @Override
     public Object get() {
         return null;
