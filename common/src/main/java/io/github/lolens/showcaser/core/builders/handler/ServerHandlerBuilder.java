@@ -55,7 +55,7 @@ public class ServerHandlerBuilder<T extends ScreenHandler> {
                 public ShareContext handle(PlayerEntity player, ShareContext context) {
                     try {
                         return processor.apply(player, context);
-                    } catch (Exception e) {
+                    } catch (RuntimeException e) {
                         Showcaser.LOGGER.error("Encountered error while processing ShareContext from {}. Context Id: {}", player.getName(), context.getId(), e);
                     }
                     return null;

@@ -81,7 +81,7 @@ public class ClientHandlerBuilder<T extends Screen> {
                     public @NotNull HandlerResult createContext(Screen screen, Consumer<ShareContext> contextConsumer) {
                         try {
                             return contextCreator.apply((T) screen, contextConsumer);
-                        } catch (Exception e) {
+                        } catch (RuntimeException e) {
                             Showcaser.LOGGER.error("Encountered error while creating ShareContext for screen {}", screen.getClass().getName(), e);
                         }
                         return HandlerResult.PASS;
@@ -110,8 +110,9 @@ public class ClientHandlerBuilder<T extends Screen> {
                     public void display(String senderName, ShareContext context) {
                         try {
                             display.accept(senderName, context);
-                        } catch (Exception e) {
+                        } catch (RuntimeException e) {
                             Showcaser.LOGGER.error("Encountered error while displaying ShareContext from {}. Context Id: {}", senderName, context.getId(), e);
+
                         }
                     }
                 });
