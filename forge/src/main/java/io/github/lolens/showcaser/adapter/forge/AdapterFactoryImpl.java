@@ -1,4 +1,4 @@
-package io.github.lolens.showcaser.adapter.fabric;
+package io.github.lolens.showcaser.adapter.forge;
 
 import appeng.api.stacks.AEFluidKey;
 import appeng.api.stacks.AEItemKey;
