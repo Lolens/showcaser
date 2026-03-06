@@ -198,24 +198,38 @@ public final class ClientChatMessageBuilder {
     private MutableText buildContent() {
         long amount = resource.getAmount();
 
-        Text name = resource.getDisplayName().copy();
-
-        if (resource instanceof ShareableItemStack itemStack && itemStack.hasCustomName()) {
-            name = name.copy().formatted(Formatting.ITALIC);
-        }
-
-        if (!showAmount || amount <= 1) {
-            return name.copy();
-        }
+        Text name = Text.empty();
 
         if (resource instanceof ShareableFluidStack fluidStack) {
+
+            if (amount <= 1 || !showAmount) {
+                return fluidStack.getDisplayName().copy();
+            }
+
             return fluidStack.getFluidAmountText()
                     .copy()
                     .append(" ")
-                    .append(name);
+                    .append(fluidStack.getDisplayName());
         }
 
-        if (resource instanceof ShareableItemStack) {
+        if (resource instanceof ShareableItemStack itemStack) {
+
+            ItemStack copy = itemStack.getCopy();
+
+            if (ConfigManager.getConfig().ignoreCustomNames) {
+                copy.setCustomName(null);
+            }
+
+            if (copy.hasCustomName()) {
+                name = copy.getName().copy().formatted(Formatting.ITALIC);
+            } else {
+                name = copy.getName();
+            }
+
+            if (amount <= 1 || !showAmount) {
+                return name.copy();
+            }
+
             return Text.literal("x")
                     .append(String.valueOf(amount))
                     .append(" ")

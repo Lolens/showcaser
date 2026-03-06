@@ -5,6 +5,7 @@ import dev.architectury.fluid.FluidStack;
 import dev.architectury.hooks.fluid.FluidStackHooks;
 import dev.architectury.platform.Platform;
 import io.github.lolens.showcaser.Showcaser;
+import io.github.lolens.showcaser.client.render.RenderableHoverEvent;
 import io.github.lolens.showcaser.config.ConfigManager;
 import io.github.lolens.showcaser.util.RenderUtils;
 import net.minecraft.client.gui.DrawContext;
@@ -128,32 +129,31 @@ public class ShareableFluidStack implements ShareableResource {
     }
 
     @Override
-    public void render(DrawContext context, float x, float y, float scale) {
+    public void render(DrawContext context, float x, float y, float scale, float alpha) {
         if (fluidStack.isEmpty()) return;
         Sprite sprite = FluidStackHooks.getStillTexture(fluidStack);
         if (sprite == null) return;
         int color = FluidStackHooks.getColor(fluidStack);
 
-        float[] rgb = RenderUtils.intToRGBNormalized(color);
-
-        RenderSystem.setShaderColor(rgb[0], rgb[1], rgb[2], 1);
-
-        context.getMatrices().push();
+        float[] fluidRbg = RenderUtils.intToRGBNormalized(color);
+                context.getMatrices().push();
         context.getMatrices().scale(scale, scale, 1.0F);
         context.getMatrices().translate(x / scale, y / scale, 200.0F);
         context.getMatrices().scale(0.5f, 0.5f, 0.5f);
 
-        // RenderSystem.setShaderTexture(0, sprite.getAtlasId());
         context.drawSprite(
                 0,
                 0,
                 0,
                 16,
                 16,
-                sprite
+                sprite,
+                fluidRbg[0],
+                fluidRbg[1],
+                fluidRbg[2],
+                alpha
         );
 
-        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
         context.getMatrices().pop();
 
     }

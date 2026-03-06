@@ -9,6 +9,7 @@
     "ChatHudRenderMixin",
     "CreativeInventoryScreenHandlerMixin",
     "CreativeInventoryScreenMixin",
+    "RenderLayersMixin",
     "HandledScreenMixin",
     "ItemStackMixin",
     "TextRendererDrawerMixin"

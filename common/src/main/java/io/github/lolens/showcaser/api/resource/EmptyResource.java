@@ -33,7 +33,7 @@ public class EmptyResource implements ShareableResource {
     }
 
     @Override
-    public void render(DrawContext context, float x, float y, float scale) {
+    public void render(DrawContext context, float x, float y, float scale, float alpha) {
         context.drawItem(Items.BARRIER.getDefaultStack(), (int) x, (int) y);
     }
 }

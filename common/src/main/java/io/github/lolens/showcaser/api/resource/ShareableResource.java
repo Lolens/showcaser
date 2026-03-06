@@ -17,5 +17,5 @@ public interface ShareableResource extends IconRenderer {
 
     List<Text> getTooltip();
 
-    void render(DrawContext context, float x, float y, float scale);
+    void render(DrawContext context, float x, float y, float scale, float alpha);
 }

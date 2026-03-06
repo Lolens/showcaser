@@ -72,7 +72,12 @@ public class CreativeInventoryHandler {
 
                         case CATEGORY -> {
                             // hotbar slots
-                            if (slot.id >= 45 && slot.id <= 53 && slot.hasStack()) {
+
+                            if (slot.id >= 45 && slot.id <= 53) {
+
+                                // fixes sharing empty hotbar slots while in category
+                                if (!slot.hasStack()) return HandlerResult.STOP;
+
                                 ShareContext shareContext = ShareContext.of(
                                                 ID,
                                                 screen.getScreenHandler().syncId)

@@ -8,6 +8,9 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.ChatHud;
+import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.RenderLayers;
+import net.minecraft.client.render.TexturedRenderLayers;
 import net.minecraft.text.HoverEvent;
 import net.minecraft.text.OrderedText;
 import org.spongepowered.asm.mixin.Final;
@@ -17,13 +20,15 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 
-@Mixin(ChatHud.class)
+@Mixin(value = ChatHud.class)
 public abstract class ChatHudRenderMixin {
 
-    @Shadow @Final private MinecraftClient client;
+    @Shadow
+    @Final
+    private MinecraftClient client;
 
     @Unique
-    private float showcaser$currentAlpha = 1.0f;
+    float showcaser$currentChatLineAlpha = 1.0f;
 
     @WrapOperation(
             method = "render",
@@ -34,12 +39,16 @@ public abstract class ChatHudRenderMixin {
     )
     private int renderItemInline(DrawContext context, TextRenderer textRenderer, OrderedText originalText, int x, int y, int color, Operation<Integer> original) {
 
-        this.showcaser$currentAlpha = ((color >> 24) & 0xFF) / 255.0f; // 0f to 1f
+        this.showcaser$currentChatLineAlpha = ((color >> 24) & 0xFF) / 255.0f; // 0f to 1f
+
 
         int result = original.call(context, textRenderer, originalText, x, y, color);
 
         // todo fix to work with sodium / embeddium etc
-        showcaser$renderIcons(context, originalText, x, y, showcaser$currentAlpha);
+        RenderableHoverEvent.currentAlpha = showcaser$currentChatLineAlpha;
+        showcaser$renderIcons(context, originalText, x, y, showcaser$currentChatLineAlpha);
+        RenderableHoverEvent.currentAlpha = 1.0f;
+
 
         return result;
     }
@@ -49,6 +58,7 @@ public abstract class ChatHudRenderMixin {
         final float[] currentX = {0};
         final float scale = (float) getChatScale();
 
+
         originalText.accept((index, style, codePoint) -> {
             if (codePoint == '\uE670') {
                 HoverEvent hover = style.getHoverEvent();
@@ -57,9 +67,7 @@ public abstract class ChatHudRenderMixin {
                     float renderX = baseX + currentX[0] * scale;
                     float renderY = baseY;
 
-                    RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, alpha);
-                    renderableHover.getRenderer().render(context, renderX, renderY, scale);
-                    RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+                    renderableHover.getRenderer().render(context, renderX, renderY, scale, alpha);
                 }
                 return true;
             }

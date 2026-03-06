@@ -7,6 +7,8 @@ import net.minecraft.text.Text;
 
 public class RenderableHoverEvent extends HoverEvent {
 
+    public static float currentAlpha = 1.0f;
+
     private final IconRenderer iconRenderer;
     private final int width;
 
