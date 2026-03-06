@@ -38,16 +38,19 @@ dependencies {
     modImplementation "dev.architectury:architectury-fabric:$rootProject.architectury_api_version"
 
 
-    // TODO To compile only later
+    modCompileOnly("curse.maven:applied-energistics-2-223794:7148494")
     modLocalRuntime('teamreborn:energy:3.0.0')
-    modImplementation("curse.maven:applied-energistics-2-223794:7148494")
+    modLocalRuntime("curse.maven:applied-energistics-2-223794:7148494")
 
-    // TODO remove later
-    // adding rei api with runtime to platform build.gradle crashes the game upon opening ae2 screen
+    // adding rei api to common with runtime to platform build.gradle crashes the game upon opening ae2 screen
     modCompileOnly("me.shedaniel:RoughlyEnoughItems-api-fabric:${rei_version}")
 
+    // todo remove later with jvm check skip
+    modLocalRuntime("maven.modrinth:sodium:mc1.20.1-0.5.13-fabric")
 
     modCompileOnly("dev.emi:emi-fabric:${emi_version}")
+    modLocalRuntime("dev.emi:emi-fabric:${emi_version}")
+
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive = false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
