@@ -1,26 +1,16 @@
 package io.github.lolens.showcaser.command;
 
-import com.google.gson.JsonElement;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.serialization.JsonOps;
 import dev.architectury.event.events.common.CommandRegistrationEvent;
-import dev.emi.emi.api.EmiApi;
-import dev.emi.emi.api.recipe.EmiRecipe;
-import dev.emi.emi.api.stack.EmiIngredient;
-import dev.emi.emi.api.stack.serializer.EmiIngredientSerializer;
-import io.github.lolens.showcaser.Showcaser;
 import io.github.lolens.showcaser.config.ConfigManager;
 import io.github.lolens.showcaser.network.message.s2c.conditional.emi.EmiOpenScreenMessage;
+import io.github.lolens.showcaser.network.message.s2c.conditional.emi.EmiOpenScreenMessage.TargetType;
 import io.github.lolens.showcaser.network.message.s2c.conditional.rei.ReiOpenScreenMessage;
-import net.minecraft.command.argument.EntityArgumentType;
-import net.minecraft.command.argument.IdentifierArgumentType;
-import net.minecraft.command.argument.NbtCompoundArgumentType;
-import net.minecraft.command.argument.NbtElementArgumentType;
+import net.minecraft.command.argument.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -100,12 +90,10 @@ public class ServerCommands {
                             CommandManager.literal("showcaser")
                                     .then(CommandManager.literal("emi")
                                             .then(CommandManager.literal("open")
-                                                    .then(CommandManager.argument("recipe_id", IdentifierArgumentType.identifier())
-                                                            .executes(EMI::executeOpenRecipe)
-                                                    )
-
-                                                    .then(CommandManager.argument("output_resource", NbtElementArgumentType.nbtElement())
-                                                            .executes(EMI::executeOpenResource)
+                                                    .then(CommandManager.argument("type", StringArgumentType.string())
+                                                            .then(CommandManager.argument("id", IdentifierArgumentType.identifier())
+                                                                    .executes(EMI::executeOpen)
+                                                            )
                                                     )
                                             )
                                     )
@@ -113,25 +101,21 @@ public class ServerCommands {
                 });
             }
 
-            private static int executeOpenRecipe(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-                ServerPlayerEntity player = context.getSource().getPlayer();
-                if (player == null) return 1;
-                Identifier recipeId = IdentifierArgumentType.getIdentifier(context, "recipe_id");
-
-                new EmiOpenScreenMessage(recipeId).sendTo(player);
-                return 1;
-            }
-
-            private static int executeOpenResource(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+            private static int executeOpen(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
                 ServerPlayerEntity player = context.getSource().getPlayer();
                 if (player == null) return 1;
 
-                NbtElement nbtElement = NbtElementArgumentType.getNbtElement(context, "output_resource");
-
-                new EmiOpenScreenMessage(nbtElement).sendTo(player);
+                String type = StringArgumentType.getString(context, "type");
+                Identifier id = IdentifierArgumentType.getIdentifier(context, "id");
+                TargetType targetType = switch (type) {
+                    case "recipe" -> TargetType.RECIPE;
+                    case "item" -> TargetType.ITEM;
+                    case "fluid" -> TargetType.FLUID;
+                    default -> throw new IllegalArgumentException("Unexpected value: " + type);
+                };
+                new EmiOpenScreenMessage(id, targetType).sendTo(player);
                 return 1;
             }
-
 
         } // end static class EMI
 
