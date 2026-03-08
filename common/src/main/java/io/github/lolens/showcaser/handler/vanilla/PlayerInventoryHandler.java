@@ -6,7 +6,7 @@ import io.github.lolens.showcaser.Showcaser;
 import io.github.lolens.showcaser.adapter.AdapterFactory;
 import io.github.lolens.showcaser.api.HandlerResult;
 import io.github.lolens.showcaser.api.resource.ShareableResource;
-import io.github.lolens.showcaser.core.builders.ClientChatMessageBuilder;
+import io.github.lolens.showcaser.client.ClientChatMessageBuilder;
 import io.github.lolens.showcaser.core.builders.handler.ClientHandlerBuilder;
 import io.github.lolens.showcaser.core.builders.handler.ServerHandlerBuilder;
 import io.github.lolens.showcaser.exception.ServerShareProcessingException;
@@ -23,7 +23,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.util.Identifier;
 
 import static io.github.lolens.showcaser.Showcaser.MOD_ID;
-import static io.github.lolens.showcaser.core.builders.ClientChatMessageBuilder.VerifiedType.VERIFIED;
+import static io.github.lolens.showcaser.client.ClientChatMessageBuilder.VerifiedType.VERIFIED;
 import static io.github.lolens.showcaser.util.HandlerUtils.getHandler;
 import static io.github.lolens.showcaser.util.HandlerUtils.isValidSlot;
 

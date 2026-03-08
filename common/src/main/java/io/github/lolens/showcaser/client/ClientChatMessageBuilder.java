@@ -1,6 +1,5 @@
-package io.github.lolens.showcaser.core.builders;
+package io.github.lolens.showcaser.client;
 
-import io.github.lolens.showcaser.Showcaser;
 import io.github.lolens.showcaser.api.resource.ShareableFluidStack;
 import io.github.lolens.showcaser.api.resource.ShareableItemStack;
 import io.github.lolens.showcaser.api.resource.ShareableResource;
