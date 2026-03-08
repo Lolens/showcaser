@@ -8,21 +8,25 @@ import dev.emi.emi.registry.EmiIngredientSerializers;
 import dev.emi.emi.screen.RecipeScreen;
 import io.github.lolens.showcaser.adapter.AdapterFactory;
 import io.github.lolens.showcaser.api.HandlerResult;
+import io.github.lolens.showcaser.api.resource.ShareableFluidStack;
+import io.github.lolens.showcaser.api.resource.ShareableItemStack;
 import io.github.lolens.showcaser.api.resource.ShareableResource;
 import io.github.lolens.showcaser.command.ServerCommands;
-import io.github.lolens.showcaser.core.builders.ClientChatMessageBuilder;
+import io.github.lolens.showcaser.client.ClientChatMessageBuilder;
 import io.github.lolens.showcaser.core.builders.handler.ClientHandlerBuilder;
 import io.github.lolens.showcaser.core.builders.handler.ServerHandlerBuilder;
 import io.github.lolens.showcaser.model.ShareContext;
 import io.github.lolens.showcaser.network.Networking;
+import io.github.lolens.showcaser.network.message.s2c.conditional.emi.EmiOpenScreenMessage;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.registry.Registries;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.MutableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 import static io.github.lolens.showcaser.Showcaser.MOD_ID;
-import static io.github.lolens.showcaser.core.builders.ClientChatMessageBuilder.VerifiedType.NONE;
+import static io.github.lolens.showcaser.client.ClientChatMessageBuilder.VerifiedType.NONE;
 
 @SuppressWarnings("UnstableApiUsage")
 public class EmiHandlerImpl {
@@ -75,6 +79,7 @@ public class EmiHandlerImpl {
 
                     ingredient = ingredient.getEmiStacks().get(0);
 
+                    // todo fix serialization breaking max char limit on click events which causes disconnection
                     if (ingredient instanceof FluidEmiStack ||
                             ingredient instanceof ItemEmiStack
                     ) {
@@ -99,10 +104,15 @@ public class EmiHandlerImpl {
                     String clickEventString;
 
                     if (context.hasIdentifier()) {
-                        Identifier recipeId = context.getIdentifier();
-                        clickEventString = String.format("/showcaser emi open %s", recipeId.toString());
+                        clickEventString = String.format("/showcaser emi open recipe %s", context.getIdentifier());
                     } else {
-                        clickEventString = String.format("/showcaser emi open %s", context.getJsonAsNbt());
+                        if (resource instanceof ShareableItemStack itemStack) {
+                            clickEventString = String.format("/showcaser emi open item %s", itemStack.getRegistryId());
+                        } else if (resource instanceof ShareableFluidStack fluidStack) {
+                            clickEventString = String.format("/showcaser emi open fluid %s", fluidStack.getRegistryId());
+                        } else {
+                            return;
+                        }
                     }
 
                     MutableText text = ClientChatMessageBuilder.create(context, player, resource)
