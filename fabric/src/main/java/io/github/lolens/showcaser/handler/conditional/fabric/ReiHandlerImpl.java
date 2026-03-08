@@ -7,7 +7,7 @@ import io.github.lolens.showcaser.adapter.AdapterFactory;
 import io.github.lolens.showcaser.api.HandlerResult;
 import io.github.lolens.showcaser.api.resource.ShareableResource;
 import io.github.lolens.showcaser.command.ServerCommands;
-import io.github.lolens.showcaser.core.builders.ClientChatMessageBuilder;
+import io.github.lolens.showcaser.client.ClientChatMessageBuilder;
 import io.github.lolens.showcaser.core.builders.handler.ClientHandlerBuilder;
 import io.github.lolens.showcaser.core.builders.handler.ServerHandlerBuilder;
 import io.github.lolens.showcaser.model.ShareContext;
@@ -29,7 +29,7 @@ import net.minecraft.util.Identifier;
 import java.util.Optional;
 
 import static io.github.lolens.showcaser.Showcaser.MOD_ID;
-import static io.github.lolens.showcaser.core.builders.ClientChatMessageBuilder.VerifiedType.NONE;
+import static io.github.lolens.showcaser.client.ClientChatMessageBuilder.VerifiedType.NONE;
 
 public class ReiHandlerImpl {
 
@@ -73,6 +73,7 @@ public class ReiHandlerImpl {
                     if (entryNbt == null) {
                         Showcaser.LOGGER.warn("Tried creating context for stack that cannot be saved to nbt. Screen: {}",
                                 screen.getClass().getName());
+                        return HandlerResult.PASS;
                     }
 
                     if (entryType == VanillaEntryTypes.ITEM) {

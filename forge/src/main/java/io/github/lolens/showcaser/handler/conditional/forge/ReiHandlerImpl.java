@@ -1,13 +1,13 @@
 package io.github.lolens.showcaser.handler.conditional.forge;
 
-import dev.architectury.fluid.FluidStack;
 import dev.architectury.platform.Platform;
 import dev.architectury.utils.Env;
+import io.github.lolens.showcaser.Showcaser;
 import io.github.lolens.showcaser.adapter.AdapterFactory;
 import io.github.lolens.showcaser.api.HandlerResult;
 import io.github.lolens.showcaser.api.resource.ShareableResource;
 import io.github.lolens.showcaser.command.ServerCommands;
-import io.github.lolens.showcaser.core.builders.ClientChatMessageBuilder;
+import io.github.lolens.showcaser.client.ClientChatMessageBuilder;
 import io.github.lolens.showcaser.core.builders.handler.ClientHandlerBuilder;
 import io.github.lolens.showcaser.core.builders.handler.ServerHandlerBuilder;
 import io.github.lolens.showcaser.model.ShareContext;
@@ -19,7 +19,6 @@ import me.shedaniel.rei.api.common.entry.type.EntryType;
 import me.shedaniel.rei.api.common.entry.type.VanillaEntryTypes;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.MutableText;
@@ -30,7 +29,7 @@ import net.minecraft.util.Identifier;
 import java.util.Optional;
 
 import static io.github.lolens.showcaser.Showcaser.MOD_ID;
-import static io.github.lolens.showcaser.core.builders.ClientChatMessageBuilder.VerifiedType.NONE;
+import static io.github.lolens.showcaser.client.ClientChatMessageBuilder.VerifiedType.NONE;
 
 public class ReiHandlerImpl {
 
@@ -71,6 +70,12 @@ public class ReiHandlerImpl {
                     EntryType<?> entryType = entryStack.getType();
                     NbtCompound entryNbt = entryStack.saveStack();
 
+                    if (entryNbt == null) {
+                        Showcaser.LOGGER.warn("Tried creating context for stack that cannot be saved to nbt. Screen: {}",
+                                screen.getClass().getName());
+                        return HandlerResult.PASS;
+                    }
+
                     if (entryType == VanillaEntryTypes.ITEM) {
                         entryNbt.putString("type", "minecraft:item");
                         contextConsumer.accept(ShareContext.of(ID)
@@ -95,7 +100,6 @@ public class ReiHandlerImpl {
                     MutableText text = Text.empty();
 
                     if (entryType == VanillaEntryTypes.ITEM) {
-                        ItemStack itemStack = entryStack.castValue();
                         text = ClientChatMessageBuilder.create(context, player, resource)
                                 .withWidth(12)
                                 .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
@@ -106,7 +110,6 @@ public class ReiHandlerImpl {
                                 .build();
                     }
                     if (entryType == VanillaEntryTypes.FLUID) {
-                        FluidStack fluidStack = entryStack.castValue();
                         text = ClientChatMessageBuilder.create(context, player, resource)
                                 .showAmount(false)
                                 .withWidth(12)
