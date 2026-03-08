@@ -53,6 +53,8 @@ dependencies {
     // adding rei api to common with runtime to platform build.gradle crashes the game upon opening ae2 screen
     modCompileOnly("me.shedaniel:RoughlyEnoughItems-api-forge:${rei_version}")
 
+    // modLocalRuntime("curse.maven:embeddium-908741:5681725")
+
     common(project(path: ':common', configuration: 'namedElements')) { transitive = false }
     shadowBundle project(path: ':common', configuration: 'transformProductionForge')
 

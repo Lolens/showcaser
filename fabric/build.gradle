@@ -45,12 +45,12 @@ dependencies {
     // adding rei api to common with runtime to platform build.gradle crashes the game upon opening ae2 screen
     modCompileOnly("me.shedaniel:RoughlyEnoughItems-api-fabric:${rei_version}")
 
-    // todo remove later with jvm check skip
-    modLocalRuntime("maven.modrinth:sodium:mc1.20.1-0.5.13-fabric")
+
+    // modLocalRuntime("curse.maven:embeddium-908741:5522040")
+    // modLocalRuntime("maven.modrinth:sodium:mc1.20.1-0.5.13-fabric")
 
     modCompileOnly("dev.emi:emi-fabric:${emi_version}")
     modLocalRuntime("dev.emi:emi-fabric:${emi_version}")
-
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive = false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')

@@ -1,12 +1,9 @@
 package io.github.lolens.showcaser.api.resource;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import dev.architectury.fluid.FluidStack;
 import dev.architectury.hooks.fluid.FluidStackHooks;
 import dev.architectury.platform.Platform;
 import io.github.lolens.showcaser.Showcaser;
-import io.github.lolens.showcaser.client.render.RenderableHoverEvent;
-import io.github.lolens.showcaser.config.ConfigManager;
 import io.github.lolens.showcaser.util.RenderUtils;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.texture.Sprite;
@@ -14,6 +11,7 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +27,14 @@ public class ShareableFluidStack implements ShareableResource {
     @Override
     public Object get() {
         return fluidStack;
+    }
+
+    public FluidStack getFluidStack() {
+        return this.fluidStack;
+    }
+
+    public Identifier getRegistryId() {
+        return this.fluidStack.getFluid().arch$registryName();
     }
 
     @Override

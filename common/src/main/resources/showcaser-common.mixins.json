@@ -9,9 +9,10 @@
     "ChatHudRenderMixin",
     "CreativeInventoryScreenHandlerMixin",
     "CreativeInventoryScreenMixin",
-    "RenderLayersMixin",
     "HandledScreenMixin",
+    "ItemRendererMixin",
     "ItemStackMixin",
+    "SpriteIdentifierMixin",
     "TextRendererDrawerMixin"
   ],
   "injectors": {

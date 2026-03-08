@@ -1,12 +1,12 @@
 package io.github.lolens.showcaser.api.resource;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 
 import java.util.List;
@@ -46,6 +46,10 @@ public class ShareableItemStack implements ShareableResource {
         return itemStack.isEmpty();
     }
 
+    public Identifier getRegistryId() {
+        return this.itemStack.getItem().arch$registryName();
+    }
+
     @Override
     public Text getDisplayName() {
         return itemStack.getName();
@@ -72,18 +76,19 @@ public class ShareableItemStack implements ShareableResource {
         return itemStack.getRarity();
     }
 
+    public ItemStack getStack() {
+        return this.itemStack;
+    }
+
     @Override
     public void render(DrawContext context, float x, float y, float scale, float alpha) {
 
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, alpha);
         context.getMatrices().push();
         context.getMatrices().scale(scale, scale, 1.0F);
         context.getMatrices().translate(x / scale, y / scale, 200.0F);
         context.getMatrices().scale(0.5f, 0.5f, 0.5f);
         context.drawItem(itemStack, 0, 0);
         context.getMatrices().pop();
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-
     }
 
 
