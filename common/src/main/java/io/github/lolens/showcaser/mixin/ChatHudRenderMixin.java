@@ -58,7 +58,6 @@ public abstract class ChatHudRenderMixin {
         final float[] currentX = {0};
         final float scale = (float) getChatScale();
 
-
         originalText.accept((index, style, codePoint) -> {
             if (codePoint == '\uE670') {
                 HoverEvent hover = style.getHoverEvent();
@@ -67,7 +66,10 @@ public abstract class ChatHudRenderMixin {
                     float renderX = baseX + currentX[0] * scale;
                     float renderY = baseY;
 
+                    RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, alpha);
                     renderableHover.getRenderer().render(context, renderX, renderY, scale, alpha);
+                    RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+
                 }
                 return true;
             }
