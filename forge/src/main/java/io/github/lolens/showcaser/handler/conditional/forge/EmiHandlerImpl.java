@@ -79,7 +79,6 @@ public class EmiHandlerImpl {
 
                     ingredient = ingredient.getEmiStacks().get(0);
 
-                    // todo fix serialization breaking max char limit on click events which causes disconnection
                     if (ingredient instanceof FluidEmiStack ||
                             ingredient instanceof ItemEmiStack
                     ) {
