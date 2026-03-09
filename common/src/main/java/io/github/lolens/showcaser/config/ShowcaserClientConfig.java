@@ -8,7 +8,7 @@ public class ShowcaserClientConfig {
     public boolean addEmptySpaceBeforeVerifiedText = false;
 
     @Description("Items displayed in chat will use custom name that is set though anvil or any other way")
-    public boolean ignoreCustomNames = true;
+    public boolean ignoreCustomNames = false;
 
 
 }
