@@ -3,7 +3,14 @@ package io.github.lolens.showcaser.config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dev.architectury.platform.Platform;
+import dev.architectury.utils.Env;
+import dev.architectury.utils.GameInstance;
 import io.github.lolens.showcaser.Showcaser;
+import io.github.lolens.showcaser.network.message.s2c.ConfigSyncMessage;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -19,18 +26,36 @@ public class ConfigManager {
 
     private static final Path CONFIG_FOLDER = Platform.getConfigFolder().resolve(Showcaser.MOD_ID);
 
-    private static final Path CONFIG = CONFIG_FOLDER.resolve(Showcaser.MOD_ID + "-config.json");
-    private static final Path PERSISTENT_STORAGE = CONFIG_FOLDER.resolve(Showcaser.MOD_ID + "-storage.json");
+    private static final Path SERVER_CONFIG = CONFIG_FOLDER.resolve(Showcaser.MOD_ID + "-server-config.json");
+    private static final Path CLIENT_CONFIG = CONFIG_FOLDER.resolve(Showcaser.MOD_ID + "-client-config.json");
+    private static final Path SERVER_PERSISTENT_STORAGE = CONFIG_FOLDER.resolve(Showcaser.MOD_ID + "-server-storage.json");
 
 
-    private static ShowcaserConfig config;
+    private static ShowcaserClientConfig clientConfig;
+    private static ShowcaserServerConfig clientServerSyncedValues;
+
+    private static ShowcaserServerConfig serverConfig;
     private static ShowcaserStorage storage;
 
-    public static ShowcaserConfig getConfig() {
-        if (config == null) {
+    public static ShowcaserServerConfig getServerConfig() {
+        if (serverConfig == null) {
             throw new IllegalStateException("Config not loaded");
         }
-        return config;
+        return serverConfig;
+    }
+
+    public static ShowcaserClientConfig getClientConfig() {
+        if (clientConfig == null) {
+            throw new IllegalStateException("Config not loaded");
+        }
+        return clientConfig;
+    }
+
+    public static ShowcaserServerConfig getSyncedConfig() {
+        if (clientServerSyncedValues == null) {
+            throw new IllegalStateException("Config not loaded");
+        }
+        return clientServerSyncedValues;
     }
 
     public static ShowcaserStorage getStorage() {
@@ -75,22 +100,48 @@ public class ConfigManager {
     }
 
     public static void saveStorage() {
-        save(PERSISTENT_STORAGE, storage);
+        save(SERVER_PERSISTENT_STORAGE, storage);
+    }
+    public static void saveServerConfig() {
+        save(SERVER_CONFIG, serverConfig);
+    }
+    public static void saveClientConfig() {
+        save(CLIENT_CONFIG, clientConfig);
     }
 
-    public static void saveConfig() {
-        save(CONFIG, config);
+    @Environment(EnvType.CLIENT)
+    public static void sync(ConfigSyncMessage configSyncMessage) {
+        if (Platform.getEnvironment() != Env.CLIENT) throw new IllegalStateException("Sync config not on the client thread");
+        clientServerSyncedValues = new ShowcaserServerConfig(configSyncMessage);
     }
 
-    public static void loadAll() {
+    @Environment(EnvType.SERVER)
+    public static void syncServerConfigToPlayer(ServerPlayerEntity player) {
+        new ConfigSyncMessage(serverConfig).sendTo(player);
+    }
+
+    public static void syncServerConfigToAll() {
+        MinecraftServer server = GameInstance.getServer();
+
+        for (ServerPlayerEntity serverPlayerEntity : server.getPlayerManager().getPlayerList()) {
+            syncServerConfigToPlayer(serverPlayerEntity);
+        }
+    }
+
+    // client config is reloaded upon rejoining the world
+    @Environment(EnvType.CLIENT)
+    public static void loadClient() {
+        if (Platform.getEnvironment() != Env.CLIENT) throw new IllegalStateException("Load client configs called not on the server thread");
+        clientConfig = load(CLIENT_CONFIG, ShowcaserClientConfig.class, new ShowcaserClientConfig());
+    }
+
+    // server config updates on /showcaser reload command or restarting the server
+    @Environment(EnvType.SERVER)
+    public static void loadServer() {
+        if (Platform.getEnvironment() != Env.SERVER) throw new IllegalStateException("Load server configs called not on the server thread");
         Showcaser.LOGGER.info("Loaded configs");
-        config = load(CONFIG, ShowcaserConfig.class, new ShowcaserConfig());
-        storage = load(PERSISTENT_STORAGE, ShowcaserStorage.class, new ShowcaserStorage());
-    }
-
-    public static void saveAll() {
-        save(CONFIG, config);
-        save(PERSISTENT_STORAGE, storage);
+        serverConfig = load(SERVER_CONFIG, ShowcaserServerConfig.class, new ShowcaserServerConfig());
+        storage = load(SERVER_PERSISTENT_STORAGE, ShowcaserStorage.class, new ShowcaserStorage());
     }
 
 }

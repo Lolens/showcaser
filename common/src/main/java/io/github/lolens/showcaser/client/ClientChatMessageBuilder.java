@@ -215,7 +215,7 @@ public final class ClientChatMessageBuilder {
 
             ItemStack copy = itemStack.getCopy();
 
-            if (ConfigManager.getConfig().ignoreCustomNames) {
+            if (ConfigManager.getClientConfig().ignoreCustomNames) {
                 copy.setCustomName(null);
             }
 
@@ -259,7 +259,7 @@ public final class ClientChatMessageBuilder {
     private ItemStack prepareRenderStack(ShareableItemStack resource) {
         ItemStack copy = ((ItemStack) resource.get()).copy();
 
-        if (ConfigManager.getConfig().ignoreCustomNames) copy.setCustomName(null);
+        if (ConfigManager.getClientConfig().ignoreCustomNames) copy.setCustomName(null);
 
         if (verifiedType == VerifiedType.VERIFIED) {
             copy.getOrCreateNbt().putBoolean(VERIFIED_KEY, true);
@@ -275,7 +275,7 @@ public final class ClientChatMessageBuilder {
         MutableText mutable = text.copy();
         mutable.append("\n");
         // can cause verified message indentation desync on client upon reload but who cares
-        if (ConfigManager.getConfig().addEmptySpaceBeforeVerifiedText) mutable.append("\n");
+        if (ConfigManager.getClientConfig().addEmptySpaceBeforeVerifiedText) mutable.append("\n");
         mutable.append(VERIFIED_MESSAGE);
         return mutable;
     }
@@ -283,7 +283,7 @@ public final class ClientChatMessageBuilder {
     public static Text markAsUnverified(Text text) {
         MutableText mutable = text.copy();
         mutable.append("\n");
-        if (ConfigManager.getConfig().addEmptySpaceBeforeVerifiedText) mutable.append("\n");
+        if (ConfigManager.getClientConfig().addEmptySpaceBeforeVerifiedText) mutable.append("\n");
         mutable.append(UNVERIFIED_MESSAGE);
         return mutable;
     }

@@ -2,7 +2,6 @@ package io.github.lolens.showcaser.handler;
 
 
 import dev.architectury.utils.GameInstance;
-import io.github.lolens.showcaser.Showcaser;
 import io.github.lolens.showcaser.config.ConfigManager;
 import io.github.lolens.showcaser.model.ShareContext;
 import io.github.lolens.showcaser.network.message.s2c.ShareDisplayMessage;
@@ -89,7 +88,7 @@ public class ServerShareDispatcher {
 
     private static boolean checkCooldown(PlayerEntity player) {
         // caching cooldowns as static field and updating via ConfigUpdateEvent is overhead probably...
-        int cooldown = ConfigManager.getConfig().chatSharingCooldown;
+        int cooldown = ConfigManager.getServerConfig().chatSharingCooldown;
 
         int time = GameInstance.getServer().getTicks();
         int sinceSend = time - lastSendTimes.getOrDefault(player.getUuid(), -cooldown);

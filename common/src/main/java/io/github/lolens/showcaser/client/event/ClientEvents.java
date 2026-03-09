@@ -24,7 +24,7 @@ public class ClientEvents {
         });
 
         ClientPlayerEvent.CLIENT_PLAYER_JOIN.register(player -> {
-            ConfigManager.loadAll();
+            ConfigManager.loadClient();
             CachedPriorityRegistry.prewarmCache();
         });
 

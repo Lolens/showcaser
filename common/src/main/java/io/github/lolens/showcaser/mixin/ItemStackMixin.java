@@ -34,7 +34,7 @@ public abstract class ItemStackMixin {
 
             // tooltip.add(ScreenTexts.EMPTY);
 
-            if (ConfigManager.getConfig().addEmptySpaceBeforeVerifiedText) tooltip.add(ScreenTexts.EMPTY);
+            if (ConfigManager.getClientConfig().addEmptySpaceBeforeVerifiedText) tooltip.add(ScreenTexts.EMPTY);
             tooltip.add(verifiedText);
 
             cir.setReturnValue(tooltip);

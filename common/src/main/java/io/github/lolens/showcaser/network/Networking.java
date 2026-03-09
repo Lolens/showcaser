@@ -4,6 +4,7 @@ import dev.architectury.networking.simple.MessageType;
 import dev.architectury.networking.simple.SimpleNetworkManager;
 import io.github.lolens.showcaser.Showcaser;
 import io.github.lolens.showcaser.network.message.c2s.ShareMessage;
+import io.github.lolens.showcaser.network.message.s2c.ConfigSyncMessage;
 import io.github.lolens.showcaser.network.message.s2c.ShareDisplayMessage;
 import io.github.lolens.showcaser.network.message.s2c.conditional.emi.EmiOpenScreenMessage;
 import io.github.lolens.showcaser.network.message.s2c.conditional.rei.ReiOpenScreenMessage;
@@ -22,6 +23,11 @@ public class Networking {
                 "s2c_share_display",
                 ShareDisplayMessage::new
         );
+
+        MessageTypes.S2C.CONFIG_SYNC = NETWORK_MANAGER.registerS2C(
+                "s2c_config_sync",
+                ConfigSyncMessage::new
+        );
     }
 
     public static class MessageTypes {
@@ -32,6 +38,7 @@ public class Networking {
 
         public static class S2C {
             public static MessageType SHARE_DISPLAY;
+            public static MessageType CONFIG_SYNC;
         }
 
     }

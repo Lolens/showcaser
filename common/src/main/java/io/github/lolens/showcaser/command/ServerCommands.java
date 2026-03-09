@@ -49,7 +49,7 @@ public class ServerCommands {
     }
 
     private static int reloadConfigs(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        ConfigManager.loadAll();
+        ConfigManager.loadServer();
 
         context.getSource().sendMessage(Text.translatable("showcaser.commands.reload").formatted(Formatting.GREEN));
         return 1;
