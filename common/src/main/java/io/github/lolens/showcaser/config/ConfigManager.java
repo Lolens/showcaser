@@ -136,9 +136,7 @@ public class ConfigManager {
     }
 
     // server config updates on /showcaser reload command or restarting the server
-    @Environment(EnvType.SERVER)
     public static void loadServer() {
-        if (Platform.getEnvironment() != Env.SERVER) throw new IllegalStateException("Load server configs called not on the server thread");
         Showcaser.LOGGER.info("Loaded configs");
         serverConfig = load(SERVER_CONFIG, ShowcaserServerConfig.class, new ShowcaserServerConfig());
         storage = load(SERVER_PERSISTENT_STORAGE, ShowcaserStorage.class, new ShowcaserStorage());
