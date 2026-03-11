@@ -173,11 +173,11 @@ public final class ClientChatMessageBuilder {
 
     // === HELPERS ===
 
-
     private RenderableHoverEvent buildHoverEvent() {
 
         if (resource instanceof ShareableItemStack shareableItemStack) {
 
+            // item stack uses its default tooltip
             ItemStack stack = prepareRenderStack(shareableItemStack);
             return new RenderableHoverEvent(
                     iconWidth,
@@ -186,18 +186,23 @@ public final class ClientChatMessageBuilder {
             );
         }
 
-        Text fullTooltip = buildTooltip();
-        return new RenderableHoverEvent(
-                iconWidth,
-                resource,
-                fullTooltip
-        );
+        if (resource instanceof  ShareableFluidStack) {
+            // tooltip for fluidStack is fully custom
+            Text fullTooltip = buildTooltip();
+            return new RenderableHoverEvent(
+                    iconWidth,
+                    resource,
+                    fullTooltip
+            );
+        }
+
+        throw new IllegalStateException("Tried building hover event for unknown resource");
     }
 
     private MutableText buildContent() {
         long amount = resource.getAmount();
 
-        Text name = Text.empty();
+        Text name;
 
         if (resource instanceof ShareableFluidStack fluidStack) {
 
@@ -246,6 +251,8 @@ public final class ClientChatMessageBuilder {
                 Text.literal("\n")
         );
 
+        if (ConfigManager.getServerConfig().hideVerifiedTooltipLine) return tooltip;
+
         if (verifiedType == VerifiedType.VERIFIED) {
             return markAsVerified(tooltip);
         }
@@ -260,6 +267,8 @@ public final class ClientChatMessageBuilder {
         ItemStack copy = ((ItemStack) resource.get()).copy();
 
         if (ConfigManager.getClientConfig().ignoreCustomNames) copy.setCustomName(null);
+
+        if (ConfigManager.getServerConfig().hideVerifiedTooltipLine) return copy;
 
         if (verifiedType == VerifiedType.VERIFIED) {
             copy.getOrCreateNbt().putBoolean(VERIFIED_KEY, true);

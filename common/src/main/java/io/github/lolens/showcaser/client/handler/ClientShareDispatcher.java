@@ -15,7 +15,9 @@ public class ClientShareDispatcher {
     public static void onKeyPress(Screen screen) {
         int cooldown = ConfigManager.getSyncedConfig().chatSharingCooldown;
 
-        Showcaser.LOGGER.info("Pressed key on screen: {}", screen.getClass().getName());
+        if (ConfigManager.getClientConfig().logScreenClass) {
+            Showcaser.LOGGER.info("Pressed key on screen: {}", screen.getClass().getName());
+        }
 
         long currentTime = System.currentTimeMillis();
         if (currentTime - lastSendAt < cooldown) return;

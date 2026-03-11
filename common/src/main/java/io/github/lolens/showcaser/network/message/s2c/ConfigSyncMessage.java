@@ -10,14 +10,17 @@ import net.minecraft.network.PacketByteBuf;
 
 public class ConfigSyncMessage extends BaseS2CMessage {
 
-    private int sharingCooldown = 20;
+    private final int sharingCooldown;
+    private final boolean shouldHideVerificationMessage;
 
     public ConfigSyncMessage(ShowcaserServerConfig config) {
         this.sharingCooldown = config.chatSharingCooldown;
+        this.shouldHideVerificationMessage = config.hideVerifiedTooltipLine;
     }
 
     public ConfigSyncMessage(PacketByteBuf buf) {
         this.sharingCooldown = buf.readVarInt();
+        this.shouldHideVerificationMessage = buf.readBoolean();
     }
 
     @Override
@@ -28,6 +31,7 @@ public class ConfigSyncMessage extends BaseS2CMessage {
     @Override
     public void write(PacketByteBuf buf) {
         buf.writeVarInt(sharingCooldown);
+        buf.writeBoolean(shouldHideVerificationMessage);
     }
 
     @Override
