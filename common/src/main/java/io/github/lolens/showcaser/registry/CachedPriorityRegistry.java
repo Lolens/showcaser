@@ -13,13 +13,19 @@ public final class CachedPriorityRegistry {
     // Screen class / sorted client handlers by execution priority
     private static final Map<Class<?>, List<ClientShareHandler<? extends Screen>>> CLIENT_CACHE = new HashMap<>();
 
+    // these are for classes added by handlers using blacklist(Class<?> clazz)
     private static final Set<Class<?>> EXACT_BLACKLIST = new HashSet<>();
     private static final Set<Class<?>> INHERIT_BLACKLIST = new HashSet<>();
+
+    // these are for classes added by config using blacklist(String className)
+    private static final Set<Class<?>> EXACT_BLACKLIST_BY_CONFIG = new HashSet<>();
+    private static final Set<Class<?>> INHERIT_BLACKLIST_BY_CONFIG = new HashSet<>();
 
     private static boolean dirty = true;
 
     /**
      * excludes specified class from handling
+     *
      * @param clazz class excluded from handling
      */
     public static void blacklistExact(Class<?> clazz) {
@@ -29,12 +35,32 @@ public final class CachedPriorityRegistry {
 
     /**
      * excludes specified class and it's inheritors from handling
+     *
      * @param clazz class excluded from handling
      */
     public static void blacklistWithInheritors(Class<?> clazz) {
         INHERIT_BLACKLIST.add(clazz);
         invalidate();
     }
+
+    public static void blacklistExact(String className) {
+        try {
+            EXACT_BLACKLIST_BY_CONFIG.add(Class.forName(className));
+            invalidate();
+        } catch (ClassNotFoundException e) {
+            Showcaser.LOGGER.error("Tried adding {} to exact class blacklist but class was not found.", className);
+        }
+    }
+
+    public static void blacklistWithInheritors(String className) {
+        try {
+            INHERIT_BLACKLIST_BY_CONFIG.add(Class.forName(className));
+            invalidate();
+        } catch (ClassNotFoundException e) {
+            Showcaser.LOGGER.error("Tried adding {} and its inheritors to blacklist but class was not found.", className);
+        }
+    }
+
 
     public static void whitelistExact(Class<?> clazz) {
         EXACT_BLACKLIST.remove(clazz);
@@ -47,7 +73,7 @@ public final class CachedPriorityRegistry {
     }
 
     private static boolean isBlacklisted(Class<?> screenClass) {
-        if (EXACT_BLACKLIST.contains(screenClass)) {
+        if (EXACT_BLACKLIST.contains(screenClass) || EXACT_BLACKLIST_BY_CONFIG.contains(screenClass)) {
             return true;
         }
 
@@ -57,7 +83,19 @@ public final class CachedPriorityRegistry {
             }
         }
 
+        for (Class<?> blacklisted : INHERIT_BLACKLIST_BY_CONFIG) {
+            if (blacklisted.isAssignableFrom(screenClass)) {
+                return true;
+            }
+        }
+
         return false;
+    }
+
+    public static void clearConfigBlacklistedClasses() {
+        INHERIT_BLACKLIST_BY_CONFIG.clear();
+        EXACT_BLACKLIST_BY_CONFIG.clear();
+        invalidate();
     }
 
     public static List<ClientShareHandler<? extends Screen>> getClientHandlersFor(Screen screen) {
@@ -70,7 +108,7 @@ public final class CachedPriorityRegistry {
             return List.copyOf(ClientHandlerRegistry.getClientOverlayShareHandlers());
         }
 
-        checkAndInvalidateCache();
+        clearIfDirty();
 
         return CLIENT_CACHE.computeIfAbsent(screenClass, clazz -> {
 
@@ -93,7 +131,7 @@ public final class CachedPriorityRegistry {
         });
     }
 
-    private static void checkAndInvalidateCache() {
+    private static void clearIfDirty() {
         if (dirty) {
             CLIENT_CACHE.clear();
             dirty = false;
@@ -102,13 +140,6 @@ public final class CachedPriorityRegistry {
 
     public static void invalidate() {
         dirty = true;
-    }
-
-    public static void clearCache() {
-        CLIENT_CACHE.clear();
-        EXACT_BLACKLIST.clear();
-        INHERIT_BLACKLIST.clear();
-        dirty = false;
     }
 
     public static void prewarmCache(Class<?>... classes) {
@@ -131,7 +162,7 @@ public final class CachedPriorityRegistry {
         prewarmCache(targets.toArray(new Class[0]));
     }
 
-    public static void printInfo(Class<?> ...classes) {
+    public static void printInfo(Class<?>... classes) {
         StringBuilder sb = new StringBuilder();
         sb.append("Prewarmed cache for ").append(classes.length).append(" classes:\n");
 
@@ -150,6 +181,42 @@ public final class CachedPriorityRegistry {
                         .collect(Collectors.joining(", "));
 
                 sb.append(handlerInfo).append("\n");
+            });
+        }
+
+        if (EXACT_BLACKLIST.isEmpty()) {
+            sb.append("\nNo classes banned (by handlers exact)");
+        } else {
+            sb.append("\nClasses banned: (by handlers exact)\n");
+            EXACT_BLACKLIST.forEach(clazz -> {
+                sb.append("   ").append(clazz.getName()).append("\n");
+            });
+        }
+
+        if (INHERIT_BLACKLIST.isEmpty()) {
+            sb.append("\nNo classes banned (by handlers with inheritors)");
+        } else {
+            sb.append("\nClasses banned: (by handlers with inheritors)\n");
+            INHERIT_BLACKLIST.forEach(clazz -> {
+                sb.append("   ").append(clazz.getName()).append("\n");
+            });
+        }
+
+        if (EXACT_BLACKLIST_BY_CONFIG.isEmpty()) {
+            sb.append("\nNo classes banned (by config exact)");
+        } else {
+            sb.append("\nClasses banned: (by config exact)\n");
+            EXACT_BLACKLIST_BY_CONFIG.forEach(clazz -> {
+                sb.append("   ").append(clazz.getName()).append("\n");
+            });
+        }
+
+        if (INHERIT_BLACKLIST_BY_CONFIG.isEmpty()) {
+            sb.append("\nNo classes banned (by config with inheritors)");
+        } else {
+            sb.append("\nClasses banned: (by config with inheritors)\n");
+            INHERIT_BLACKLIST_BY_CONFIG.forEach(clazz -> {
+                sb.append("   ").append(clazz.getName()).append("\n");
             });
         }
 

@@ -6,6 +6,7 @@ import dev.architectury.platform.Platform;
 import dev.architectury.utils.Env;
 import dev.architectury.utils.GameInstance;
 import io.github.lolens.showcaser.Showcaser;
+import io.github.lolens.showcaser.api.event.client.ClientConfigSyncEvent;
 import io.github.lolens.showcaser.network.message.s2c.ConfigSyncMessage;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -113,9 +114,9 @@ public class ConfigManager {
     public static void sync(ConfigSyncMessage configSyncMessage) {
         if (Platform.getEnvironment() != Env.CLIENT) throw new IllegalStateException("Sync config not on the client thread");
         clientServerSyncedValues = new ShowcaserServerConfig(configSyncMessage);
+        ClientConfigSyncEvent.EVENT.invoker().onConfigSync(clientServerSyncedValues);
     }
 
-    @Environment(EnvType.SERVER)
     public static void syncServerConfigToPlayer(ServerPlayerEntity player) {
         new ConfigSyncMessage(serverConfig).sendTo(player);
     }
@@ -140,6 +141,9 @@ public class ConfigManager {
         Showcaser.LOGGER.info("Loaded configs");
         serverConfig = load(SERVER_CONFIG, ShowcaserServerConfig.class, new ShowcaserServerConfig());
         storage = load(SERVER_PERSISTENT_STORAGE, ShowcaserStorage.class, new ShowcaserStorage());
+
+        // maybe should add server config reload event?
+        syncServerConfigToAll();
     }
 
 }

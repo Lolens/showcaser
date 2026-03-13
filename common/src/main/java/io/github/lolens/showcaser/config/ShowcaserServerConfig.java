@@ -3,10 +3,16 @@ package io.github.lolens.showcaser.config;
 import io.github.lolens.showcaser.network.message.s2c.ConfigSyncMessage;
 import jdk.jfr.Description;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ShowcaserServerConfig {
 
     ShowcaserServerConfig(ConfigSyncMessage message) {
         this.chatSharingCooldown = message.getSharingCooldown();
+        this.hideVerifiedTooltipLine = message.isShouldHideVerificationMessage();
+        this.blacklistedClassesExact = message.getBlacklistExact();
+        this.blacklistedClassesWithInheritors = message.getBlacklistWithInheritors();
     }
 
     ShowcaserServerConfig() {
@@ -23,5 +29,8 @@ public class ShowcaserServerConfig {
     )
     public boolean hideVerifiedTooltipLine = false;
 
+    public List<String> blacklistedClassesExact = new ArrayList<>();
+
+    public List<String> blacklistedClassesWithInheritors = new ArrayList<>();
 
 }

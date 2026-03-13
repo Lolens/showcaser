@@ -35,8 +35,4 @@ public final class ServerShareHandlerRegistry {
         return SERVER_HANDLERS.get(id);
     }
 
-    public static void clear() {
-        SERVER_HANDLERS.clear();
-        CachedPriorityRegistry.clearCache();
-    }
 }

@@ -3,6 +3,7 @@ package io.github.lolens.showcaser.client.event;
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.client.ClientPlayerEvent;
 import dev.architectury.event.events.client.ClientScreenInputEvent;
+import io.github.lolens.showcaser.api.event.client.ClientConfigSyncEvent;
 import io.github.lolens.showcaser.client.handler.ClientShareDispatcher;
 import io.github.lolens.showcaser.config.ConfigManager;
 import io.github.lolens.showcaser.registry.CachedPriorityRegistry;
@@ -25,6 +26,21 @@ public class ClientEvents {
 
         ClientPlayerEvent.CLIENT_PLAYER_JOIN.register(player -> {
             ConfigManager.loadClient();
+        });
+
+        // prevents clients from creating context on screens that are banned on server
+        ClientConfigSyncEvent.EVENT.register(config -> {
+
+            CachedPriorityRegistry.clearConfigBlacklistedClasses();
+
+            for (String className : config.blacklistedClassesWithInheritors) {
+                CachedPriorityRegistry.blacklistWithInheritors(className);
+            }
+            for (String className : config.blacklistedClassesExact) {
+                CachedPriorityRegistry.blacklistExact(className);
+            }
+
+            // at this stage client should server's blacklist
             CachedPriorityRegistry.prewarmCache();
         });
 
