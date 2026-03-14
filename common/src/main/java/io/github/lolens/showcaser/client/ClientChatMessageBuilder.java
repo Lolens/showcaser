@@ -251,7 +251,7 @@ public final class ClientChatMessageBuilder {
                 Text.literal("\n")
         );
 
-        if (ConfigManager.getServerConfig().hideVerifiedTooltipLine) return tooltip;
+        if (ConfigManager.getSyncedConfig().hideVerifiedTooltipLine) return tooltip;
 
         if (verifiedType == VerifiedType.VERIFIED) {
             return markAsVerified(tooltip);
@@ -268,7 +268,7 @@ public final class ClientChatMessageBuilder {
 
         if (ConfigManager.getClientConfig().ignoreCustomNames) copy.setCustomName(null);
 
-        if (ConfigManager.getServerConfig().hideVerifiedTooltipLine) return copy;
+        if (ConfigManager.getSyncedConfig().hideVerifiedTooltipLine) return copy;
 
         if (verifiedType == VerifiedType.VERIFIED) {
             copy.getOrCreateNbt().putBoolean(VERIFIED_KEY, true);
