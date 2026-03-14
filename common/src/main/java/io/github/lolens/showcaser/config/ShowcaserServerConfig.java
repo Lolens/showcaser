@@ -29,8 +29,10 @@ public class ShowcaserServerConfig {
     )
     public boolean hideVerifiedTooltipLine = false;
 
+    @Description("Disables context creation on specified screen")
     public List<String> blacklistedClassesExact = new ArrayList<>();
 
+    @Description("Disables context creation on specified screen and it's inheritors")
     public List<String> blacklistedClassesWithInheritors = new ArrayList<>();
 
 }
