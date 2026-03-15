@@ -15,7 +15,7 @@ public class ShareMessage extends BaseC2SMessage {
 
     public ShareMessage(ShareContext shareContext) {
         this.shareContext = shareContext;
-        Showcaser.LOGGER.info("new S2C ShareMessage: {}", shareContext);
+        Showcaser.LOGGER.info("new C2S ShareMessage: {}", shareContext);
     }
 
     public ShareMessage(PacketByteBuf buf) { // deserializer
