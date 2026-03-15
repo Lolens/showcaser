@@ -8,6 +8,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 
 public class ShareContext {
@@ -60,6 +61,8 @@ public class ShareContext {
     public ShareContext with(String key, ItemStack stack) {
         NbtCompound stackNbt = new NbtCompound();
         stack.writeNbt(stackNbt);
+        // overwrite byte value with int count to work with inventories that has higher max stack count
+        stackNbt.putInt("Count", stack.getCount());
         data.put(key, stackNbt);
         return this;
     }
@@ -98,7 +101,11 @@ public class ShareContext {
     }
 
     public ItemStack getItemStack(String key) {
-        return ItemStack.fromNbt(data.getCompound(key));
+        NbtCompound stackNbt = data.getCompound(key);
+        ItemStack stack = ItemStack.fromNbt(stackNbt);
+        int actualCount = stackNbt.getInt("Count");
+        stack.setCount(actualCount);
+        return stack;
     }
 
     public boolean has(String key) {
@@ -181,15 +188,6 @@ public class ShareContext {
 
     public JsonElement getJsonElement() {
         return NbtOps.INSTANCE.convertTo(JsonOps.INSTANCE, data.get("json"));
-    }
-
-    public NbtElement getJsonAsNbt() {
-        return data.get("json");
-    }
-
-    public ShareContext withType(String type) {
-        data.putString("type", type);
-        return this;
     }
 
     public String getType() {
