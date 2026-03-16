@@ -15,12 +15,12 @@ import dev.architectury.utils.Env;
 import io.github.lolens.showcaser.adapter.AdapterFactory;
 import io.github.lolens.showcaser.api.handler.HandlerResult;
 import io.github.lolens.showcaser.api.resource.ShareableResource;
+import io.github.lolens.showcaser.api.shareContext.ShareContext;
 import io.github.lolens.showcaser.client.ClientChatMessageBuilder;
 import io.github.lolens.showcaser.core.builder.handler.ClientHandlerBuilder;
 import io.github.lolens.showcaser.core.builder.handler.ServerHandlerBuilder;
 import io.github.lolens.showcaser.exception.ServerShareProcessingException;
 import io.github.lolens.showcaser.forge.mixin.MEStorageMenuInvoker;
-import io.github.lolens.showcaser.core.ShareContext;
 import io.github.lolens.showcaser.registry.CachedPriorityRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.nbt.NbtCompound;
@@ -29,6 +29,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.util.Identifier;
 
 import static io.github.lolens.showcaser.Showcaser.MOD_ID;
+import static io.github.lolens.showcaser.api.ShowcaserAPI.getContextFactory;
 import static io.github.lolens.showcaser.client.ClientChatMessageBuilder.VerifiedType.VERIFIED;
 import static io.github.lolens.showcaser.util.HandlerUtils.getHandler;
 import static io.github.lolens.showcaser.util.HandlerUtils.isValidSyncId;
@@ -68,7 +69,7 @@ public class Ae2HandlerImpl {
                     );
 
                     NbtCompound keyCompound = key.toTagGeneric();
-                    return ShareContext.of(ID)
+                    return getContextFactory().create(ID)
                             .with("key", keyCompound)
                             .withAmount(amount); // amount in droplets on fabric. Gets converted at display
                 })
@@ -91,7 +92,7 @@ public class Ae2HandlerImpl {
                         // for cases when "something" is 0 and displayed for crafting availability reason
                         if (entry.getStoredAmount() == 0) return HandlerResult.STOP;
 
-                        ShareContext context = ShareContext.of(
+                        ShareContext context = getContextFactory().create(
                                 ID,
                                 screen.getScreenHandler().syncId
                         ).with("serial", entry.getSerial());

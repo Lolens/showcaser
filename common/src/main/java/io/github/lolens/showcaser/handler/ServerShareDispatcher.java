@@ -2,8 +2,8 @@ package io.github.lolens.showcaser.handler;
 
 
 import dev.architectury.utils.GameInstance;
+import io.github.lolens.showcaser.api.shareContext.ShareContext;
 import io.github.lolens.showcaser.config.ConfigManager;
-import io.github.lolens.showcaser.core.ShareContext;
 import io.github.lolens.showcaser.network.message.s2c.ShareDisplayMessage;
 import io.github.lolens.showcaser.registry.ServerShareHandlerRegistry;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
@@ -25,7 +25,7 @@ public class ServerShareDispatcher {
         if (checkCooldown(player)) return;
 
         ShareContext out;
-        if (context.hasValidSyncId()) {
+        if (context.hasTrustedSyncId()) {
             out = dispatchTrusted(context, player);
         } else {
             out = dispatchUntrusted(context, player);

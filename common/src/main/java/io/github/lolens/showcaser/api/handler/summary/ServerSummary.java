@@ -1,6 +1,6 @@
 package io.github.lolens.showcaser.api.handler.summary;
 
-import io.github.lolens.showcaser.core.ShareContext;
+import io.github.lolens.showcaser.api.shareContext.ShareContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.util.Identifier;

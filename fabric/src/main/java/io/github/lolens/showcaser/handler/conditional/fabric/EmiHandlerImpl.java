@@ -15,7 +15,6 @@ import io.github.lolens.showcaser.command.ServerCommands;
 import io.github.lolens.showcaser.client.ClientChatMessageBuilder;
 import io.github.lolens.showcaser.core.builder.handler.ClientHandlerBuilder;
 import io.github.lolens.showcaser.core.builder.handler.ServerHandlerBuilder;
-import io.github.lolens.showcaser.core.ShareContext;
 import io.github.lolens.showcaser.network.Networking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.ClickEvent;
@@ -24,6 +23,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 import static io.github.lolens.showcaser.Showcaser.MOD_ID;
+import static io.github.lolens.showcaser.api.ShowcaserAPI.getContextFactory;
 import static io.github.lolens.showcaser.client.ClientChatMessageBuilder.VerifiedType.NONE;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -81,12 +81,12 @@ public class EmiHandlerImpl {
                             ingredient instanceof ItemEmiStack
                     ) {
                         if (recipeId == null) {
-                            contextConsumer.accept(ShareContext.of(ID)
+                            contextConsumer.accept(getContextFactory().create(ID)
                                     .withJsonElement(EmiIngredientSerializers.serialize(ingredient))
                             );
                             return HandlerResult.SUCCESS;
                         }
-                        contextConsumer.accept(ShareContext.of(ID)
+                        contextConsumer.accept(getContextFactory().create(ID)
                                 .withJsonElement(EmiIngredientSerializers.serialize(ingredient))
                                 .withIdentifier(recipeId)
                         );

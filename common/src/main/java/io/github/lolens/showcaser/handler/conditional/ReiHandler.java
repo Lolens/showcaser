@@ -3,13 +3,13 @@ package io.github.lolens.showcaser.handler.conditional;
 import dev.architectury.platform.Platform;
 import dev.architectury.utils.Env;
 import io.github.lolens.showcaser.adapter.AdapterFactory;
+import io.github.lolens.showcaser.api.ShowcaserAPI;
 import io.github.lolens.showcaser.api.handler.HandlerResult;
 import io.github.lolens.showcaser.api.resource.ShareableResource;
 import io.github.lolens.showcaser.command.ServerCommands;
 import io.github.lolens.showcaser.client.ClientChatMessageBuilder;
 import io.github.lolens.showcaser.core.builder.handler.ClientHandlerBuilder;
 import io.github.lolens.showcaser.core.builder.handler.ServerHandlerBuilder;
-import io.github.lolens.showcaser.core.ShareContext;
 import io.github.lolens.showcaser.network.Networking;
 import me.shedaniel.rei.api.client.REIRuntime;
 import me.shedaniel.rei.api.client.overlay.ScreenOverlay;
@@ -28,6 +28,7 @@ import net.minecraft.util.Identifier;
 import java.util.Optional;
 
 import static io.github.lolens.showcaser.Showcaser.MOD_ID;
+import static io.github.lolens.showcaser.api.ShowcaserAPI.getContextFactory;
 import static io.github.lolens.showcaser.client.ClientChatMessageBuilder.VerifiedType.NONE;
 
 public class ReiHandler {
@@ -71,13 +72,13 @@ public class ReiHandler {
 
                     if (entryType == VanillaEntryTypes.ITEM) {
                         entryNbt.putString("type", "minecraft:item");
-                        contextConsumer.accept(ShareContext.of(ID)
+                        contextConsumer.accept(getContextFactory().create(ID)
                                 .with("entry", entryNbt));
                         return HandlerResult.SUCCESS;
                     }
                     if (entryType == VanillaEntryTypes.FLUID) {
                         entryNbt.putString("type", "minecraft:fluid");
-                        contextConsumer.accept(ShareContext.of(ID)
+                        contextConsumer.accept(getContextFactory().create(ID)
                                 .with("entry", entryNbt));
                         return HandlerResult.SUCCESS;
                     }

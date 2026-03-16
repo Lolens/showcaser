@@ -4,8 +4,9 @@ import dev.architectury.networking.NetworkManager;
 import dev.architectury.networking.simple.BaseC2SMessage;
 import dev.architectury.networking.simple.MessageType;
 import io.github.lolens.showcaser.Showcaser;
+import io.github.lolens.showcaser.api.shareContext.ShareContext;
+import io.github.lolens.showcaser.core.ShareContextImpl;
 import io.github.lolens.showcaser.handler.ServerShareDispatcher;
-import io.github.lolens.showcaser.core.ShareContext;
 import io.github.lolens.showcaser.network.Networking;
 import net.minecraft.network.PacketByteBuf;
 
@@ -19,7 +20,7 @@ public class ShareMessage extends BaseC2SMessage {
     }
 
     public ShareMessage(PacketByteBuf buf) { // deserializer
-        shareContext = ShareContext.deserialize(buf);
+        shareContext = ShareContextImpl.deserialize(buf);
     }
 
     @Override
@@ -29,7 +30,7 @@ public class ShareMessage extends BaseC2SMessage {
 
     @Override
     public void write(PacketByteBuf buf) { // serializer
-        shareContext.serialize(buf);
+        ((ShareContextImpl) shareContext).serialize(buf);
     }
 
     @Override

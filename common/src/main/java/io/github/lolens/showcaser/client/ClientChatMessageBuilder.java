@@ -1,11 +1,11 @@
 package io.github.lolens.showcaser.client;
 
+import io.github.lolens.showcaser.api.shareContext.ShareContext;
 import io.github.lolens.showcaser.api.resource.ShareableFluidStack;
 import io.github.lolens.showcaser.api.resource.ShareableItemStack;
 import io.github.lolens.showcaser.api.resource.ShareableResource;
 import io.github.lolens.showcaser.client.render.RenderableHoverEvent;
 import io.github.lolens.showcaser.config.ConfigManager;
-import io.github.lolens.showcaser.core.ShareContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.*;
 import net.minecraft.util.Formatting;

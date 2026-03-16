@@ -3,6 +3,7 @@ package io.github.lolens.showcaser.handler.vanilla;
 import dev.architectury.platform.Platform;
 import dev.architectury.utils.Env;
 import io.github.lolens.showcaser.adapter.AdapterFactory;
+import io.github.lolens.showcaser.api.shareContext.ShareContext;
 import io.github.lolens.showcaser.api.handler.HandlerResult;
 import io.github.lolens.showcaser.api.resource.ShareableResource;
 import io.github.lolens.showcaser.client.ClientChatMessageBuilder;
@@ -11,7 +12,6 @@ import io.github.lolens.showcaser.core.builder.handler.ServerHandlerBuilder;
 import io.github.lolens.showcaser.mixin.CreativeInventoryScreenHandlerMixin;
 import io.github.lolens.showcaser.mixin.CreativeInventoryScreenMixin;
 import io.github.lolens.showcaser.mixin.HandledScreenMixin;
-import io.github.lolens.showcaser.core.ShareContext;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import net.minecraft.item.ItemGroup;
@@ -21,6 +21,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.util.Identifier;
 
 import static io.github.lolens.showcaser.Showcaser.MOD_ID;
+import static io.github.lolens.showcaser.api.ShowcaserAPI.getContextFactory;
 import static io.github.lolens.showcaser.client.ClientChatMessageBuilder.VerifiedType.VERIFIED;
 
 public class CreativeInventoryHandler {
@@ -40,7 +41,7 @@ public class CreativeInventoryHandler {
                 .process((player, context) -> {
                     if (!player.isCreative()) return null;
 
-                    return ShareContext.of(ID)
+                    return getContextFactory().create(ID)
                             .withItemStack(context.getItemStack());
                 })
                 .register();
@@ -60,7 +61,7 @@ public class CreativeInventoryHandler {
                     switch (type) {
                         case INVENTORY -> {
                             if (slot.hasStack()) {
-                                ShareContext shareContext = ShareContext.of(
+                                ShareContext shareContext = getContextFactory().create(
                                                 ID,
                                                 screen.getScreenHandler().syncId)
                                         .withItemStack(slot.getStack());
@@ -77,7 +78,7 @@ public class CreativeInventoryHandler {
                                 // fixes sharing empty hotbar slots while in category
                                 if (!slot.hasStack()) return HandlerResult.STOP;
 
-                                ShareContext shareContext = ShareContext.of(
+                                ShareContext shareContext = getContextFactory().create(
                                                 ID,
                                                 screen.getScreenHandler().syncId)
                                         .withItemStack(slot.getStack());
@@ -93,7 +94,7 @@ public class CreativeInventoryHandler {
                             if (listId >= handler.itemList.size()) return HandlerResult.STOP;
 
                             ItemStack stack = screen.getScreenHandler().itemList.get(slot.id + (9 * row));
-                            ShareContext shareContext = ShareContext.of(
+                            ShareContext shareContext = getContextFactory().create(
                                             ID,
                                             screen.getScreenHandler().syncId)
                                     .withItemStack(stack);

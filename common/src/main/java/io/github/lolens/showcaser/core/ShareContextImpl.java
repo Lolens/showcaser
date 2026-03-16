@@ -3,6 +3,7 @@ package io.github.lolens.showcaser.core;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import io.github.lolens.showcaser.Showcaser;
+import io.github.lolens.showcaser.api.shareContext.ShareContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -10,36 +11,36 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
-public class ShareContext {
+public class ShareContextImpl implements ShareContext {
 
     protected final Identifier id;
     protected int syncId; // -1 if not trusted
 
     protected final NbtCompound data;
 
-    protected ShareContext(Identifier id, int syncId, NbtCompound data) {
+    protected ShareContextImpl(Identifier id, int syncId, NbtCompound data) {
         this.id = id;
         this.syncId = syncId;
         this.data = data;
     }
 
-    protected ShareContext(Identifier id, NbtCompound data) {
+    protected ShareContextImpl(Identifier id, NbtCompound data) {
         this(id, -1, data);
     }
 
     public static ShareContext of(Identifier id, int syncId, NbtCompound data) {
-        return new ShareContext(id, syncId, data);
+        return new ShareContextImpl(id, syncId, data);
     }
     public static ShareContext of(Identifier id, NbtCompound data) {
-        return new ShareContext(id, -1, data);
+        return new ShareContextImpl(id, -1, data);
     }
 
     public static ShareContext of(Identifier id, int syncId) {
-        return new ShareContext(id, syncId, new NbtCompound());
+        return new ShareContextImpl(id, syncId, new NbtCompound());
     }
 
     public static ShareContext of(Identifier id) {
-        return new ShareContext(id, -1, new NbtCompound());
+        return new ShareContextImpl(id, -1, new NbtCompound());
     }
 
     public ShareContext with(String key, String value) {
@@ -47,7 +48,7 @@ public class ShareContext {
         return this;
     }
 
-    public ShareContext with(String key, Long value) {
+    public ShareContext with(String key, long value) {
         data.putLong(key, value);
         return this;
     }
@@ -75,7 +76,7 @@ public class ShareContext {
         return id;
     }
 
-    public boolean hasValidSyncId() {
+    public boolean hasTrustedSyncId() {
         return syncId != -1;
     }
 
@@ -121,7 +122,7 @@ public class ShareContext {
         int syncId = buf.readInt();
         Identifier id = buf.readIdentifier();
         NbtCompound data = buf.readNbt();
-        return new ShareContext(id, syncId, data);
+        return new ShareContextImpl(id, syncId, data);
     }
 
     @Override
@@ -144,6 +145,10 @@ public class ShareContext {
         return this;
     }
 
+    public boolean hasSlotIndex() {
+        return has("slot");
+    }
+
     public long getAmount() {
         return data.getLong("amount");
     }
@@ -151,6 +156,10 @@ public class ShareContext {
     public ShareContext withAmount(long value) {
         data.putLong("amount", value);
         return this;
+    }
+
+    public boolean hasAmount() {
+        return has("amount");
     }
 
     public ShareContext withItemStack(ItemStack stack) {
@@ -185,12 +194,12 @@ public class ShareContext {
         return with("json", element);
     }
 
-    public JsonElement getJsonElement() {
-        return NbtOps.INSTANCE.convertTo(JsonOps.INSTANCE, data.get("json"));
+    public boolean hasJsonElement() {
+        return has("json");
     }
 
-    public String getType() {
-        return data.getString("type");
+    public JsonElement getJsonElement() {
+        return NbtOps.INSTANCE.convertTo(JsonOps.INSTANCE, data.get("json"));
     }
 
 }

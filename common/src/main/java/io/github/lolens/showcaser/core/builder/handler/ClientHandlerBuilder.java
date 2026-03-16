@@ -1,9 +1,9 @@
 package io.github.lolens.showcaser.core.builder.handler;
 
-import io.github.lolens.showcaser.api.handler.HandlerResult;
+import io.github.lolens.showcaser.api.shareContext.ShareContext;
 import io.github.lolens.showcaser.api.event.HandlerRegistrationEvent;
+import io.github.lolens.showcaser.api.handler.HandlerResult;
 import io.github.lolens.showcaser.api.handler.summary.ClientSummary;
-import io.github.lolens.showcaser.core.ShareContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.Identifier;
 

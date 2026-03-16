@@ -2,6 +2,7 @@ package io.github.lolens.showcaser;
 
 import dev.architectury.platform.Platform;
 import dev.architectury.utils.Env;
+import io.github.lolens.showcaser.api.ShowcaserAPI;
 import io.github.lolens.showcaser.client.KeyMappings;
 import io.github.lolens.showcaser.client.event.ClientEvents;
 import io.github.lolens.showcaser.command.ServerCommands;
@@ -17,6 +18,8 @@ public final class Showcaser {
     public static final String MOD_ID = "showcaser";
 
     public static void init() {
+
+        ShowcaserAPI.init();
 
         Events.register();
 

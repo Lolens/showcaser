@@ -4,13 +4,13 @@ import dev.architectury.platform.Platform;
 import dev.architectury.utils.Env;
 import io.github.lolens.showcaser.adapter.AdapterFactory;
 import io.github.lolens.showcaser.api.handler.HandlerResult;
+import io.github.lolens.showcaser.api.resource.ShareableResource;
+import io.github.lolens.showcaser.api.shareContext.ShareContext;
 import io.github.lolens.showcaser.client.ClientChatMessageBuilder;
 import io.github.lolens.showcaser.core.builder.handler.ClientHandlerBuilder;
 import io.github.lolens.showcaser.core.builder.handler.ServerHandlerBuilder;
 import io.github.lolens.showcaser.exception.ServerShareProcessingException;
 import io.github.lolens.showcaser.mixin.HandledScreenMixin;
-import io.github.lolens.showcaser.core.ShareContext;
-import io.github.lolens.showcaser.api.resource.ShareableResource;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.item.ItemStack;
@@ -21,6 +21,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.util.Identifier;
 
 import static io.github.lolens.showcaser.Showcaser.MOD_ID;
+import static io.github.lolens.showcaser.api.ShowcaserAPI.getContextFactory;
 import static io.github.lolens.showcaser.client.ClientChatMessageBuilder.VerifiedType.VERIFIED;
 import static io.github.lolens.showcaser.util.HandlerUtils.getHandler;
 import static io.github.lolens.showcaser.util.HandlerUtils.isValidSlot;
@@ -50,7 +51,7 @@ public class FallbackHandler {
 
                     if (stack.isEmpty()) return null;
 
-                    return ShareContext.of(ID).with("stack", stack);
+                    return getContextFactory().create(ID).with("stack", stack);
                 })
                 .register();
     }
@@ -66,7 +67,7 @@ public class FallbackHandler {
 
                     if (slot instanceof CraftingResultSlot) return HandlerResult.STOP;
 
-                    ShareContext shareContext = ShareContext.of(
+                    ShareContext shareContext = getContextFactory().create(
                                     ID,
                                     screen.getScreenHandler().syncId)
                             .with("slot", slot.id);

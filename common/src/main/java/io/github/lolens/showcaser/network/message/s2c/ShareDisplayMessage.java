@@ -4,7 +4,8 @@ import dev.architectury.networking.NetworkManager;
 import dev.architectury.networking.simple.BaseS2CMessage;
 import dev.architectury.networking.simple.MessageType;
 import io.github.lolens.showcaser.Showcaser;
-import io.github.lolens.showcaser.core.ShareContext;
+import io.github.lolens.showcaser.api.shareContext.ShareContext;
+import io.github.lolens.showcaser.core.ShareContextImpl;
 import io.github.lolens.showcaser.network.Networking;
 import io.github.lolens.showcaser.registry.ClientHandlerRegistry;
 import net.minecraft.network.PacketByteBuf;
@@ -15,7 +16,7 @@ public class ShareDisplayMessage extends BaseS2CMessage {
     ShareContext shareContext;
 
     public ShareDisplayMessage(PacketByteBuf buf) {
-        this.shareContext = ShareContext.deserialize(buf);
+        this.shareContext = ShareContextImpl.deserialize(buf);
         this.senderName = buf.readString();
     }
 
@@ -32,7 +33,7 @@ public class ShareDisplayMessage extends BaseS2CMessage {
 
     @Override
     public void write(PacketByteBuf buf) {
-        shareContext.serialize(buf);
+        ((ShareContextImpl) shareContext).serialize(buf);
         buf.writeString(senderName);
     }
 
