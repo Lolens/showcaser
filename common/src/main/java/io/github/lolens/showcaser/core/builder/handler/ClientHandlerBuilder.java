@@ -16,7 +16,7 @@ public class ClientHandlerBuilder<T extends Screen> {
     private final Identifier id;
     private Class<T> screenClass;
     private BiFunction<T, Consumer<ShareContext>, HandlerResult> contextCreator;
-    private BiConsumer<String, ShareContext> display;
+    private BiConsumer<String, ShareContext> displayHandler;
 
     private ClientHandlerBuilder(Identifier id) {
         this.id = id;
@@ -36,8 +36,8 @@ public class ClientHandlerBuilder<T extends Screen> {
         return this;
     }
 
-    public ClientHandlerBuilder<T> display(BiConsumer<String, ShareContext> display) {
-        this.display = display;
+    public ClientHandlerBuilder<T> display(BiConsumer<String, ShareContext> displayHandler) {
+        this.displayHandler = displayHandler;
         return this;
     }
 
@@ -50,7 +50,7 @@ public class ClientHandlerBuilder<T extends Screen> {
                 id,
                 screenClass,
                 contextCreator,
-                display
+                displayHandler
         );
     }
 

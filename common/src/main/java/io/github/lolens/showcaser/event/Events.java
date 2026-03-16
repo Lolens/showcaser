@@ -4,6 +4,9 @@ import dev.architectury.event.events.common.LifecycleEvent;
 import dev.architectury.event.events.common.PlayerEvent;
 import io.github.lolens.showcaser.Showcaser;
 import io.github.lolens.showcaser.api.event.HandlerRegistrationEvent;
+import io.github.lolens.showcaser.api.handler.ClientShareHandler;
+import io.github.lolens.showcaser.api.handler.DisplayHandler;
+import io.github.lolens.showcaser.api.handler.ServerShareHandler;
 import io.github.lolens.showcaser.api.handler.summary.ClientSummary;
 import io.github.lolens.showcaser.api.handler.summary.ServerSummary;
 import io.github.lolens.showcaser.config.ConfigManager;
@@ -25,6 +28,21 @@ public class Events {
             @Override
             public void registerServer(ServerSummary<?> summary) {
                 ShareHandlerRegistrar.registerServerSummary(summary);
+            }
+
+            @Override
+            public void register(DisplayHandler displayHandler) {
+                ShareHandlerRegistrar.register(displayHandler);
+            }
+
+            @Override
+            public void register(ClientShareHandler<?> shareHandler) {
+                ShareHandlerRegistrar.register(shareHandler);
+            }
+
+            @Override
+            public void register(ServerShareHandler<?> shareHandler) {
+                ShareHandlerRegistrar.register(shareHandler);
             }
         });
 
