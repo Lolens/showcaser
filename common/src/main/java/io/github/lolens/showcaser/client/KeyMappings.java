@@ -7,11 +7,12 @@ import net.minecraft.client.util.InputUtil;
 
 public class KeyMappings {
 
+    // maybe should be rewritten to make use of forge key binding modifier and use Screen.isShiftDown() on fabric
     public static final KeyBinding SHARE_ITEM_IN_CHAT = new KeyBinding(
-            String.format("key.%s.share_item_in_chat", Showcaser.MOD_ID),
+            "key.showcaser.share_item_in_chat",
             InputUtil.Type.KEYSYM,
             InputUtil.GLFW_KEY_X,
-            String.format("key.categories.%s", Showcaser.MOD_ID)
+            "key.showcaser.category"
     );
 
     public static void register() {

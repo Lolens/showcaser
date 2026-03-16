@@ -1,8 +1,8 @@
 package io.github.lolens.showcaser.client.handler;
 
 import io.github.lolens.showcaser.Showcaser;
-import io.github.lolens.showcaser.api.ClientShareHandler;
-import io.github.lolens.showcaser.api.HandlerResult;
+import io.github.lolens.showcaser.api.handler.ClientShareHandler;
+import io.github.lolens.showcaser.api.handler.HandlerResult;
 import io.github.lolens.showcaser.config.ConfigManager;
 import io.github.lolens.showcaser.network.message.c2s.ShareMessage;
 import io.github.lolens.showcaser.registry.CachedPriorityRegistry;

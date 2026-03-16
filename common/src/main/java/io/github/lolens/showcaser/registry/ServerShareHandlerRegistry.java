@@ -1,7 +1,7 @@
 package io.github.lolens.showcaser.registry;
 
 import io.github.lolens.showcaser.Showcaser;
-import io.github.lolens.showcaser.api.ServerShareHandler;
+import io.github.lolens.showcaser.api.handler.ServerShareHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;

@@ -1,9 +1,8 @@
 package io.github.lolens.showcaser.registry;
 
 import io.github.lolens.showcaser.Showcaser;
-import io.github.lolens.showcaser.api.ClientShareHandler;
-import io.github.lolens.showcaser.api.DisplayHandler;
-import io.github.lolens.showcaser.registry.CachedPriorityRegistry;
+import io.github.lolens.showcaser.api.handler.ClientShareHandler;
+import io.github.lolens.showcaser.api.handler.DisplayHandler;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;

@@ -4,11 +4,11 @@ import dev.architectury.platform.Platform;
 import dev.architectury.utils.Env;
 import io.github.lolens.showcaser.Showcaser;
 import io.github.lolens.showcaser.adapter.AdapterFactory;
-import io.github.lolens.showcaser.api.HandlerResult;
+import io.github.lolens.showcaser.api.handler.HandlerResult;
 import io.github.lolens.showcaser.api.resource.ShareableResource;
 import io.github.lolens.showcaser.client.ClientChatMessageBuilder;
-import io.github.lolens.showcaser.core.builders.handler.ClientHandlerBuilder;
-import io.github.lolens.showcaser.core.builders.handler.ServerHandlerBuilder;
+import io.github.lolens.showcaser.core.builder.handler.ClientHandlerBuilder;
+import io.github.lolens.showcaser.core.builder.handler.ServerHandlerBuilder;
 import io.github.lolens.showcaser.exception.ServerShareProcessingException;
 import io.github.lolens.showcaser.mixin.HandledScreenMixin;
 import io.github.lolens.showcaser.model.ShareContext;
@@ -66,7 +66,6 @@ public class PlayerInventoryHandler {
 
                     Slot slot = ((HandledScreenMixin) screen).showcaser$getFocusedSlot();
 
-                    // stop fallback from sending stack in crafting result slot
                     if (slot instanceof CraftingResultSlot) return HandlerResult.STOP;
 
                     if (slot == null || !slot.hasStack()) return HandlerResult.PASS;

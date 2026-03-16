@@ -1,7 +1,7 @@
 package io.github.lolens.showcaser.registry;
 
 import io.github.lolens.showcaser.Showcaser;
-import io.github.lolens.showcaser.api.ClientShareHandler;
+import io.github.lolens.showcaser.api.handler.ClientShareHandler;
 import io.github.lolens.showcaser.core.PriorityCalculator;
 import net.minecraft.client.gui.screen.Screen;
 

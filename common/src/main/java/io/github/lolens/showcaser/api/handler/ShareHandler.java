@@ -1,9 +1,10 @@
-package io.github.lolens.showcaser.api;
+package io.github.lolens.showcaser.api.handler;
 
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+// base handler for side-specific handlers
 public interface ShareHandler {
 
     @NotNull

@@ -1,10 +1,16 @@
 {
+  "key.showcaser.share_item_in_chat": "Поделиться ресурсом",
+  "key.showcaser.category": "Showcaser",
+
   "showcaser.chat.share_message": "%s поделился %s",
   "showcaser.chat.share_message.recipe": "%s поделился рецептом %s",
   "showcaser.chat.share_message.tooltip.unverified": "Предмет не подтвержден сервером",
   "showcaser.chat.share_message.tooltip.verified": "Предмет подтвержден сервером",
+
+  "showcaser.chat.banned": "Сервер запретил вам делиться предметами в чате",
+
   "showcaser.commands.sharing.ban": "Игрок %s больше не может делиться в чате",
   "showcaser.commands.sharing.unban": "Игрок %s снова может делиться в чате",
-  "showcaser.commands.reload": "Хранилище и конфигурация Showcaser успешно перезагружена",
-  "showcaser.chat.banned": "Сервер запретил вам делиться предметами в чате"
+  "showcaser.commands.reload": "Хранилище и конфигурация Showcaser успешно перезагружена"
+
 }

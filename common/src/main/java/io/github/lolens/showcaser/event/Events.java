@@ -4,10 +4,13 @@ import dev.architectury.event.events.common.LifecycleEvent;
 import dev.architectury.event.events.common.PlayerEvent;
 import io.github.lolens.showcaser.Showcaser;
 import io.github.lolens.showcaser.api.event.HandlerRegistrationEvent;
+import io.github.lolens.showcaser.api.handler.summary.ClientSummary;
+import io.github.lolens.showcaser.api.handler.summary.ServerSummary;
 import io.github.lolens.showcaser.config.ConfigManager;
-import io.github.lolens.showcaser.core.builders.handler.ClientHandlerBuilder;
-import io.github.lolens.showcaser.core.builders.handler.ServerHandlerBuilder;
+import io.github.lolens.showcaser.core.builder.handler.ClientHandlerBuilder;
+import io.github.lolens.showcaser.core.builder.handler.ServerHandlerBuilder;
 import io.github.lolens.showcaser.network.message.s2c.ConfigSyncMessage;
+import io.github.lolens.showcaser.registry.ShareHandlerRegistrar;
 
 public class Events {
 
@@ -15,15 +18,13 @@ public class Events {
 
         HandlerRegistrationEvent.EVENT.register(new HandlerRegistrationEvent() {
             @Override
-            public void registerClient(ClientHandlerBuilder.ClientSummary<?> summary) {
-                summary.registerHandlers();
-                Showcaser.LOGGER.info("Registered client handlers: " + summary.id());
+            public void registerClient(ClientSummary<?> summary) {
+                ShareHandlerRegistrar.registerClientSummary(summary);
             }
 
             @Override
-            public void registerServer(ServerHandlerBuilder.ServerSummary<?> summary) {
-                summary.registerHandler();
-                Showcaser.LOGGER.info("Registered server handler: " + summary.id());
+            public void registerServer(ServerSummary<?> summary) {
+                ShareHandlerRegistrar.registerServerSummary(summary);
             }
         });
 

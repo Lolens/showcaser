@@ -40,7 +40,6 @@ public class ClientEvents {
                 CachedPriorityRegistry.blacklistExact(className);
             }
 
-            // at this stage client should server's blacklist
             CachedPriorityRegistry.prewarmCache();
         });
 

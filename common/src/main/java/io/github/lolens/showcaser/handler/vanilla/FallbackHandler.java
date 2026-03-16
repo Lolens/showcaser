@@ -3,10 +3,10 @@ package io.github.lolens.showcaser.handler.vanilla;
 import dev.architectury.platform.Platform;
 import dev.architectury.utils.Env;
 import io.github.lolens.showcaser.adapter.AdapterFactory;
-import io.github.lolens.showcaser.api.HandlerResult;
+import io.github.lolens.showcaser.api.handler.HandlerResult;
 import io.github.lolens.showcaser.client.ClientChatMessageBuilder;
-import io.github.lolens.showcaser.core.builders.handler.ClientHandlerBuilder;
-import io.github.lolens.showcaser.core.builders.handler.ServerHandlerBuilder;
+import io.github.lolens.showcaser.core.builder.handler.ClientHandlerBuilder;
+import io.github.lolens.showcaser.core.builder.handler.ServerHandlerBuilder;
 import io.github.lolens.showcaser.exception.ServerShareProcessingException;
 import io.github.lolens.showcaser.mixin.HandledScreenMixin;
 import io.github.lolens.showcaser.model.ShareContext;
@@ -15,6 +15,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.slot.CraftingResultSlot;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.MutableText;
 import net.minecraft.util.Identifier;
@@ -62,6 +63,8 @@ public class FallbackHandler {
                     Slot slot = ((HandledScreenMixin) screen).showcaser$getFocusedSlot();
 
                     if (slot == null || !slot.hasStack()) return HandlerResult.PASS;
+
+                    if (slot instanceof CraftingResultSlot) return HandlerResult.STOP;
 
                     ShareContext shareContext = ShareContext.of(
                                     ID,

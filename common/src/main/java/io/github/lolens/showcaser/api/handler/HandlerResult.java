@@ -1,4 +1,4 @@
-package io.github.lolens.showcaser.api;
+package io.github.lolens.showcaser.api.handler;
 
 public enum HandlerResult {
     /** Handler created context successfully. Stops further processing */

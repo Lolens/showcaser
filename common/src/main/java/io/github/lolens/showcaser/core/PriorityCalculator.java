@@ -1,6 +1,6 @@
 package io.github.lolens.showcaser.core;
 
-import io.github.lolens.showcaser.api.ShareHandler;
+import io.github.lolens.showcaser.api.handler.ShareHandler;
 
 import java.util.Comparator;
 
@@ -16,8 +16,10 @@ public class PriorityCalculator {
     public static int calculatePriority(ShareHandler handler, Class<?> targetClass) {
         Class<?> handlerClass = handler.getTargetClass();
 
+        // overlays always go first
         if (handlerClass == null) return OVERLAY_PRIORITY;
 
+        // should not be returned as caller checks it, but anyway...
         if (!handlerClass.isAssignableFrom(targetClass)) return INCOMPATIBLE_PRIORITY;
 
         if (handlerClass.equals(targetClass)) return EXACT_MATCH_PRIORITY;
@@ -45,6 +47,7 @@ public class PriorityCalculator {
             int p1 = calculatePriority(h1, targetClass);
             int p2 = calculatePriority(h2, targetClass);
 
+            // in case 2 handlers target the same class they are compared by getPriority()
             if (p1 == p2) {
                 return Integer.compare(h1.getPriority(), h2.getPriority());
             }

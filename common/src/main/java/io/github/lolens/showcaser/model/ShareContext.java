@@ -61,7 +61,7 @@ public class ShareContext {
     public ShareContext with(String key, ItemStack stack) {
         NbtCompound stackNbt = new NbtCompound();
         stack.writeNbt(stackNbt);
-        // overwrite byte value with int count to work with inventories that has higher max stack count
+        // overwrite byte value with int count to work with inventories that have higher max stack count
         stackNbt.putInt("Count", stack.getCount());
         data.put(key, stackNbt);
         return this;

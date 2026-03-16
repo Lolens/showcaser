@@ -1,4 +1,4 @@
-package io.github.lolens.showcaser.api;
+package io.github.lolens.showcaser.api.handler;
 
 import io.github.lolens.showcaser.model.ShareContext;
 import net.minecraft.client.gui.screen.Screen;

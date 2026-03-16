@@ -1,8 +1,9 @@
-package io.github.lolens.showcaser.core.builders.handler;
+package io.github.lolens.showcaser.core.builder.handler;
 
 import io.github.lolens.showcaser.Showcaser;
-import io.github.lolens.showcaser.api.ServerShareHandler;
+import io.github.lolens.showcaser.api.handler.ServerShareHandler;
 import io.github.lolens.showcaser.api.event.HandlerRegistrationEvent;
+import io.github.lolens.showcaser.api.handler.summary.ServerSummary;
 import io.github.lolens.showcaser.model.ShareContext;
 import io.github.lolens.showcaser.registry.ShareHandlerRegistrar;
 import net.minecraft.entity.player.PlayerEntity;
@@ -43,34 +44,5 @@ public class ServerHandlerBuilder<T extends ScreenHandler> {
         return new ServerSummary<>(id, containerClass, processor);
     }
 
-    public record ServerSummary<T extends ScreenHandler>(
-            Identifier id,
-            Class<T> containerClass,
-            BiFunction<PlayerEntity, ShareContext, ShareContext> processor
-    ) {
 
-        public void registerHandler() {
-            ShareHandlerRegistrar.register(new ServerShareHandler<T>() {
-                @Override
-                public ShareContext handle(PlayerEntity player, ShareContext context) {
-                    try {
-                        return processor.apply(player, context);
-                    } catch (RuntimeException e) {
-                        Showcaser.LOGGER.error("Encountered error while processing ShareContext from {}. Context Id: {}", player.getName(), context.getId(), e);
-                    }
-                    return null;
-                }
-
-                @Override
-                public @NotNull Identifier getIdentifier() {
-                    return id;
-                }
-
-                @Override
-                public Class<T> getTargetClass() {
-                    return containerClass;
-                }
-            });
-        }
-    }
 }
