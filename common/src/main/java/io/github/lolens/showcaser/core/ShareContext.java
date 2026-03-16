@@ -1,4 +1,4 @@
-package io.github.lolens.showcaser.model;
+package io.github.lolens.showcaser.core;
 
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
@@ -8,7 +8,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 
 public class ShareContext {

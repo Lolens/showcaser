@@ -14,7 +14,7 @@ import io.github.lolens.showcaser.api.resource.EmptyResource;
 import io.github.lolens.showcaser.api.resource.ShareableFluidStack;
 import io.github.lolens.showcaser.api.resource.ShareableItemStack;
 import io.github.lolens.showcaser.api.resource.ShareableResource;
-import io.github.lolens.showcaser.model.ShareContext;
+import io.github.lolens.showcaser.core.ShareContext;
 import io.github.lolens.showcaser.util.PlatformUtils;
 import me.shedaniel.rei.api.common.entry.EntryStack;
 import me.shedaniel.rei.api.common.entry.type.VanillaEntryTypes;

@@ -1,6 +1,6 @@
 package io.github.lolens.showcaser.exception;
 
-import io.github.lolens.showcaser.model.ShareContext;
+import io.github.lolens.showcaser.core.ShareContext;
 import net.minecraft.entity.player.PlayerEntity;
 
 public class ServerShareProcessingException extends RuntimeException {

@@ -11,7 +11,7 @@ import io.github.lolens.showcaser.core.builder.handler.ServerHandlerBuilder;
 import io.github.lolens.showcaser.mixin.CreativeInventoryScreenHandlerMixin;
 import io.github.lolens.showcaser.mixin.CreativeInventoryScreenMixin;
 import io.github.lolens.showcaser.mixin.HandledScreenMixin;
-import io.github.lolens.showcaser.model.ShareContext;
+import io.github.lolens.showcaser.core.ShareContext;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import net.minecraft.item.ItemGroup;

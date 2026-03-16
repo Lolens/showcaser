@@ -1,15 +1,11 @@
 package io.github.lolens.showcaser.core.builder.handler;
 
-import io.github.lolens.showcaser.Showcaser;
-import io.github.lolens.showcaser.api.handler.ServerShareHandler;
 import io.github.lolens.showcaser.api.event.HandlerRegistrationEvent;
 import io.github.lolens.showcaser.api.handler.summary.ServerSummary;
-import io.github.lolens.showcaser.model.ShareContext;
-import io.github.lolens.showcaser.registry.ShareHandlerRegistrar;
+import io.github.lolens.showcaser.core.ShareContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.util.Identifier;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.BiFunction;
 

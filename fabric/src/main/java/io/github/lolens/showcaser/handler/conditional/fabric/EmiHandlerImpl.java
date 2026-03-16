@@ -15,7 +15,7 @@ import io.github.lolens.showcaser.command.ServerCommands;
 import io.github.lolens.showcaser.client.ClientChatMessageBuilder;
 import io.github.lolens.showcaser.core.builder.handler.ClientHandlerBuilder;
 import io.github.lolens.showcaser.core.builder.handler.ServerHandlerBuilder;
-import io.github.lolens.showcaser.model.ShareContext;
+import io.github.lolens.showcaser.core.ShareContext;
 import io.github.lolens.showcaser.network.Networking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.ClickEvent;

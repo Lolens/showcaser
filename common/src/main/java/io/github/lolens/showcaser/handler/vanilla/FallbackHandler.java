@@ -9,7 +9,7 @@ import io.github.lolens.showcaser.core.builder.handler.ClientHandlerBuilder;
 import io.github.lolens.showcaser.core.builder.handler.ServerHandlerBuilder;
 import io.github.lolens.showcaser.exception.ServerShareProcessingException;
 import io.github.lolens.showcaser.mixin.HandledScreenMixin;
-import io.github.lolens.showcaser.model.ShareContext;
+import io.github.lolens.showcaser.core.ShareContext;
 import io.github.lolens.showcaser.api.resource.ShareableResource;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;

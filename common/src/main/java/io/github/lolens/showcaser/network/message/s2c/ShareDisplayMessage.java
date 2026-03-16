@@ -4,7 +4,7 @@ import dev.architectury.networking.NetworkManager;
 import dev.architectury.networking.simple.BaseS2CMessage;
 import dev.architectury.networking.simple.MessageType;
 import io.github.lolens.showcaser.Showcaser;
-import io.github.lolens.showcaser.model.ShareContext;
+import io.github.lolens.showcaser.core.ShareContext;
 import io.github.lolens.showcaser.network.Networking;
 import io.github.lolens.showcaser.registry.ClientHandlerRegistry;
 import net.minecraft.network.PacketByteBuf;

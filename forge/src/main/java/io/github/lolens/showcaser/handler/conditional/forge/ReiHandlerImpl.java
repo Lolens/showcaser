@@ -10,7 +10,7 @@ import io.github.lolens.showcaser.command.ServerCommands;
 import io.github.lolens.showcaser.client.ClientChatMessageBuilder;
 import io.github.lolens.showcaser.core.builder.handler.ClientHandlerBuilder;
 import io.github.lolens.showcaser.core.builder.handler.ServerHandlerBuilder;
-import io.github.lolens.showcaser.model.ShareContext;
+import io.github.lolens.showcaser.core.ShareContext;
 import io.github.lolens.showcaser.network.Networking;
 import me.shedaniel.rei.api.client.REIRuntime;
 import me.shedaniel.rei.api.client.overlay.ScreenOverlay;

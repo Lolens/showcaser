@@ -3,7 +3,7 @@ package io.github.lolens.showcaser.handler;
 
 import dev.architectury.utils.GameInstance;
 import io.github.lolens.showcaser.config.ConfigManager;
-import io.github.lolens.showcaser.model.ShareContext;
+import io.github.lolens.showcaser.core.ShareContext;
 import io.github.lolens.showcaser.network.message.s2c.ShareDisplayMessage;
 import io.github.lolens.showcaser.registry.ServerShareHandlerRegistry;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
