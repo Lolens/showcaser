@@ -3,9 +3,11 @@ package io.github.lolens.showcaser.handler.conditional.fabric;
 import dev.architectury.platform.Platform;
 import dev.architectury.utils.Env;
 import io.github.lolens.showcaser.Showcaser;
-import io.github.lolens.showcaser.adapter.AdapterFactory;
+import io.github.lolens.showcaser.api.event.AdapterRegistrationEvent;
 import io.github.lolens.showcaser.api.handler.HandlerResult;
 import io.github.lolens.showcaser.api.resource.ShareableResource;
+import io.github.lolens.showcaser.client.adapter.AdapterRegistry;
+import io.github.lolens.showcaser.client.adapter.impl.fabric.ReiAdapter;
 import io.github.lolens.showcaser.command.ServerCommands;
 import io.github.lolens.showcaser.client.ClientChatMessageBuilder;
 import io.github.lolens.showcaser.core.builder.handler.ClientHandlerBuilder;
@@ -92,7 +94,7 @@ public class ReiHandlerImpl {
                     return HandlerResult.PASS;
                 })
                 .display((player, context) -> {
-                    ShareableResource resource = AdapterFactory.fromContext(context);
+                    ShareableResource resource = AdapterRegistry.adapt(context);
 
                     NbtCompound entryNbt = context.getCompound("entry");
                     EntryStack<?> entryStack = EntryStack.read(entryNbt);
@@ -124,5 +126,7 @@ public class ReiHandlerImpl {
                     MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(text);
                 })
                 .register();
+
+        AdapterRegistrationEvent.EVENT.invoker().register(new ReiAdapter(ID));
     }
 }

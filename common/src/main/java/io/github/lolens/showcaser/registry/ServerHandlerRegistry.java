@@ -2,6 +2,7 @@ package io.github.lolens.showcaser.registry;
 
 import io.github.lolens.showcaser.Showcaser;
 import io.github.lolens.showcaser.api.handler.ServerShareHandler;
+import io.github.lolens.showcaser.client.ClientHandlerCache;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 
-public final class ServerShareHandlerRegistry {
+public final class ServerHandlerRegistry {
 
     private static final Map<Identifier, ServerShareHandler<? extends ScreenHandler>> SERVER_HANDLERS = new HashMap<>();
 
@@ -23,7 +24,7 @@ public final class ServerShareHandlerRegistry {
 
         SERVER_HANDLERS.put(handler.getIdentifier(), handler);
 
-        CachedPriorityRegistry.invalidate();
+        ClientHandlerCache.invalidate();
     }
 
     public static Collection<ServerShareHandler<? extends ScreenHandler>> getServerHandlers() {

@@ -5,7 +5,7 @@ import dev.architectury.utils.GameInstance;
 import io.github.lolens.showcaser.api.shareContext.ShareContext;
 import io.github.lolens.showcaser.config.ConfigManager;
 import io.github.lolens.showcaser.network.message.s2c.ShareDisplayMessage;
-import io.github.lolens.showcaser.registry.ServerShareHandlerRegistry;
+import io.github.lolens.showcaser.registry.ServerHandlerRegistry;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
@@ -44,7 +44,7 @@ public class ServerShareDispatcher {
     }
 
     private static ShareContext dispatchUntrusted(ShareContext context, PlayerEntity player) {
-        var handler = ServerShareHandlerRegistry.getServerHandler(context.getId());
+        var handler = ServerHandlerRegistry.getServerHandler(context.getId());
         if (handler != null) {
             return handler.handle(player, context);
         }
@@ -67,7 +67,7 @@ public class ServerShareDispatcher {
             return null;
         }
 
-        var handler = ServerShareHandlerRegistry.getServerHandler(context.getId());
+        var handler = ServerHandlerRegistry.getServerHandler(context.getId());
         if (handler != null) {
             LOGGER.info("Handler found! Id: {}", handler.getIdentifier());
             return handler.handle(player, context);

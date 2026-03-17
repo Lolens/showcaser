@@ -1,6 +1,6 @@
 package io.github.lolens.showcaser.util;
 
-public class RenderUtils {
+public final class RenderUtils {
 
     public static byte[] intToRGB(int color) {
         byte r = (byte) ((color >> 16) & 0xFF );

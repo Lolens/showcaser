@@ -1,14 +1,15 @@
-package io.github.lolens.showcaser.registry;
+package io.github.lolens.showcaser.client;
 
 import io.github.lolens.showcaser.Showcaser;
 import io.github.lolens.showcaser.api.handler.ClientShareHandler;
 import io.github.lolens.showcaser.core.PriorityCalculator;
+import io.github.lolens.showcaser.registry.ClientHandlerRegistry;
 import net.minecraft.client.gui.screen.Screen;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public final class CachedPriorityRegistry {
+public final class ClientHandlerCache {
 
     // Screen class / sorted client handlers by execution priority
     private static final Map<Class<?>, List<ClientShareHandler<? extends Screen>>> CLIENT_CACHE = new HashMap<>();

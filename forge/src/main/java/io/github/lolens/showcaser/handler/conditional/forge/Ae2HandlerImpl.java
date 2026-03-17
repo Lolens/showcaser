@@ -12,16 +12,18 @@ import appeng.menu.slot.FakeSlot;
 import appeng.menu.slot.PatternTermSlot;
 import dev.architectury.platform.Platform;
 import dev.architectury.utils.Env;
-import io.github.lolens.showcaser.adapter.AdapterFactory;
+import io.github.lolens.showcaser.api.event.AdapterRegistrationEvent;
 import io.github.lolens.showcaser.api.handler.HandlerResult;
 import io.github.lolens.showcaser.api.resource.ShareableResource;
 import io.github.lolens.showcaser.api.shareContext.ShareContext;
 import io.github.lolens.showcaser.client.ClientChatMessageBuilder;
+import io.github.lolens.showcaser.client.adapter.AdapterRegistry;
+import io.github.lolens.showcaser.client.adapter.impl.forge.Ae2Adapter;
 import io.github.lolens.showcaser.core.builder.handler.ClientHandlerBuilder;
 import io.github.lolens.showcaser.core.builder.handler.ServerHandlerBuilder;
 import io.github.lolens.showcaser.exception.ServerShareProcessingException;
 import io.github.lolens.showcaser.forge.mixin.MEStorageMenuInvoker;
-import io.github.lolens.showcaser.registry.CachedPriorityRegistry;
+import io.github.lolens.showcaser.client.ClientHandlerCache;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.slot.Slot;
@@ -34,6 +36,7 @@ import static io.github.lolens.showcaser.client.ClientChatMessageBuilder.Verifie
 import static io.github.lolens.showcaser.util.HandlerUtils.getHandler;
 import static io.github.lolens.showcaser.util.HandlerUtils.isValidSyncId;
 
+
 @SuppressWarnings("rawtypes")
 public class Ae2HandlerImpl {
     private static final Identifier ID = Identifier.of(MOD_ID, "ae2");
@@ -43,7 +46,7 @@ public class Ae2HandlerImpl {
         registerServer();
 
         if (Platform.getEnvironment() == Env.CLIENT) {
-            CachedPriorityRegistry.blacklistWithInheritors(UpgradeableScreen.class);
+            ClientHandlerCache.blacklistWithInheritors(UpgradeableScreen.class);
             registerClient();
         }
     }
@@ -103,7 +106,7 @@ public class Ae2HandlerImpl {
                     return HandlerResult.PASS;
                 })
                 .display((player, context) -> {
-                    ShareableResource resource = AdapterFactory.fromContext(context);
+                    ShareableResource resource = AdapterRegistry.adapt(context);
 
                     MutableText text = ClientChatMessageBuilder.create(context, player, resource)
                             .setVerified(VERIFIED)
@@ -114,5 +117,7 @@ public class Ae2HandlerImpl {
                     MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(text);
                 })
                 .register();
+
+        AdapterRegistrationEvent.EVENT.invoker().register(new Ae2Adapter(ID));
     }
 }

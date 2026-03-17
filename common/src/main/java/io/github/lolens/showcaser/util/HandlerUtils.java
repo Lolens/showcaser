@@ -1,8 +1,12 @@
 package io.github.lolens.showcaser.util;
 
-import io.github.lolens.showcaser.Showcaser;
+import io.github.lolens.showcaser.api.handler.ClientShareHandler;
+import io.github.lolens.showcaser.api.handler.ServerShareHandler;
+import io.github.lolens.showcaser.core.PriorityCalculator;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.screen.ScreenHandler;
+
+import java.util.Comparator;
 
 public final class HandlerUtils {
 

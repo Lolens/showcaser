@@ -4,8 +4,8 @@
 
   "showcaser.chat.share_message": "%s поделился %s",
   "showcaser.chat.share_message.recipe": "%s поделился рецептом %s",
-  "showcaser.chat.share_message.tooltip.unverified": "Предмет не подтвержден сервером",
-  "showcaser.chat.share_message.tooltip.verified": "Предмет подтвержден сервером",
+  "showcaser.chat.share_message.tooltip.unverified": "Не подтверждено сервером",
+  "showcaser.chat.share_message.tooltip.verified": "Подтверждено сервером",
 
   "showcaser.chat.banned": "Сервер запретил вам делиться предметами в чате",
 

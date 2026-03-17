@@ -6,11 +6,13 @@ import dev.emi.emi.api.EmiApi;
 import dev.emi.emi.api.stack.*;
 import dev.emi.emi.registry.EmiIngredientSerializers;
 import dev.emi.emi.screen.RecipeScreen;
-import io.github.lolens.showcaser.adapter.AdapterFactory;
+import io.github.lolens.showcaser.api.event.AdapterRegistrationEvent;
 import io.github.lolens.showcaser.api.handler.HandlerResult;
 import io.github.lolens.showcaser.api.resource.ShareableFluidStack;
 import io.github.lolens.showcaser.api.resource.ShareableItemStack;
 import io.github.lolens.showcaser.api.resource.ShareableResource;
+import io.github.lolens.showcaser.client.adapter.AdapterRegistry;
+import io.github.lolens.showcaser.client.adapter.impl.fabric.EmiAdapter;
 import io.github.lolens.showcaser.command.ServerCommands;
 import io.github.lolens.showcaser.client.ClientChatMessageBuilder;
 import io.github.lolens.showcaser.core.builder.handler.ClientHandlerBuilder;
@@ -96,7 +98,7 @@ public class EmiHandlerImpl {
                     return HandlerResult.PASS;
                 })
                 .display((player, context) -> {
-                    ShareableResource resource = AdapterFactory.fromContext(context);
+                    ShareableResource resource = AdapterRegistry.adapt(context);
 
                     String clickEventString;
 
@@ -124,5 +126,7 @@ public class EmiHandlerImpl {
                     MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(text);
                 })
                 .register();
+
+        AdapterRegistrationEvent.EVENT.invoker().register(new EmiAdapter(ID));
     }
 }

@@ -1,5 +1,6 @@
 package io.github.lolens.showcaser.core;
 
+import io.github.lolens.showcaser.api.handler.ClientShareHandler;
 import io.github.lolens.showcaser.api.handler.ShareHandler;
 
 import java.util.Comparator;
@@ -42,7 +43,8 @@ public class PriorityCalculator {
         return current != null ? distance : Integer.MAX_VALUE;
     }
 
-    public static <T extends ShareHandler> Comparator<T> createComparator(Class<?> targetClass) {
+    // <T extends ClientShareHandler<?>> because inheritance-wise comparison should be used only on client handlers
+    public static <T extends ClientShareHandler<?>> Comparator<T> createComparator(Class<?> targetClass) {
         return (h1, h2) -> {
             int p1 = calculatePriority(h1, targetClass);
             int p2 = calculatePriority(h2, targetClass);

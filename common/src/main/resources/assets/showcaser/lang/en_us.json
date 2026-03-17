@@ -4,8 +4,8 @@
 
   "showcaser.chat.share_message": "%s shared %s",
   "showcaser.chat.share_message.recipe": "%s shared recipe %s",
-  "showcaser.chat.share_message.tooltip.unverified": "Item is not verified by the server",
-  "showcaser.chat.share_message.tooltip.verified": "Item is verified by the server",
+  "showcaser.chat.share_message.tooltip.unverified": "Not verified by the server",
+  "showcaser.chat.share_message.tooltip.verified": "Verified by the server",
 
   "showcaser.chat.banned": "Server has restricted resource sharing for you",
 

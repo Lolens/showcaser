@@ -3,6 +3,7 @@ package io.github.lolens.showcaser.registry;
 import io.github.lolens.showcaser.Showcaser;
 import io.github.lolens.showcaser.api.handler.ClientShareHandler;
 import io.github.lolens.showcaser.api.handler.DisplayHandler;
+import io.github.lolens.showcaser.client.ClientHandlerCache;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +37,7 @@ public final class ClientHandlerRegistry {
             CLIENT_SHARE_HANDLERS.put(handler.getIdentifier(), handler);
         }
 
-        CachedPriorityRegistry.invalidate();
+        ClientHandlerCache.invalidate();
     }
 
     static void addClientDisplayHandler(@NotNull DisplayHandler handler) {
@@ -47,7 +48,7 @@ public final class ClientHandlerRegistry {
 
         CLIENT_DISPLAY_HANDLERS.put(handler.getIdentifier(), handler);
 
-        CachedPriorityRegistry.invalidate();
+        ClientHandlerCache.invalidate();
     }
 
     public static Collection<ClientShareHandler<? extends Screen>> getClientShareHandlers() {

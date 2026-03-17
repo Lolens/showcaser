@@ -3,10 +3,12 @@ package io.github.lolens.showcaser.client.event;
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.client.ClientPlayerEvent;
 import dev.architectury.event.events.client.ClientScreenInputEvent;
+import io.github.lolens.showcaser.api.event.AdapterRegistrationEvent;
 import io.github.lolens.showcaser.api.event.client.ClientConfigSyncEvent;
+import io.github.lolens.showcaser.client.adapter.AdapterRegistry;
 import io.github.lolens.showcaser.client.handler.ClientShareDispatcher;
 import io.github.lolens.showcaser.config.ConfigManager;
-import io.github.lolens.showcaser.registry.CachedPriorityRegistry;
+import io.github.lolens.showcaser.client.ClientHandlerCache;
 import net.minecraft.client.gui.screen.Screen;
 
 import static io.github.lolens.showcaser.client.KeyMappings.SHARE_ITEM_IN_CHAT;
@@ -24,6 +26,8 @@ public class ClientEvents {
             return EventResult.pass();
         });
 
+        AdapterRegistrationEvent.EVENT.register(AdapterRegistry::register);
+
         ClientPlayerEvent.CLIENT_PLAYER_JOIN.register(player -> {
             ConfigManager.loadClient();
         });
@@ -31,16 +35,16 @@ public class ClientEvents {
         // prevents clients from creating context on screens that are banned on server
         ClientConfigSyncEvent.EVENT.register(config -> {
 
-            CachedPriorityRegistry.clearConfigBlacklistedClasses();
+            ClientHandlerCache.clearConfigBlacklistedClasses();
 
             for (String className : config.blacklistedClassesWithInheritors) {
-                CachedPriorityRegistry.blacklistWithInheritors(className);
+                ClientHandlerCache.blacklistWithInheritors(className);
             }
             for (String className : config.blacklistedClassesExact) {
-                CachedPriorityRegistry.blacklistExact(className);
+                ClientHandlerCache.blacklistExact(className);
             }
 
-            CachedPriorityRegistry.prewarmCache();
+            ClientHandlerCache.prewarmCache();
         });
 
     }

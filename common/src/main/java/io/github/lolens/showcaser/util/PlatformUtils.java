@@ -2,7 +2,7 @@ package io.github.lolens.showcaser.util;
 
 import dev.architectury.platform.Platform;
 
-public class PlatformUtils {
+public final class PlatformUtils {
 
     private PlatformUtils() {}
 

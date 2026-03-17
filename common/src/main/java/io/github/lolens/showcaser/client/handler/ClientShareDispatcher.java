@@ -5,7 +5,7 @@ import io.github.lolens.showcaser.api.handler.ClientShareHandler;
 import io.github.lolens.showcaser.api.handler.HandlerResult;
 import io.github.lolens.showcaser.config.ConfigManager;
 import io.github.lolens.showcaser.network.message.c2s.ShareMessage;
-import io.github.lolens.showcaser.registry.CachedPriorityRegistry;
+import io.github.lolens.showcaser.client.ClientHandlerCache;
 import net.minecraft.client.gui.screen.Screen;
 
 public class ClientShareDispatcher {
@@ -22,7 +22,7 @@ public class ClientShareDispatcher {
         long currentTime = System.currentTimeMillis();
         if (currentTime - lastSendAt < cooldown) return;
 
-        var handlers = CachedPriorityRegistry.getClientHandlersFor(screen);
+        var handlers = ClientHandlerCache.getClientHandlersFor(screen);
 
         for (ClientShareHandler<? extends Screen> handler : handlers) {
 

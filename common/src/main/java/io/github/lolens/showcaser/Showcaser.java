@@ -23,15 +23,16 @@ public final class Showcaser {
 
         Events.register();
 
+        if (Platform.getEnvironment() == Env.CLIENT) {
+            KeyMappings.register();
+            ClientEvents.register();
+        }
+
         Handlers.registerAll();
 
         Networking.register();
 
         ServerCommands.register();
 
-        if (Platform.getEnvironment() == Env.CLIENT) {
-            KeyMappings.register();
-            ClientEvents.register();
-        }
     }
 }

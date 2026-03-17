@@ -8,7 +8,7 @@ import io.github.lolens.showcaser.handler.conditional.ReiHandler;
 import io.github.lolens.showcaser.handler.vanilla.CreativeInventoryHandler;
 import io.github.lolens.showcaser.handler.vanilla.FallbackHandler;
 import io.github.lolens.showcaser.handler.vanilla.PlayerInventoryHandler;
-import io.github.lolens.showcaser.registry.CachedPriorityRegistry;
+import io.github.lolens.showcaser.client.ClientHandlerCache;
 import io.github.lolens.showcaser.util.PlatformUtils;
 import net.minecraft.client.gui.screen.ingame.AnvilScreen;
 
@@ -25,7 +25,7 @@ public class Handlers {
 
         if (Platform.getEnvironment() == Env.CLIENT) {
             // prevents sharing constantly renamed output slot item
-            CachedPriorityRegistry.blacklistExact(AnvilScreen.class);
+            ClientHandlerCache.blacklistExact(AnvilScreen.class);
         }
 
     }

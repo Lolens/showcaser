@@ -21,14 +21,17 @@ public final class ShareHandlerRegistrar {
 
     public static void register(ClientShareHandler<?> clientShareHandler) {
         ClientHandlerRegistry.addClientShareHandler(clientShareHandler);
+        Showcaser.LOGGER.info("Registered client share handler with id {}", clientShareHandler.getIdentifier());
     }
 
-    public static void register(DisplayHandler clientShareHandler) {
-        ClientHandlerRegistry.addClientDisplayHandler(clientShareHandler);
+    public static void register(DisplayHandler clientDisplayHandler) {
+        ClientHandlerRegistry.addClientDisplayHandler(clientDisplayHandler);
+        Showcaser.LOGGER.info("Registered client display handler with id {}", clientDisplayHandler.getIdentifier());
     }
 
-    public static void register(ServerShareHandler<?> clientShareHandler) {
-        ServerShareHandlerRegistry.addServerHandler(clientShareHandler);
+    public static void register(ServerShareHandler<?> serverShareHandler) {
+        ServerHandlerRegistry.addServerHandler(serverShareHandler);
+        Showcaser.LOGGER.info("Registered server share handler with id {}", serverShareHandler.getIdentifier());
     }
 
     public static <T extends Screen> void registerClientSummary(ClientSummary<T> summary) {
@@ -76,7 +79,6 @@ public final class ShareHandlerRegistrar {
             });
         }
 
-        Showcaser.LOGGER.info("Registered client handlers: " + summary.id());
     }
 
     public static <T extends ScreenHandler> void registerServerSummary(ServerSummary<T> summary) {
@@ -101,8 +103,6 @@ public final class ShareHandlerRegistrar {
                 return summary.containerClass();
             }
         });
-
-        Showcaser.LOGGER.info("Registered server handler: " + summary.id());
     }
 
 }
