@@ -59,7 +59,10 @@ public class FtbQuestsHandlerImpl {
 
                         QuestScreen questScreen = opt.get();
 
-                        if (questScreen.getViewedQuest() == null) return HandlerResult.PASS;
+                        if (!questScreen.anyModalPanelOpen()) return HandlerResult.PASS;
+                        // true if quest book is opened and no quest selected
+                        if (questScreen.getViewedQuest() == null) return HandlerResult.STOP;
+
                         long questId = questScreen.getViewedQuest().getId();
 
                         contextConsumer.accept(ShowcaserAPI.getContextFactory().create(ID)
