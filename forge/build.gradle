@@ -47,9 +47,12 @@ dependencies {
     modLocalRuntime("curse.maven:guideme-1173950:7127447")
     modLocalRuntime("curse.maven:applied-energistics-2-223794:7148487")
 
-    modImplementation("curse.maven:ftb-quests-forge-289412:7608804")
-    modImplementation("curse.maven:ftb-library-forge-404465:7296748")
-    modImplementation("curse.maven:ftb-teams-forge-404468:7499810")
+    modCompileOnly("curse.maven:ftb-quests-forge-289412:7608804")
+    modCompileOnly("curse.maven:ftb-library-forge-404465:7296748")
+    modCompileOnly("curse.maven:ftb-teams-forge-404468:7499810")
+    modLocalRuntime("curse.maven:ftb-quests-forge-289412:7608804")
+    modLocalRuntime("curse.maven:ftb-library-forge-404465:7296748")
+    modLocalRuntime("curse.maven:ftb-teams-forge-404468:7499810")
 
     modCompileOnly("dev.emi:emi-forge:${emi_version}")
     modLocalRuntime("dev.emi:emi-forge:${emi_version}")
