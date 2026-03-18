@@ -1,11 +1,15 @@
 package io.github.lolens.showcaser.api.resource;
 
+import io.github.lolens.showcaser.client.render.RenderableHoverEvent;
+import io.github.lolens.showcaser.config.ConfigManager;
+import io.github.lolens.showcaser.util.ResourceUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 
@@ -72,6 +76,37 @@ public class ShareableItemStack implements ShareableResource {
         return itemStack.getTooltip(client.player, TooltipContext.BASIC);
     }
 
+    @Override
+    public Text getContent(boolean showAmount, boolean ignoreCustomName, Text forcedName) {
+        Text text;
+        ItemStack stack = getCopy();
+
+        if (forcedName == null) {
+
+            if (ConfigManager.getClientConfig().ignoreCustomNames) {
+                stack.setCustomName(null);
+            }
+
+            if (stack.hasCustomName()) {
+                text = stack.getName().copy().formatted(Formatting.ITALIC);
+            } else {
+                text = stack.getName();
+            }
+
+        } else {
+            text = forcedName.copy();
+        }
+
+        if (amount <= 1 || !showAmount) {
+            return text.copy();
+        }
+
+        return Text.literal("x")
+                .append(String.valueOf(amount))
+                .append(" ")
+                .append(text);
+    }
+
     public Rarity getRarity() {
         return itemStack.getRarity();
     }
@@ -82,7 +117,6 @@ public class ShareableItemStack implements ShareableResource {
 
     @Override
     public void render(DrawContext context, float x, float y, float scale, float alpha) {
-
         context.getMatrices().push();
         context.getMatrices().scale(scale, scale, 1.0F);
         context.getMatrices().translate(x / scale, y / scale, 200.0F);
@@ -90,6 +124,5 @@ public class ShareableItemStack implements ShareableResource {
         context.drawItem(itemStack, 0, 0);
         context.getMatrices().pop();
     }
-
 
 }

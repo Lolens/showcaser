@@ -17,5 +17,8 @@ public interface ShareableResource extends IconRenderer {
 
     List<Text> getTooltip();
 
+    // content is the "x2 stone" or "1 B Water" text
+    Text getContent(boolean showAmount, boolean ignoreCustomName, Text forcedName);
+
     void render(DrawContext context, float x, float y, float scale, float alpha);
 }

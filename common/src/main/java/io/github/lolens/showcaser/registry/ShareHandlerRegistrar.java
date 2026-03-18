@@ -34,6 +34,7 @@ public final class ShareHandlerRegistrar {
         Showcaser.LOGGER.info("Registered server share handler with id {}", serverShareHandler.getIdentifier());
     }
 
+    // todo forgot priority......
     public static <T extends Screen> void registerClientSummary(ClientSummary<T> summary) {
 
         if (summary.contextCreator() != null) {

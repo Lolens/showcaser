@@ -33,7 +33,6 @@ public class EmiAdapter extends BaseShareContextAdapter {
         }
         if (ingredient instanceof FluidEmiStack emiStack) {
             FluidStack fluidStackArch = FluidStack.create((Fluid) emiStack.getKey(), 1000);
-            Showcaser.LOGGER.info(fluidStackArch.getName().toString());
             return new ShareableFluidStack(fluidStackArch);
         }
 

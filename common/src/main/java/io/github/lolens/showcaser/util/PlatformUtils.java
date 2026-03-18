@@ -15,5 +15,10 @@ public final class PlatformUtils {
     public static boolean isEMILoaded() {
         return Platform.isModLoaded("emi");
     }
+    public static boolean isFTBQuestsLoaded() {
+        return Platform.isModLoaded("ftbquests");
+    }
+
+
 
 }

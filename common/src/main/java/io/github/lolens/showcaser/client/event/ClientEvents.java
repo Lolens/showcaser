@@ -6,7 +6,7 @@ import dev.architectury.event.events.client.ClientScreenInputEvent;
 import io.github.lolens.showcaser.api.event.AdapterRegistrationEvent;
 import io.github.lolens.showcaser.api.event.client.ClientConfigSyncEvent;
 import io.github.lolens.showcaser.client.adapter.AdapterRegistry;
-import io.github.lolens.showcaser.client.handler.ClientShareDispatcher;
+import io.github.lolens.showcaser.client.ClientShareDispatcher;
 import io.github.lolens.showcaser.config.ConfigManager;
 import io.github.lolens.showcaser.client.ClientHandlerCache;
 import net.minecraft.client.gui.screen.Screen;

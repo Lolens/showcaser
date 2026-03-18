@@ -175,7 +175,6 @@ public class ShareContextImpl implements ShareContext {
     }
 
     public ShareContext withIdentifier(Identifier id) {
-        Showcaser.LOGGER.info("With identifier {}", id.toString());
         data.putString("id-namespace", id.getNamespace());
         data.putString("id-path", id.getPath());
         return this;

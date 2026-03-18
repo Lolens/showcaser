@@ -4,6 +4,9 @@
 
   "showcaser.chat.share_message": "%s поделился %s",
   "showcaser.chat.share_message.recipe": "%s поделился рецептом %s",
+  "showcaser.chat.share_message.quest": "%s подился квестом %s",
+  "showcaser.chat.share_message.quest.not_visible": "Квест не может быть открыт, так как он невидим для вас",
+
   "showcaser.chat.share_message.tooltip.unverified": "Не подтверждено сервером",
   "showcaser.chat.share_message.tooltip.verified": "Подтверждено сервером",
 

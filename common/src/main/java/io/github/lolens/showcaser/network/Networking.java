@@ -30,6 +30,10 @@ public class Networking {
         );
     }
 
+    public static SimpleNetworkManager getNetworkManager() {
+        return NETWORK_MANAGER;
+    }
+
     public static class MessageTypes {
 
         public static class C2S {

@@ -1,28 +1,22 @@
 package io.github.lolens.showcaser.client;
 
+import io.github.lolens.showcaser.api.resource.MessageVerification;
+import io.github.lolens.showcaser.api.resource.ShareableItemStack;
 import io.github.lolens.showcaser.api.shareContext.ShareContext;
 import io.github.lolens.showcaser.api.resource.ShareableFluidStack;
-import io.github.lolens.showcaser.api.resource.ShareableItemStack;
 import io.github.lolens.showcaser.api.resource.ShareableResource;
 import io.github.lolens.showcaser.client.render.RenderableHoverEvent;
 import io.github.lolens.showcaser.config.ConfigManager;
+import io.github.lolens.showcaser.util.ResourceUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 
+import java.util.List;
+
+import static io.github.lolens.showcaser.util.ResourceUtils.*;
+
 public final class ClientChatMessageBuilder {
-
-    private static final String VERIFIED_KEY = "showcaser_verified";
-
-    public static final Text UNVERIFIED_MESSAGE =
-            Text.translatable("showcaser.chat.share_message.tooltip.unverified")
-                    .formatted(Formatting.RED, Formatting.BOLD);
-
-    public static final Text VERIFIED_MESSAGE =
-            Text.translatable("showcaser.chat.share_message.tooltip.verified")
-                    .formatted(Formatting.GREEN, Formatting.BOLD);
-
-    private static final char MARKER = '\uE670';
 
     private final ShareContext context;
     private final String senderName;
@@ -31,16 +25,11 @@ public final class ClientChatMessageBuilder {
     private final int iconWidth;
     private final boolean useBrackets;
     private final boolean showAmount;
-    private final VerifiedType verifiedType;
+    private final MessageVerification messageVerification;
     private final ClickEvent clickEvent;
     private final Style contentStyle;
     private final String translationKey;
-
-    public enum VerifiedType {
-        VERIFIED,
-        UNVERIFIED,
-        NONE
-    }
+    private final Text forcedName;
 
     private ClientChatMessageBuilder(
             ShareContext context,
@@ -49,10 +38,11 @@ public final class ClientChatMessageBuilder {
             int iconWidth,
             boolean useBrackets,
             boolean showAmount,
-            VerifiedType verifiedType,
+            MessageVerification messageVerification,
             ClickEvent clickEvent,
             Style contentStyle,
-            String translationKey
+            String translationKey,
+            Text forcedName
     ) {
         this.context = context;
         this.senderName = senderName;
@@ -60,26 +50,29 @@ public final class ClientChatMessageBuilder {
         this.iconWidth = iconWidth;
         this.useBrackets = useBrackets;
         this.showAmount = showAmount;
-        this.verifiedType = verifiedType;
+        this.messageVerification = messageVerification;
         this.clickEvent = clickEvent;
         this.contentStyle = contentStyle;
         this.translationKey = translationKey;
+        this.forcedName = forcedName;
     }
 
     public static ClientChatMessageBuilder create(
             ShareContext context,
             String sender,
-            ShareableResource resource
+            ShareableResource resource,
+            MessageVerification verified
     ) {
         return new ClientChatMessageBuilder(
                 context, sender, resource,
                 12,
                 true,
                 true,
-                VerifiedType.NONE,
+                verified,
                 null,
                 Style.EMPTY,
-                "showcaser.chat.share_message"
+                "showcaser.chat.share_message",
+                null
         );
     }
 
@@ -88,56 +81,57 @@ public final class ClientChatMessageBuilder {
     public ClientChatMessageBuilder withWidth(int width) {
         return new ClientChatMessageBuilder(
                 context, senderName, resource,
-                width, useBrackets, showAmount, verifiedType,
-                clickEvent, contentStyle, translationKey
+                width, useBrackets, showAmount, messageVerification,
+                clickEvent, contentStyle, translationKey, forcedName
         );
     }
 
     public ClientChatMessageBuilder useBrackets(boolean use) {
         return new ClientChatMessageBuilder(
                 context, senderName, resource,
-                iconWidth, use, showAmount, verifiedType,
-                clickEvent, contentStyle, translationKey
+                iconWidth, use, showAmount, messageVerification,
+                clickEvent, contentStyle, translationKey, forcedName
         );
     }
 
     public ClientChatMessageBuilder showAmount(boolean show) {
         return new ClientChatMessageBuilder(
                 context, senderName, resource,
-                iconWidth, useBrackets, show, verifiedType,
-                clickEvent, contentStyle, translationKey
+                iconWidth, useBrackets, show, messageVerification,
+                clickEvent, contentStyle, translationKey, forcedName
         );
     }
 
     public ClientChatMessageBuilder withClickEvent(ClickEvent event) {
         return new ClientChatMessageBuilder(
                 context, senderName, resource,
-                iconWidth, useBrackets, showAmount, verifiedType,
-                event, contentStyle, translationKey
+                iconWidth, useBrackets, showAmount, messageVerification,
+                event, contentStyle, translationKey, forcedName
         );
     }
 
     public ClientChatMessageBuilder withFormatting(Formatting... formatting) {
         return new ClientChatMessageBuilder(
                 context, senderName, resource,
-                iconWidth, useBrackets, showAmount, verifiedType,
-                clickEvent, Style.EMPTY.withFormatting(formatting), translationKey
-        );
-    }
-
-    public ClientChatMessageBuilder setVerified(VerifiedType verifiedType) {
-        return new ClientChatMessageBuilder(
-                context, senderName, resource,
-                iconWidth, useBrackets, showAmount, verifiedType,
-                clickEvent, contentStyle, translationKey
+                iconWidth, useBrackets, showAmount, messageVerification,
+                clickEvent, Style.EMPTY.withFormatting(formatting),
+                translationKey, forcedName
         );
     }
 
     public ClientChatMessageBuilder withTranslationKey(String key) {
         return new ClientChatMessageBuilder(
                 context, senderName, resource,
-                iconWidth, useBrackets, showAmount, verifiedType,
-                clickEvent, contentStyle, key
+                iconWidth, useBrackets, showAmount, messageVerification,
+                clickEvent, contentStyle, key, forcedName
+        );
+    }
+
+    public ClientChatMessageBuilder withForcedDisplayName(Text name) {
+        return new ClientChatMessageBuilder(
+                context, senderName, resource,
+                iconWidth, useBrackets, showAmount, messageVerification,
+                clickEvent, contentStyle, translationKey, name
         );
     }
 
@@ -145,18 +139,21 @@ public final class ClientChatMessageBuilder {
 
         RenderableHoverEvent hoverEvent = buildHoverEvent();
 
-        MutableText marker = Text.literal(String.valueOf(MARKER))
+        MutableText marker = Text.literal(String.valueOf(ResourceUtils.MARKER))
                 .styled(style -> style
                         .withClickEvent(clickEvent)
                         .withHoverEvent(hoverEvent)
-                        // full message should be colored or it looks bad
-                        .withFormatting(resource instanceof ShareableItemStack stack
-                                ? stack.getRarity().formatting
+                        // for items with rarity use rarity even for brackets
+                        .withFormatting(resource instanceof ShareableItemStack itemStack
+                                ? itemStack.getRarity().formatting
                                 : Formatting.WHITE)
                 );
 
-
-        MutableText content = buildContent();
+        MutableText content = resource.getContent(
+                showAmount,
+                ConfigManager.getClientConfig().ignoreCustomNames,
+                forcedName
+        ).copy();
 
         if (!contentStyle.isEmpty()) {
             content = content.styled(style -> style.withParent(contentStyle));
@@ -175,125 +172,25 @@ public final class ClientChatMessageBuilder {
 
     private RenderableHoverEvent buildHoverEvent() {
 
-        if (resource instanceof ShareableItemStack shareableItemStack) {
+        // use marked default stack tooltip for stacks and custom text for everything else
+        if (resource instanceof ShareableItemStack itemStack) {
+            ItemStack copy = ResourceUtils.markStackVerified(itemStack.getStack(), messageVerification);
 
-            // item stack uses its default tooltip
-            ItemStack stack = prepareRenderStack(shareableItemStack);
+            if (ConfigManager.getClientConfig().ignoreCustomNames) copy.setCustomName(null);
+
             return new RenderableHoverEvent(
                     iconWidth,
                     resource,
-                    stack
+                    copy
             );
-        }
-
-        if (resource instanceof  ShareableFluidStack) {
-            // tooltip for fluidStack is fully custom
-            Text fullTooltip = buildTooltip();
+        } else {
+            Text fullTooltip = markTooltip(resource, messageVerification);
             return new RenderableHoverEvent(
                     iconWidth,
                     resource,
                     fullTooltip
             );
         }
-
-        throw new IllegalStateException("Tried building hover event for unknown resource");
     }
 
-    private MutableText buildContent() {
-        long amount = resource.getAmount();
-
-        Text name;
-
-        if (resource instanceof ShareableFluidStack fluidStack) {
-
-            if (amount <= 1 || !showAmount) {
-                return fluidStack.getDisplayName().copy();
-            }
-
-            return fluidStack.getFluidAmountText()
-                    .copy()
-                    .append(" ")
-                    .append(fluidStack.getDisplayName());
-        }
-
-        if (resource instanceof ShareableItemStack itemStack) {
-
-            ItemStack copy = itemStack.getCopy();
-
-            if (ConfigManager.getClientConfig().ignoreCustomNames) {
-                copy.setCustomName(null);
-            }
-
-            if (copy.hasCustomName()) {
-                name = copy.getName().copy().formatted(Formatting.ITALIC);
-            } else {
-                name = copy.getName();
-            }
-
-            if (amount <= 1 || !showAmount) {
-                return name.copy();
-            }
-
-            return Text.literal("x")
-                    .append(String.valueOf(amount))
-                    .append(" ")
-                    .append(name);
-        }
-
-        throw new IllegalStateException("Tried building content for unknown resource");
-    }
-
-
-
-    private Text buildTooltip() {
-        Text tooltip = Texts.join(
-                resource.getTooltip(),
-                Text.literal("\n")
-        );
-
-        if (ConfigManager.getSyncedConfig().hideVerifiedTooltipLine) return tooltip;
-
-        if (verifiedType == VerifiedType.VERIFIED) {
-            return markAsVerified(tooltip);
-        }
-        if (verifiedType == VerifiedType.UNVERIFIED) {
-            return markAsUnverified(tooltip);
-        }
-        return tooltip;
-    }
-
-    // modifies resource's itemStack's copy to contain verified marker in nbt
-    private ItemStack prepareRenderStack(ShareableItemStack resource) {
-        ItemStack copy = ((ItemStack) resource.get()).copy();
-
-        if (ConfigManager.getClientConfig().ignoreCustomNames) copy.setCustomName(null);
-
-        if (ConfigManager.getSyncedConfig().hideVerifiedTooltipLine) return copy;
-
-        if (verifiedType == VerifiedType.VERIFIED) {
-            copy.getOrCreateNbt().putBoolean(VERIFIED_KEY, true);
-        }
-        if (verifiedType == VerifiedType.UNVERIFIED) {
-            copy.getOrCreateNbt().putBoolean(VERIFIED_KEY, false);
-        }
-
-        return copy;
-    }
-
-    public static Text markAsVerified(Text text) {
-        MutableText mutable = text.copy();
-        mutable.append("\n");
-        // can cause verified message indentation desync on client upon reload but who cares
-        if (ConfigManager.getClientConfig().addEmptySpaceBeforeVerifiedText) mutable.append("\n");
-        mutable.append(VERIFIED_MESSAGE);
-        return mutable;
-    }
-
-    public static Text markAsUnverified(Text text) {
-        MutableText mutable = text.copy();
-        mutable.append("\n");
-        if (ConfigManager.getClientConfig().addEmptySpaceBeforeVerifiedText) mutable.append("\n");
-        mutable.append(UNVERIFIED_MESSAGE);
-        return mutable;
-    }
 }

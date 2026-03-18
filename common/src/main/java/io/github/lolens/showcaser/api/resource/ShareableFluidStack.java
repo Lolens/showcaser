@@ -4,6 +4,8 @@ import dev.architectury.fluid.FluidStack;
 import dev.architectury.hooks.fluid.FluidStackHooks;
 import dev.architectury.platform.Platform;
 import io.github.lolens.showcaser.Showcaser;
+import io.github.lolens.showcaser.client.ClientChatMessageBuilder;
+import io.github.lolens.showcaser.client.render.RenderableHoverEvent;
 import io.github.lolens.showcaser.util.RenderUtils;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.texture.Sprite;
@@ -61,6 +63,18 @@ public class ShareableFluidStack implements ShareableResource {
         return buildTooltip(fluidStack, displayAmount);
     }
 
+    @Override
+    public Text getContent(boolean showAmount, boolean ignoreCustomName, Text forcedName) {
+        long amount = getAmount();
+        if (amount <= 1 || !showAmount) {
+            return getDisplayName().copy();
+        }
+
+        return getFluidAmountText()
+                .copy()
+                .append(" ")
+                .append(getDisplayName());
+    }
 
     public static List<Text> buildTooltip(Fluid fluid, long amount, boolean showAmount) {
         // fluidStack is used only for name because it is created with x81 amount on fabric cuz droplets
@@ -81,6 +95,7 @@ public class ShareableFluidStack implements ShareableResource {
         return tooltip;
     }
 
+
     public static List<Text> buildTooltip(FluidStack fluidStack, boolean showAmount) {
         return buildTooltip(fluidStack.getFluid(), convertToMillibuckets(fluidStack.getAmount()), showAmount);
     }
@@ -99,7 +114,6 @@ public class ShareableFluidStack implements ShareableResource {
     };
 
     public static String formatFluid(long mbAmount) {
-        Showcaser.LOGGER.warn("in format fluid with {}", mbAmount);
         long value = mbAmount;
         long divisor = 1;
         int unit = 0;

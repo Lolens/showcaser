@@ -3,6 +3,7 @@ package io.github.lolens.showcaser.handler.vanilla;
 import dev.architectury.platform.Platform;
 import dev.architectury.utils.Env;
 import io.github.lolens.showcaser.api.event.AdapterRegistrationEvent;
+import io.github.lolens.showcaser.api.resource.MessageVerification;
 import io.github.lolens.showcaser.api.shareContext.ShareContext;
 import io.github.lolens.showcaser.api.handler.HandlerResult;
 import io.github.lolens.showcaser.api.resource.ShareableResource;
@@ -24,7 +25,6 @@ import net.minecraft.util.Identifier;
 
 import static io.github.lolens.showcaser.Showcaser.MOD_ID;
 import static io.github.lolens.showcaser.api.ShowcaserAPI.getContextFactory;
-import static io.github.lolens.showcaser.client.ClientChatMessageBuilder.VerifiedType.VERIFIED;
 
 public class CreativeInventoryHandler {
     private static final Identifier ID = Identifier.of(MOD_ID, "creative_inventory");
@@ -111,8 +111,7 @@ public class CreativeInventoryHandler {
                 .display((player, context) -> {
                     ShareableResource resource = AdapterRegistry.adapt(context);
 
-                    MutableText text = ClientChatMessageBuilder.create(context, player, resource)
-                            .setVerified(VERIFIED)
+                    MutableText text = ClientChatMessageBuilder.create(context, player, resource, MessageVerification.VERIFIED)
                             .withWidth(12)
                             .build();
 

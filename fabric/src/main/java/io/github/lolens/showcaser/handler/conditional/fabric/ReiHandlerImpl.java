@@ -5,11 +5,12 @@ import dev.architectury.utils.Env;
 import io.github.lolens.showcaser.Showcaser;
 import io.github.lolens.showcaser.api.event.AdapterRegistrationEvent;
 import io.github.lolens.showcaser.api.handler.HandlerResult;
+import io.github.lolens.showcaser.api.resource.MessageVerification;
 import io.github.lolens.showcaser.api.resource.ShareableResource;
 import io.github.lolens.showcaser.client.adapter.AdapterRegistry;
 import io.github.lolens.showcaser.client.adapter.impl.fabric.ReiAdapter;
-import io.github.lolens.showcaser.command.ServerCommands;
 import io.github.lolens.showcaser.client.ClientChatMessageBuilder;
+import io.github.lolens.showcaser.command.ServerCommands;
 import io.github.lolens.showcaser.core.builder.handler.ClientHandlerBuilder;
 import io.github.lolens.showcaser.core.builder.handler.ServerHandlerBuilder;
 import io.github.lolens.showcaser.network.Networking;
@@ -31,7 +32,6 @@ import java.util.Optional;
 
 import static io.github.lolens.showcaser.Showcaser.MOD_ID;
 import static io.github.lolens.showcaser.api.ShowcaserAPI.getContextFactory;
-import static io.github.lolens.showcaser.client.ClientChatMessageBuilder.VerifiedType.NONE;
 
 public class ReiHandlerImpl {
 
@@ -102,23 +102,21 @@ public class ReiHandlerImpl {
                     MutableText text = Text.empty();
 
                     if (entryType == VanillaEntryTypes.ITEM) {
-                        text = ClientChatMessageBuilder.create(context, player, resource)
+                        text = ClientChatMessageBuilder.create(context, player, resource, MessageVerification.NONE)
                                 .withWidth(12)
                                 .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
                                         String.format("/showcaser rei open %s", entryStack.wildcard().saveStack())))
                                 .withFormatting(Formatting.UNDERLINE)
-                                .setVerified(NONE)
                                 .withTranslationKey("showcaser.chat.share_message.recipe")
                                 .build();
                     }
                     if (entryType == VanillaEntryTypes.FLUID) {
-                        text = ClientChatMessageBuilder.create(context, player, resource)
+                        text = ClientChatMessageBuilder.create(context, player, resource, MessageVerification.NONE)
                                 .showAmount(false)
                                 .withWidth(12)
                                 .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
                                         String.format("/showcaser rei open %s", entryStack.wildcard().saveStack())))
                                 .withFormatting(Formatting.UNDERLINE)
-                                .setVerified(NONE)
                                 .withTranslationKey("showcaser.chat.share_message.recipe")
                                 .build();
                     }

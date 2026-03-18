@@ -2,6 +2,7 @@ package io.github.lolens.showcaser.mixin;
 
 import io.github.lolens.showcaser.config.ConfigManager;
 import io.github.lolens.showcaser.client.ClientChatMessageBuilder;
+import io.github.lolens.showcaser.util.ResourceUtils;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -29,8 +30,8 @@ public abstract class ItemStackMixin {
             boolean isVerified = stack.getNbt().getBoolean("showcaser_verified");
 
             Text verifiedText = isVerified
-                    ? ClientChatMessageBuilder.VERIFIED_MESSAGE
-                    : ClientChatMessageBuilder.UNVERIFIED_MESSAGE;
+                    ? ResourceUtils.VERIFIED_MESSAGE
+                    : ResourceUtils.UNVERIFIED_MESSAGE;
 
             // tooltip.add(ScreenTexts.EMPTY);
 

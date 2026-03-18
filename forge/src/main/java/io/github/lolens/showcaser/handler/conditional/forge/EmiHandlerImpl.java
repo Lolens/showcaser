@@ -8,6 +8,7 @@ import dev.emi.emi.registry.EmiIngredientSerializers;
 import dev.emi.emi.screen.RecipeScreen;
 import io.github.lolens.showcaser.api.event.AdapterRegistrationEvent;
 import io.github.lolens.showcaser.api.handler.HandlerResult;
+import io.github.lolens.showcaser.api.resource.MessageVerification;
 import io.github.lolens.showcaser.api.resource.ShareableFluidStack;
 import io.github.lolens.showcaser.api.resource.ShareableItemStack;
 import io.github.lolens.showcaser.api.resource.ShareableResource;
@@ -26,7 +27,6 @@ import net.minecraft.util.Identifier;
 
 import static io.github.lolens.showcaser.Showcaser.MOD_ID;
 import static io.github.lolens.showcaser.api.ShowcaserAPI.getContextFactory;
-import static io.github.lolens.showcaser.client.ClientChatMessageBuilder.VerifiedType.NONE;
 
 @SuppressWarnings("UnstableApiUsage")
 public class EmiHandlerImpl {
@@ -114,12 +114,11 @@ public class EmiHandlerImpl {
                         }
                     }
 
-                    MutableText text = ClientChatMessageBuilder.create(context, player, resource)
+                    MutableText text = ClientChatMessageBuilder.create(context, player, resource, MessageVerification.NONE)
                             .withWidth(12)
                             .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, clickEventString))
                             .withFormatting(Formatting.UNDERLINE)
                             .showAmount(false)
-                            .setVerified(NONE)
                             .withTranslationKey("showcaser.chat.share_message.recipe")
                             .build();
 

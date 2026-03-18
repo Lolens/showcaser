@@ -1,4 +1,4 @@
-package io.github.lolens.showcaser.client.handler;
+package io.github.lolens.showcaser.client;
 
 import io.github.lolens.showcaser.Showcaser;
 import io.github.lolens.showcaser.api.handler.ClientShareHandler;

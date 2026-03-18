@@ -34,7 +34,12 @@ public class EmptyResource implements ShareableResource {
     }
 
     @Override
+    public Text getContent(boolean showAmount, boolean ignoreCustomName, Text forcedName) {
+        return forcedName != null ? forcedName : Text.empty();
+    }
+
+    @Override
     public void render(DrawContext context, float x, float y, float scale, float alpha) {
-        context.drawItem(Items.BARRIER.getDefaultStack(), (int) x, (int) y);
+        // context.drawItem(Items.BARRIER.getDefaultStack(), (int) x, (int) y);
     }
 }
