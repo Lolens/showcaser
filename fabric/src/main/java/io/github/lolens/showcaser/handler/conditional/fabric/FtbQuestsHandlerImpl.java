@@ -11,10 +11,10 @@ import io.github.lolens.showcaser.api.handler.HandlerResult;
 import io.github.lolens.showcaser.api.resource.EmptyResource;
 import io.github.lolens.showcaser.api.resource.MessageVerification;
 import io.github.lolens.showcaser.client.ClientChatMessageBuilder;
-import io.github.lolens.showcaser.command.FabricServerCommands;
+import io.github.lolens.showcaser.fabric.command.FabricServerCommands;
 import io.github.lolens.showcaser.core.builder.handler.ClientHandlerBuilder;
 import io.github.lolens.showcaser.core.builder.handler.ServerHandlerBuilder;
-import io.github.lolens.showcaser.network.FabricNetworking;
+import io.github.lolens.showcaser.fabric.network.FabricNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.MutableText;
@@ -59,8 +59,7 @@ public class FtbQuestsHandlerImpl {
 
                         QuestScreen questScreen = opt.get();
 
-                        // other handlers shouldn't handle ftb screen
-                        if (questScreen.getViewedQuest() == null) return HandlerResult.STOP;
+                        if (questScreen.getViewedQuest() == null) return HandlerResult.PASS;
                         long questId = questScreen.getViewedQuest().getId();
 
                         contextConsumer.accept(ShowcaserAPI.getContextFactory().create(ID)

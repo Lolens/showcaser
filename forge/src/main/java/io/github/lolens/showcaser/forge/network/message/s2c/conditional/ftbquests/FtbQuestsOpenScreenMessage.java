@@ -1,11 +1,11 @@
-package io.github.lolens.showcaser.network.message.s2c.conditional.ftbquests;
+package io.github.lolens.showcaser.forge.network.message.s2c.conditional.ftbquests;
 
 import dev.architectury.networking.NetworkManager;
 import dev.architectury.networking.simple.BaseS2CMessage;
 import dev.architectury.networking.simple.MessageType;
 import dev.ftb.mods.ftbquests.client.ClientQuestFile;
 import dev.ftb.mods.ftbquests.quest.Quest;
-import io.github.lolens.showcaser.network.ForgeNetworking;
+import io.github.lolens.showcaser.forge.network.ForgeNetworking;
 import net.minecraft.network.PacketByteBuf;
 
 public class FtbQuestsOpenScreenMessage extends BaseS2CMessage {

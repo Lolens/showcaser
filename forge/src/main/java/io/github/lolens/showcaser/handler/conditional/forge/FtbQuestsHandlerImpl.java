@@ -5,16 +5,15 @@ import dev.architectury.utils.Env;
 import dev.ftb.mods.ftbquests.client.ClientQuestFile;
 import dev.ftb.mods.ftbquests.client.gui.quests.QuestScreen;
 import dev.ftb.mods.ftbquests.quest.Quest;
-import io.github.lolens.showcaser.Showcaser;
 import io.github.lolens.showcaser.api.ShowcaserAPI;
 import io.github.lolens.showcaser.api.handler.HandlerResult;
 import io.github.lolens.showcaser.api.resource.EmptyResource;
 import io.github.lolens.showcaser.api.resource.MessageVerification;
 import io.github.lolens.showcaser.client.ClientChatMessageBuilder;
-import io.github.lolens.showcaser.command.ForgeServerCommands;
+import io.github.lolens.showcaser.forge.command.ForgeServerCommands;
 import io.github.lolens.showcaser.core.builder.handler.ClientHandlerBuilder;
 import io.github.lolens.showcaser.core.builder.handler.ServerHandlerBuilder;
-import io.github.lolens.showcaser.network.ForgeNetworking;
+import io.github.lolens.showcaser.forge.network.ForgeNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.MutableText;
@@ -59,8 +58,7 @@ public class FtbQuestsHandlerImpl {
 
                         QuestScreen questScreen = opt.get();
 
-                        // other handlers shouldn't handle ftb screen
-                        if (questScreen.getViewedQuest() == null) return HandlerResult.STOP;
+                        if (questScreen.getViewedQuest() == null) return HandlerResult.PASS;
                         long questId = questScreen.getViewedQuest().getId();
 
                         contextConsumer.accept(ShowcaserAPI.getContextFactory().create(ID)

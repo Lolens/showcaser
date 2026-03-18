@@ -1,14 +1,14 @@
-package io.github.lolens.showcaser.command;
+package io.github.lolens.showcaser.fabric.command;
 
 import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import dev.architectury.event.events.common.CommandRegistrationEvent;
-import io.github.lolens.showcaser.network.message.s2c.conditional.ftbquests.FtbQuestsOpenScreenMessage;
+import io.github.lolens.showcaser.fabric.network.message.s2c.conditional.ftbquests.FtbQuestsOpenScreenMessage;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 
-public class ForgeServerCommands {
+public class FabricServerCommands {
 
     public static class Conditional {
 

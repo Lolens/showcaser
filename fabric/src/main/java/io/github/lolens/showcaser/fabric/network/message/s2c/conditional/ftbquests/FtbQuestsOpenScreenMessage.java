@@ -1,4 +1,4 @@
-package io.github.lolens.showcaser.network.message.s2c.conditional.ftbquests;
+package io.github.lolens.showcaser.fabric.network.message.s2c.conditional.ftbquests;
 
 import dev.architectury.networking.NetworkManager;
 import dev.architectury.networking.simple.BaseS2CMessage;
@@ -6,15 +6,9 @@ import dev.architectury.networking.simple.MessageType;
 import dev.ftb.mods.ftbquests.client.ClientQuestFile;
 import dev.ftb.mods.ftbquests.quest.Quest;
 import dev.ftb.mods.ftbquests.quest.TeamData;
-import io.github.lolens.showcaser.network.FabricNetworking;
-import io.github.lolens.showcaser.network.Networking;
-import me.shedaniel.rei.api.client.ClientHelper;
-import me.shedaniel.rei.api.client.view.ViewSearchBuilder;
-import me.shedaniel.rei.api.common.entry.EntryStack;
+import io.github.lolens.showcaser.fabric.network.FabricNetworking;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 

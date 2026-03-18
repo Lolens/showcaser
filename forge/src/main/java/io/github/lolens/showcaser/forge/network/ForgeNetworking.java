@@ -1,7 +1,8 @@
-package io.github.lolens.showcaser.network;
+package io.github.lolens.showcaser.forge.network;
 
 import dev.architectury.networking.simple.MessageType;
-import io.github.lolens.showcaser.network.message.s2c.conditional.ftbquests.FtbQuestsOpenScreenMessage;
+import io.github.lolens.showcaser.network.Networking;
+import io.github.lolens.showcaser.forge.network.message.s2c.conditional.ftbquests.FtbQuestsOpenScreenMessage;
 
 public class ForgeNetworking {
 
