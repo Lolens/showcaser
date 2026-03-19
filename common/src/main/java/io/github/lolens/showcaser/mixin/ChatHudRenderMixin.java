@@ -44,7 +44,6 @@ public abstract class ChatHudRenderMixin {
 
         int result = original.call(context, textRenderer, originalText, x, y, color);
 
-        // todo fix to work with sodium / embeddium etc
         RenderableHoverEvent.currentAlpha = showcaser$currentChatLineAlpha;
         showcaser$renderIcons(context, originalText, x, y, showcaser$currentChatLineAlpha);
         RenderableHoverEvent.currentAlpha = 1.0f;

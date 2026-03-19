@@ -58,6 +58,11 @@ public final class ShareHandlerRegistrar {
                 public @Nullable Class<T> getTargetClass() {
                     return summary.screenClass();
                 }
+
+                @Override
+                public int getPriority() {
+                    return summary.priority();
+                }
             });
         }
 
@@ -102,6 +107,11 @@ public final class ShareHandlerRegistrar {
             @Override
             public Class<T> getTargetClass() {
                 return summary.containerClass();
+            }
+
+            @Override
+            public int getPriority() {
+                return summary.priority();
             }
         });
     }

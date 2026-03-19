@@ -10,5 +10,6 @@ import java.util.function.BiFunction;
 public record ServerSummary<T extends ScreenHandler>(
         Identifier id,
         Class<T> containerClass,
-        BiFunction<PlayerEntity, ShareContext, ShareContext> processor
+        BiFunction<PlayerEntity, ShareContext, ShareContext> processor,
+        int priority
 ) {}

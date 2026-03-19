@@ -14,5 +14,6 @@ public record ClientSummary<T extends Screen>(
         Identifier id,
         @Nullable Class<T> screenClass,
         @Nullable BiFunction<T, Consumer<ShareContext>, HandlerResult> contextCreator,
-        @Nullable BiConsumer<String, ShareContext> display
+        @Nullable BiConsumer<String, ShareContext> display,
+        int priority
 ) {}

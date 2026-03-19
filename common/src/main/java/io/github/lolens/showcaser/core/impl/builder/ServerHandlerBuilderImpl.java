@@ -14,6 +14,7 @@ public class ServerHandlerBuilderImpl<T extends ScreenHandler> implements Server
     private final Identifier id;
     private Class<T> containerClass;
     private BiFunction<PlayerEntity, ShareContext, ShareContext> processor;
+    private int priority = 100;
 
     private ServerHandlerBuilderImpl(Identifier id) {
         this.id = id;
@@ -33,12 +34,17 @@ public class ServerHandlerBuilderImpl<T extends ScreenHandler> implements Server
         return this;
     }
 
+    public ServerHandlerBuilderImpl<T> priority(int priority) {
+        this.priority = priority;
+        return this;
+    }
+
     public void register() {
         HandlerRegistrationEvent.EVENT.invoker().registerServer(build());
     }
 
     public ServerSummary<T> build() {
-        return new ServerSummary<>(id, containerClass, processor);
+        return new ServerSummary<>(id, containerClass, processor, priority);
     }
 
 

@@ -18,6 +18,7 @@ public class ClientHandlerBuilderImpl<T extends Screen> implements ClientHandler
     private Class<T> screenClass;
     private BiFunction<T, Consumer<ShareContext>, HandlerResult> contextCreator;
     private BiConsumer<String, ShareContext> displayHandler;
+    private int priority = 100;
 
     private ClientHandlerBuilderImpl(Identifier id) {
         this.id = id;
@@ -42,6 +43,11 @@ public class ClientHandlerBuilderImpl<T extends Screen> implements ClientHandler
         return this;
     }
 
+    public ClientHandlerBuilderImpl<T> priority(int priority) {
+        this.priority = priority;
+        return this;
+    }
+
     public void register() {
         HandlerRegistrationEvent.EVENT.invoker().registerClient(build());
     }
@@ -51,7 +57,8 @@ public class ClientHandlerBuilderImpl<T extends Screen> implements ClientHandler
                 id,
                 screenClass,
                 contextCreator,
-                displayHandler
+                displayHandler,
+                priority
         );
     }
 
