@@ -12,7 +12,7 @@ public class ShowcaserClientConfig {
     public boolean ignoreCustomNames = false;
 
     @Description("Log screen class when context is created for it")
-    public boolean logScreenClass = true; // todo change to false later
+    public boolean logScreenClass = false;
 
 
 
