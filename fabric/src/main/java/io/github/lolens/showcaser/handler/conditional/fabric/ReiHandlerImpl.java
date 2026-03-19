@@ -9,10 +9,7 @@ import io.github.lolens.showcaser.api.resource.MessageVerification;
 import io.github.lolens.showcaser.api.resource.ShareableResource;
 import io.github.lolens.showcaser.client.adapter.AdapterRegistry;
 import io.github.lolens.showcaser.client.adapter.impl.fabric.ReiAdapter;
-import io.github.lolens.showcaser.client.messagebuilder.ClientChatMessageBuilderImpl;
 import io.github.lolens.showcaser.command.ServerCommands;
-import io.github.lolens.showcaser.core.impl.builder.ClientHandlerBuilderImpl;
-import io.github.lolens.showcaser.core.impl.builder.ServerHandlerBuilderImpl;
 import io.github.lolens.showcaser.network.Networking;
 import me.shedaniel.rei.api.client.REIRuntime;
 import me.shedaniel.rei.api.client.overlay.ScreenOverlay;
@@ -20,7 +17,6 @@ import me.shedaniel.rei.api.common.entry.EntryStack;
 import me.shedaniel.rei.api.common.entry.type.EntryType;
 import me.shedaniel.rei.api.common.entry.type.VanillaEntryTypes;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.MutableText;
@@ -31,8 +27,7 @@ import net.minecraft.util.Identifier;
 import java.util.Optional;
 
 import static io.github.lolens.showcaser.Showcaser.MOD_ID;
-import static io.github.lolens.showcaser.api.ShowcaserAPI.getContextFactory;
-
+import static io.github.lolens.showcaser.api.ShowcaserAPI.*;
 public class ReiHandlerImpl {
 
     private static final Identifier ID = Identifier.of(MOD_ID, "rei");
@@ -49,7 +44,7 @@ public class ReiHandlerImpl {
     }
 
     private static void registerServer() {
-        ServerHandlerBuilderImpl.create(ID)
+        getHandlerBuilderFactory().createServerBuilder(ID)
                 .forContainer(null)
                 .process((player, context) -> {
                     return context;
@@ -58,7 +53,7 @@ public class ReiHandlerImpl {
     }
 
     private static void registerClient() {
-        ClientHandlerBuilderImpl.<Screen>create(ID)
+        getHandlerBuilderFactory().createClientBuilder(ID)
                 .forScreen(null)
                 .createContext((screen, contextConsumer) -> {
                     Optional<ScreenOverlay> opt = REIRuntime.getInstance().getOverlay();
@@ -102,7 +97,7 @@ public class ReiHandlerImpl {
                     MutableText text = Text.empty();
 
                     if (entryType == VanillaEntryTypes.ITEM) {
-                        text = ClientChatMessageBuilderImpl.create(context, player, resource, MessageVerification.NONE)
+                        text = getMessageBuilderFactory().create(context, player, resource, MessageVerification.NONE)
                                 .withWidth(12)
                                 .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
                                         String.format("/showcaser rei open %s", entryStack.wildcard().saveStack())))
@@ -111,7 +106,7 @@ public class ReiHandlerImpl {
                                 .build();
                     }
                     if (entryType == VanillaEntryTypes.FLUID) {
-                        text = ClientChatMessageBuilderImpl.create(context, player, resource, MessageVerification.NONE)
+                        text = getMessageBuilderFactory().create(context, player, resource, MessageVerification.NONE)
                                 .showAmount(false)
                                 .withWidth(12)
                                 .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,

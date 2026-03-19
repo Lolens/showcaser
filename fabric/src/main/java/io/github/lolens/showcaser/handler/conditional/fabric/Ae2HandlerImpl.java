@@ -17,14 +17,11 @@ import io.github.lolens.showcaser.api.handler.HandlerResult;
 import io.github.lolens.showcaser.api.resource.MessageVerification;
 import io.github.lolens.showcaser.api.resource.ShareableResource;
 import io.github.lolens.showcaser.api.sharecontext.ShareContext;
-import io.github.lolens.showcaser.client.messagebuilder.ClientChatMessageBuilderImpl;
+import io.github.lolens.showcaser.client.ClientHandlerCache;
 import io.github.lolens.showcaser.client.adapter.AdapterRegistry;
 import io.github.lolens.showcaser.client.adapter.impl.fabric.Ae2Adapter;
-import io.github.lolens.showcaser.core.impl.builder.ClientHandlerBuilderImpl;
-import io.github.lolens.showcaser.core.impl.builder.ServerHandlerBuilderImpl;
 import io.github.lolens.showcaser.exception.ServerShareProcessingException;
 import io.github.lolens.showcaser.fabric.mixin.MEStorageMenuInvoker;
-import io.github.lolens.showcaser.client.ClientHandlerCache;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.slot.Slot;
@@ -32,7 +29,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.util.Identifier;
 
 import static io.github.lolens.showcaser.Showcaser.MOD_ID;
-import static io.github.lolens.showcaser.api.ShowcaserAPI.getContextFactory;
+import static io.github.lolens.showcaser.api.ShowcaserAPI.*;
 import static io.github.lolens.showcaser.util.HandlerUtils.getHandler;
 import static io.github.lolens.showcaser.util.HandlerUtils.isValidSyncId;
 
@@ -51,7 +48,7 @@ public class Ae2HandlerImpl {
     }
 
     private static void registerServer() {
-        ServerHandlerBuilderImpl.<AEBaseMenu>create(ID)
+        getHandlerBuilderFactory().<AEBaseMenu>createServerBuilder(ID)
                 .forContainer(AEBaseMenu.class)
                 .process((player, context) -> {
                     if (!isValidSyncId(player, context.getSyncId()))
@@ -79,7 +76,7 @@ public class Ae2HandlerImpl {
     }
 
     private static void registerClient() {
-        ClientHandlerBuilderImpl.<MEStorageScreen>create(ID)
+        getHandlerBuilderFactory().<MEStorageScreen>createClientBuilder(ID)
                 .forScreen(MEStorageScreen.class)
                 .createContext((screen, contextConsumer) -> {
                     Slot slot = screen.getSlotUnderMouse();
@@ -107,7 +104,7 @@ public class Ae2HandlerImpl {
                 .display((player, context) -> {
                     ShareableResource resource = AdapterRegistry.adapt(context);
 
-                    MutableText text = ClientChatMessageBuilderImpl.create(context, player, resource, MessageVerification.VERIFIED)
+                    MutableText text = getMessageBuilderFactory().create(context, player, resource, MessageVerification.VERIFIED)
                             .withWidth(12)
                             .showAmount(true)
                             .build();

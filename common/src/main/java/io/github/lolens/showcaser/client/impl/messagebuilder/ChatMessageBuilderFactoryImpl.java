@@ -1,4 +1,4 @@
-package io.github.lolens.showcaser.client.messagebuilder;
+package io.github.lolens.showcaser.client.impl.messagebuilder;
 
 import io.github.lolens.showcaser.api.builder.ChatMessageBuilder;
 import io.github.lolens.showcaser.api.builder.ChatMessageBuilderFactory;

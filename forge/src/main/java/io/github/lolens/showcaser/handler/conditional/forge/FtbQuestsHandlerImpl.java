@@ -5,14 +5,10 @@ import dev.architectury.utils.Env;
 import dev.ftb.mods.ftbquests.client.ClientQuestFile;
 import dev.ftb.mods.ftbquests.client.gui.quests.QuestScreen;
 import dev.ftb.mods.ftbquests.quest.Quest;
-import io.github.lolens.showcaser.api.ShowcaserAPI;
 import io.github.lolens.showcaser.api.handler.HandlerResult;
 import io.github.lolens.showcaser.api.resource.EmptyResource;
 import io.github.lolens.showcaser.api.resource.MessageVerification;
-import io.github.lolens.showcaser.client.messagebuilder.ClientChatMessageBuilderImpl;
 import io.github.lolens.showcaser.forge.command.ForgeServerCommands;
-import io.github.lolens.showcaser.core.impl.builder.ClientHandlerBuilderImpl;
-import io.github.lolens.showcaser.core.impl.builder.ServerHandlerBuilderImpl;
 import io.github.lolens.showcaser.forge.network.ForgeNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.ClickEvent;
@@ -23,6 +19,7 @@ import net.minecraft.util.Identifier;
 import java.util.Optional;
 
 import static io.github.lolens.showcaser.Showcaser.MOD_ID;
+import static io.github.lolens.showcaser.api.ShowcaserAPI.*;
 
 public class FtbQuestsHandlerImpl {
     private static final Identifier ID = Identifier.of(MOD_ID, "ftbquests");
@@ -39,7 +36,7 @@ public class FtbQuestsHandlerImpl {
     }
 
     private static void registerServer() {
-        ServerHandlerBuilderImpl.create(ID)
+        getHandlerBuilderFactory().createServerBuilder(ID)
                 .forContainer(null)
                 .process((player, context) -> {
                     return context;
@@ -48,7 +45,7 @@ public class FtbQuestsHandlerImpl {
     }
 
     private static void registerClient() {
-        ClientHandlerBuilderImpl.create(ID)
+        getHandlerBuilderFactory().createClientBuilder(ID)
                 .forScreen(null)
                 .createContext((screen, contextConsumer) -> {
 
@@ -64,7 +61,7 @@ public class FtbQuestsHandlerImpl {
 
                         long questId = questScreen.getViewedQuest().getId();
 
-                        contextConsumer.accept(ShowcaserAPI.getContextFactory().create(ID)
+                        contextConsumer.accept(getContextFactory().create(ID)
                                 .with("questId", questId)
                         );
 
@@ -81,7 +78,7 @@ public class FtbQuestsHandlerImpl {
 
                     String clickEventString = String.format("/showcaser ftbquests open %s", questId);
 
-                    MutableText text = ClientChatMessageBuilderImpl.create(context, player, new EmptyResource(), MessageVerification.NONE)
+                    MutableText text = getMessageBuilderFactory().create(context, player, new EmptyResource(), MessageVerification.NONE)
                             .withWidth(0)
                             .withForcedDisplayName(quest.getTitle())
                             .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, clickEventString))

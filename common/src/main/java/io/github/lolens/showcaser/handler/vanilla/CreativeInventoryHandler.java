@@ -3,15 +3,12 @@ package io.github.lolens.showcaser.handler.vanilla;
 import dev.architectury.platform.Platform;
 import dev.architectury.utils.Env;
 import io.github.lolens.showcaser.api.event.AdapterRegistrationEvent;
-import io.github.lolens.showcaser.api.resource.MessageVerification;
-import io.github.lolens.showcaser.api.sharecontext.ShareContext;
 import io.github.lolens.showcaser.api.handler.HandlerResult;
+import io.github.lolens.showcaser.api.resource.MessageVerification;
 import io.github.lolens.showcaser.api.resource.ShareableResource;
-import io.github.lolens.showcaser.client.messagebuilder.ClientChatMessageBuilderImpl;
+import io.github.lolens.showcaser.api.sharecontext.ShareContext;
 import io.github.lolens.showcaser.client.adapter.AdapterRegistry;
 import io.github.lolens.showcaser.client.adapter.impl.ItemStackAdapter;
-import io.github.lolens.showcaser.core.impl.builder.ClientHandlerBuilderImpl;
-import io.github.lolens.showcaser.core.impl.builder.ServerHandlerBuilderImpl;
 import io.github.lolens.showcaser.mixin.CreativeInventoryScreenHandlerMixin;
 import io.github.lolens.showcaser.mixin.CreativeInventoryScreenMixin;
 import io.github.lolens.showcaser.mixin.HandledScreenMixin;
@@ -24,7 +21,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.util.Identifier;
 
 import static io.github.lolens.showcaser.Showcaser.MOD_ID;
-import static io.github.lolens.showcaser.api.ShowcaserAPI.getContextFactory;
+import static io.github.lolens.showcaser.api.ShowcaserAPI.*;
 
 public class CreativeInventoryHandler {
     private static final Identifier ID = Identifier.of(MOD_ID, "creative_inventory");
@@ -38,7 +35,7 @@ public class CreativeInventoryHandler {
     }
 
     private static void registerServer() {
-        ServerHandlerBuilderImpl.create(ID)
+        getHandlerBuilderFactory().createServerBuilder(ID)
                 .forContainer(null) // does not exist at server
                 .process((player, context) -> {
                     if (!player.isCreative()) return null;
@@ -50,7 +47,7 @@ public class CreativeInventoryHandler {
     }
 
     private static void registerClient() {
-        ClientHandlerBuilderImpl.<CreativeInventoryScreen>create(ID)
+        getHandlerBuilderFactory().<CreativeInventoryScreen>createClientBuilder(ID)
                 .forScreen(CreativeInventoryScreen.class)
                 .createContext((screen, contextConsumer) -> {
                     CreativeInventoryScreen.CreativeScreenHandler handler = screen.getScreenHandler();
@@ -111,7 +108,7 @@ public class CreativeInventoryHandler {
                 .display((player, context) -> {
                     ShareableResource resource = AdapterRegistry.adapt(context);
 
-                    MutableText text = ClientChatMessageBuilderImpl.create(context, player, resource, MessageVerification.VERIFIED)
+                    MutableText text = getMessageBuilderFactory().create(context, player, resource, MessageVerification.VERIFIED)
                             .withWidth(12)
                             .build();
 

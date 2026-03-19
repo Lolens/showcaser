@@ -15,9 +15,6 @@ import io.github.lolens.showcaser.api.resource.ShareableResource;
 import io.github.lolens.showcaser.client.adapter.AdapterRegistry;
 import io.github.lolens.showcaser.client.adapter.impl.forge.EmiAdapter;
 import io.github.lolens.showcaser.command.ServerCommands;
-import io.github.lolens.showcaser.client.messagebuilder.ClientChatMessageBuilderImpl;
-import io.github.lolens.showcaser.core.impl.builder.ClientHandlerBuilderImpl;
-import io.github.lolens.showcaser.core.impl.builder.ServerHandlerBuilderImpl;
 import io.github.lolens.showcaser.network.Networking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.ClickEvent;
@@ -26,8 +23,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 import static io.github.lolens.showcaser.Showcaser.MOD_ID;
-import static io.github.lolens.showcaser.api.ShowcaserAPI.getContextFactory;
-
+import static io.github.lolens.showcaser.api.ShowcaserAPI.*;
 @SuppressWarnings("UnstableApiUsage")
 public class EmiHandlerImpl {
     private static final Identifier ID = Identifier.of(MOD_ID, "emi");
@@ -44,7 +40,7 @@ public class EmiHandlerImpl {
     }
 
     private static void registerServer() {
-        ServerHandlerBuilderImpl.create(ID)
+        getHandlerBuilderFactory().createServerBuilder(ID)
                 .forContainer(null)
                 .process((player, context) -> {
                     return context;
@@ -53,7 +49,7 @@ public class EmiHandlerImpl {
     }
 
     private static void registerClient() {
-        ClientHandlerBuilderImpl.create(ID)
+        getHandlerBuilderFactory().createClientBuilder(ID)
                 .forScreen(null)
                 .createContext((screen, contextConsumer) -> {
                     EmiStackInteraction interaction = EmiApi.getHoveredStack(false);
@@ -114,7 +110,7 @@ public class EmiHandlerImpl {
                         }
                     }
 
-                    MutableText text = ClientChatMessageBuilderImpl.create(context, player, resource, MessageVerification.NONE)
+                    MutableText text = getMessageBuilderFactory().create(context, player, resource, MessageVerification.NONE)
                             .withWidth(12)
                             .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, clickEventString))
                             .withFormatting(Formatting.UNDERLINE)

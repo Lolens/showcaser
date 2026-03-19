@@ -3,7 +3,7 @@ package io.github.lolens.showcaser.api;
 import io.github.lolens.showcaser.api.builder.ChatMessageBuilderFactory;
 import io.github.lolens.showcaser.api.builder.HandlerBuilderFactory;
 import io.github.lolens.showcaser.api.sharecontext.ShareContextFactory;
-import io.github.lolens.showcaser.client.messagebuilder.ChatMessageBuilderFactoryImpl;
+import io.github.lolens.showcaser.client.impl.messagebuilder.ChatMessageBuilderFactoryImpl;
 import io.github.lolens.showcaser.core.impl.ShareContextFactoryImpl;
 import io.github.lolens.showcaser.core.impl.builder.HandlerBuilderFactoryImpl;
 
