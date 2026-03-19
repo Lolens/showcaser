@@ -7,8 +7,6 @@ import io.github.lolens.showcaser.api.handler.DisplayHandler;
 import io.github.lolens.showcaser.api.handler.ServerShareHandler;
 import io.github.lolens.showcaser.api.handler.summary.ClientSummary;
 import io.github.lolens.showcaser.api.handler.summary.ServerSummary;
-import io.github.lolens.showcaser.core.builder.handler.ClientHandlerBuilder;
-import io.github.lolens.showcaser.core.builder.handler.ServerHandlerBuilder;
 
 
 public interface HandlerRegistrationEvent {

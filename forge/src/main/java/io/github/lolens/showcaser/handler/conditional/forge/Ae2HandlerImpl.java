@@ -16,12 +16,12 @@ import io.github.lolens.showcaser.api.event.AdapterRegistrationEvent;
 import io.github.lolens.showcaser.api.handler.HandlerResult;
 import io.github.lolens.showcaser.api.resource.MessageVerification;
 import io.github.lolens.showcaser.api.resource.ShareableResource;
-import io.github.lolens.showcaser.api.shareContext.ShareContext;
-import io.github.lolens.showcaser.client.ClientChatMessageBuilder;
+import io.github.lolens.showcaser.api.sharecontext.ShareContext;
+import io.github.lolens.showcaser.client.messagebuilder.ClientChatMessageBuilderImpl;
 import io.github.lolens.showcaser.client.adapter.AdapterRegistry;
 import io.github.lolens.showcaser.client.adapter.impl.forge.Ae2Adapter;
-import io.github.lolens.showcaser.core.builder.handler.ClientHandlerBuilder;
-import io.github.lolens.showcaser.core.builder.handler.ServerHandlerBuilder;
+import io.github.lolens.showcaser.core.impl.builder.ClientHandlerBuilderImpl;
+import io.github.lolens.showcaser.core.impl.builder.ServerHandlerBuilderImpl;
 import io.github.lolens.showcaser.exception.ServerShareProcessingException;
 import io.github.lolens.showcaser.forge.mixin.MEStorageMenuInvoker;
 import io.github.lolens.showcaser.client.ClientHandlerCache;
@@ -52,7 +52,7 @@ public class Ae2HandlerImpl {
     }
 
     private static void registerServer() {
-        ServerHandlerBuilder.<AEBaseMenu>create(ID)
+        ServerHandlerBuilderImpl.<AEBaseMenu>create(ID)
                 .forContainer(AEBaseMenu.class)
                 .process((player, context) -> {
                     if (!isValidSyncId(player, context.getSyncId()))
@@ -80,7 +80,7 @@ public class Ae2HandlerImpl {
     }
 
     private static void registerClient() {
-        ClientHandlerBuilder.<MEStorageScreen>create(ID)
+        ClientHandlerBuilderImpl.<MEStorageScreen>create(ID)
                 .forScreen(MEStorageScreen.class)
                 .createContext((screen, contextConsumer) -> {
                     Slot slot = screen.getSlotUnderMouse();
@@ -108,7 +108,7 @@ public class Ae2HandlerImpl {
                 .display((player, context) -> {
                     ShareableResource resource = AdapterRegistry.adapt(context);
 
-                    MutableText text = ClientChatMessageBuilder.create(context, player, resource, MessageVerification.VERIFIED)
+                    MutableText text = ClientChatMessageBuilderImpl.create(context, player, resource, MessageVerification.VERIFIED)
                             .withWidth(12)
                             .showAmount(true)
                             .build();

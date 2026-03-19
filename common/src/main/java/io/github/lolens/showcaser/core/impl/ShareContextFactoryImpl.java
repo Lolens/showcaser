@@ -1,7 +1,8 @@
-package io.github.lolens.showcaser.core;
+package io.github.lolens.showcaser.core.impl;
 
-import io.github.lolens.showcaser.api.shareContext.ShareContext;
-import io.github.lolens.showcaser.api.shareContext.ShareContextFactory;
+import io.github.lolens.showcaser.api.sharecontext.ShareContext;
+import io.github.lolens.showcaser.api.sharecontext.ShareContextFactory;
+import io.github.lolens.showcaser.core.ShareContextImpl;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 

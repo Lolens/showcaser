@@ -1,6 +1,7 @@
-package io.github.lolens.showcaser.core.builder.handler;
+package io.github.lolens.showcaser.core.impl.builder;
 
-import io.github.lolens.showcaser.api.shareContext.ShareContext;
+import io.github.lolens.showcaser.api.builder.ClientHandlerBuilder;
+import io.github.lolens.showcaser.api.sharecontext.ShareContext;
 import io.github.lolens.showcaser.api.event.HandlerRegistrationEvent;
 import io.github.lolens.showcaser.api.handler.HandlerResult;
 import io.github.lolens.showcaser.api.handler.summary.ClientSummary;
@@ -12,31 +13,31 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 
-public class ClientHandlerBuilder<T extends Screen> {
+public class ClientHandlerBuilderImpl<T extends Screen> implements ClientHandlerBuilder<T> {
     private final Identifier id;
     private Class<T> screenClass;
     private BiFunction<T, Consumer<ShareContext>, HandlerResult> contextCreator;
     private BiConsumer<String, ShareContext> displayHandler;
 
-    private ClientHandlerBuilder(Identifier id) {
+    private ClientHandlerBuilderImpl(Identifier id) {
         this.id = id;
     }
 
-    public static <T extends Screen> ClientHandlerBuilder<T> create(Identifier id) {
-        return new ClientHandlerBuilder<>(id);
+    public static <T extends Screen> ClientHandlerBuilderImpl<T> create(Identifier id) {
+        return new ClientHandlerBuilderImpl<>(id);
     }
 
-    public ClientHandlerBuilder<T> forScreen(Class<T> screenClass) {
+    public ClientHandlerBuilderImpl<T> forScreen(Class<T> screenClass) {
         this.screenClass = screenClass;
         return this;
     }
 
-    public ClientHandlerBuilder<T> createContext(BiFunction<T, Consumer<ShareContext>, HandlerResult> contextCreator) {
+    public ClientHandlerBuilderImpl<T> createContext(BiFunction<T, Consumer<ShareContext>, HandlerResult> contextCreator) {
         this.contextCreator = contextCreator;
         return this;
     }
 
-    public ClientHandlerBuilder<T> display(BiConsumer<String, ShareContext> displayHandler) {
+    public ClientHandlerBuilderImpl<T> display(BiConsumer<String, ShareContext> displayHandler) {
         this.displayHandler = displayHandler;
         return this;
     }

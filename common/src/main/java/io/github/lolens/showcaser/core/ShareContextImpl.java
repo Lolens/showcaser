@@ -2,8 +2,7 @@ package io.github.lolens.showcaser.core;
 
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
-import io.github.lolens.showcaser.Showcaser;
-import io.github.lolens.showcaser.api.shareContext.ShareContext;
+import io.github.lolens.showcaser.api.sharecontext.ShareContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -22,10 +21,6 @@ public class ShareContextImpl implements ShareContext {
         this.id = id;
         this.syncId = syncId;
         this.data = data;
-    }
-
-    protected ShareContextImpl(Identifier id, NbtCompound data) {
-        this(id, -1, data);
     }
 
     public static ShareContext of(Identifier id, int syncId, NbtCompound data) {

@@ -4,7 +4,7 @@ import io.github.lolens.showcaser.Showcaser;
 import io.github.lolens.showcaser.api.adapter.ShareContextAdapter;
 import io.github.lolens.showcaser.api.resource.EmptyResource;
 import io.github.lolens.showcaser.api.resource.ShareableResource;
-import io.github.lolens.showcaser.api.shareContext.ShareContext;
+import io.github.lolens.showcaser.api.sharecontext.ShareContext;
 import net.minecraft.util.Identifier;
 
 import java.util.*;

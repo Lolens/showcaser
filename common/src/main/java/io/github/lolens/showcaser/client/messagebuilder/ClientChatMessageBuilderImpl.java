@@ -1,9 +1,9 @@
-package io.github.lolens.showcaser.client;
+package io.github.lolens.showcaser.client.messagebuilder;
 
+import io.github.lolens.showcaser.api.builder.ChatMessageBuilder;
 import io.github.lolens.showcaser.api.resource.MessageVerification;
 import io.github.lolens.showcaser.api.resource.ShareableItemStack;
-import io.github.lolens.showcaser.api.shareContext.ShareContext;
-import io.github.lolens.showcaser.api.resource.ShareableFluidStack;
+import io.github.lolens.showcaser.api.sharecontext.ShareContext;
 import io.github.lolens.showcaser.api.resource.ShareableResource;
 import io.github.lolens.showcaser.client.render.RenderableHoverEvent;
 import io.github.lolens.showcaser.config.ConfigManager;
@@ -12,11 +12,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 
-import java.util.List;
-
 import static io.github.lolens.showcaser.util.ResourceUtils.*;
 
-public final class ClientChatMessageBuilder {
+public final class ClientChatMessageBuilderImpl implements ChatMessageBuilder {
 
     private final ShareContext context;
     private final String senderName;
@@ -31,7 +29,7 @@ public final class ClientChatMessageBuilder {
     private final String translationKey;
     private final Text forcedName;
 
-    private ClientChatMessageBuilder(
+    private ClientChatMessageBuilderImpl(
             ShareContext context,
             String senderName,
             ShareableResource resource,
@@ -57,13 +55,13 @@ public final class ClientChatMessageBuilder {
         this.forcedName = forcedName;
     }
 
-    public static ClientChatMessageBuilder create(
+    public static ClientChatMessageBuilderImpl create(
             ShareContext context,
             String sender,
             ShareableResource resource,
             MessageVerification verified
     ) {
-        return new ClientChatMessageBuilder(
+        return new ClientChatMessageBuilderImpl(
                 context, sender, resource,
                 12,
                 true,
@@ -78,40 +76,40 @@ public final class ClientChatMessageBuilder {
 
     // === BUILDER METHODS ===
 
-    public ClientChatMessageBuilder withWidth(int width) {
-        return new ClientChatMessageBuilder(
+    public ClientChatMessageBuilderImpl withWidth(int width) {
+        return new ClientChatMessageBuilderImpl(
                 context, senderName, resource,
                 width, useBrackets, showAmount, messageVerification,
                 clickEvent, contentStyle, translationKey, forcedName
         );
     }
 
-    public ClientChatMessageBuilder useBrackets(boolean use) {
-        return new ClientChatMessageBuilder(
+    public ClientChatMessageBuilderImpl useBrackets(boolean use) {
+        return new ClientChatMessageBuilderImpl(
                 context, senderName, resource,
                 iconWidth, use, showAmount, messageVerification,
                 clickEvent, contentStyle, translationKey, forcedName
         );
     }
 
-    public ClientChatMessageBuilder showAmount(boolean show) {
-        return new ClientChatMessageBuilder(
+    public ClientChatMessageBuilderImpl showAmount(boolean show) {
+        return new ClientChatMessageBuilderImpl(
                 context, senderName, resource,
                 iconWidth, useBrackets, show, messageVerification,
                 clickEvent, contentStyle, translationKey, forcedName
         );
     }
 
-    public ClientChatMessageBuilder withClickEvent(ClickEvent event) {
-        return new ClientChatMessageBuilder(
+    public ClientChatMessageBuilderImpl withClickEvent(ClickEvent event) {
+        return new ClientChatMessageBuilderImpl(
                 context, senderName, resource,
                 iconWidth, useBrackets, showAmount, messageVerification,
                 event, contentStyle, translationKey, forcedName
         );
     }
 
-    public ClientChatMessageBuilder withFormatting(Formatting... formatting) {
-        return new ClientChatMessageBuilder(
+    public ClientChatMessageBuilderImpl withFormatting(Formatting... formatting) {
+        return new ClientChatMessageBuilderImpl(
                 context, senderName, resource,
                 iconWidth, useBrackets, showAmount, messageVerification,
                 clickEvent, Style.EMPTY.withFormatting(formatting),
@@ -119,16 +117,16 @@ public final class ClientChatMessageBuilder {
         );
     }
 
-    public ClientChatMessageBuilder withTranslationKey(String key) {
-        return new ClientChatMessageBuilder(
+    public ClientChatMessageBuilderImpl withTranslationKey(String key) {
+        return new ClientChatMessageBuilderImpl(
                 context, senderName, resource,
                 iconWidth, useBrackets, showAmount, messageVerification,
                 clickEvent, contentStyle, key, forcedName
         );
     }
 
-    public ClientChatMessageBuilder withForcedDisplayName(Text name) {
-        return new ClientChatMessageBuilder(
+    public ClientChatMessageBuilderImpl withForcedDisplayName(Text name) {
+        return new ClientChatMessageBuilderImpl(
                 context, senderName, resource,
                 iconWidth, useBrackets, showAmount, messageVerification,
                 clickEvent, contentStyle, translationKey, name

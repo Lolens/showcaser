@@ -2,7 +2,6 @@ package io.github.lolens.showcaser.event;
 
 import dev.architectury.event.events.common.LifecycleEvent;
 import dev.architectury.event.events.common.PlayerEvent;
-import io.github.lolens.showcaser.Showcaser;
 import io.github.lolens.showcaser.api.event.HandlerRegistrationEvent;
 import io.github.lolens.showcaser.api.handler.ClientShareHandler;
 import io.github.lolens.showcaser.api.handler.DisplayHandler;
@@ -10,8 +9,6 @@ import io.github.lolens.showcaser.api.handler.ServerShareHandler;
 import io.github.lolens.showcaser.api.handler.summary.ClientSummary;
 import io.github.lolens.showcaser.api.handler.summary.ServerSummary;
 import io.github.lolens.showcaser.config.ConfigManager;
-import io.github.lolens.showcaser.core.builder.handler.ClientHandlerBuilder;
-import io.github.lolens.showcaser.core.builder.handler.ServerHandlerBuilder;
 import io.github.lolens.showcaser.network.message.s2c.ConfigSyncMessage;
 import io.github.lolens.showcaser.registry.ShareHandlerRegistrar;
 

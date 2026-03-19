@@ -9,7 +9,7 @@ import io.github.lolens.showcaser.api.resource.EmptyResource;
 import io.github.lolens.showcaser.api.resource.ShareableFluidStack;
 import io.github.lolens.showcaser.api.resource.ShareableItemStack;
 import io.github.lolens.showcaser.api.resource.ShareableResource;
-import io.github.lolens.showcaser.api.shareContext.ShareContext;
+import io.github.lolens.showcaser.api.sharecontext.ShareContext;
 import net.minecraft.util.Identifier;
 
 public class Ae2Adapter extends BaseShareContextAdapter {

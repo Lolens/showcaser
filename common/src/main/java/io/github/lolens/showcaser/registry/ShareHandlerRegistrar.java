@@ -1,7 +1,7 @@
 package io.github.lolens.showcaser.registry;
 
 import io.github.lolens.showcaser.Showcaser;
-import io.github.lolens.showcaser.api.shareContext.ShareContext;
+import io.github.lolens.showcaser.api.sharecontext.ShareContext;
 import io.github.lolens.showcaser.api.handler.ClientShareHandler;
 import io.github.lolens.showcaser.api.handler.DisplayHandler;
 import io.github.lolens.showcaser.api.handler.HandlerResult;

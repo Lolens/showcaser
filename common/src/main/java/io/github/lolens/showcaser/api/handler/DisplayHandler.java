@@ -1,6 +1,6 @@
 package io.github.lolens.showcaser.api.handler;
 
-import io.github.lolens.showcaser.api.shareContext.ShareContext;
+import io.github.lolens.showcaser.api.sharecontext.ShareContext;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.ApiStatus;
 

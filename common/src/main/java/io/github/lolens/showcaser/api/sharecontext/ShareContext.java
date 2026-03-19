@@ -1,4 +1,4 @@
-package io.github.lolens.showcaser.api.shareContext;
+package io.github.lolens.showcaser.api.sharecontext;
 
 import com.google.gson.JsonElement;
 import net.minecraft.item.ItemStack;

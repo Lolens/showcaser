@@ -2,7 +2,7 @@ package io.github.lolens.showcaser.handler;
 
 
 import dev.architectury.utils.GameInstance;
-import io.github.lolens.showcaser.api.shareContext.ShareContext;
+import io.github.lolens.showcaser.api.sharecontext.ShareContext;
 import io.github.lolens.showcaser.config.ConfigManager;
 import io.github.lolens.showcaser.network.message.s2c.ShareDisplayMessage;
 import io.github.lolens.showcaser.registry.ServerHandlerRegistry;

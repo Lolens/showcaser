@@ -4,14 +4,14 @@ import dev.architectury.platform.Platform;
 import dev.architectury.utils.Env;
 import io.github.lolens.showcaser.api.event.AdapterRegistrationEvent;
 import io.github.lolens.showcaser.api.resource.MessageVerification;
-import io.github.lolens.showcaser.api.shareContext.ShareContext;
+import io.github.lolens.showcaser.api.sharecontext.ShareContext;
 import io.github.lolens.showcaser.api.handler.HandlerResult;
 import io.github.lolens.showcaser.api.resource.ShareableResource;
-import io.github.lolens.showcaser.client.ClientChatMessageBuilder;
+import io.github.lolens.showcaser.client.messagebuilder.ClientChatMessageBuilderImpl;
 import io.github.lolens.showcaser.client.adapter.AdapterRegistry;
 import io.github.lolens.showcaser.client.adapter.impl.ItemStackAdapter;
-import io.github.lolens.showcaser.core.builder.handler.ClientHandlerBuilder;
-import io.github.lolens.showcaser.core.builder.handler.ServerHandlerBuilder;
+import io.github.lolens.showcaser.core.impl.builder.ClientHandlerBuilderImpl;
+import io.github.lolens.showcaser.core.impl.builder.ServerHandlerBuilderImpl;
 import io.github.lolens.showcaser.exception.ServerShareProcessingException;
 import io.github.lolens.showcaser.mixin.HandledScreenMixin;
 import net.minecraft.client.MinecraftClient;
@@ -41,7 +41,7 @@ public class PlayerInventoryHandler {
     }
 
     private static void registerServer() {
-        ServerHandlerBuilder.<PlayerScreenHandler>create(ID)
+        ServerHandlerBuilderImpl.<PlayerScreenHandler>create(ID)
                 .forContainer(PlayerScreenHandler.class)
                 .process((player, context) -> {
                     ScreenHandler handler = getHandler(player);
@@ -61,7 +61,7 @@ public class PlayerInventoryHandler {
     }
 
     private static void registerClient() {
-        ClientHandlerBuilder.<InventoryScreen>create(ID)
+        ClientHandlerBuilderImpl.<InventoryScreen>create(ID)
                 .forScreen(InventoryScreen.class)
                 .createContext((screen, contextConsumer) -> {
 
@@ -82,7 +82,7 @@ public class PlayerInventoryHandler {
                 .display((player, context) -> {
                     ShareableResource resource = AdapterRegistry.adapt(context);
 
-                    MutableText text = ClientChatMessageBuilder.create(context, player, resource, MessageVerification.VERIFIED)
+                    MutableText text = ClientChatMessageBuilderImpl.create(context, player, resource, MessageVerification.VERIFIED)
                             .withWidth(12)
                             .build();
 

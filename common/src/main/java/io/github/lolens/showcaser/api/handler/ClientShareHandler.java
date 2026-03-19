@@ -1,6 +1,6 @@
 package io.github.lolens.showcaser.api.handler;
 
-import io.github.lolens.showcaser.api.shareContext.ShareContext;
+import io.github.lolens.showcaser.api.sharecontext.ShareContext;
 import net.minecraft.client.gui.screen.Screen;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;

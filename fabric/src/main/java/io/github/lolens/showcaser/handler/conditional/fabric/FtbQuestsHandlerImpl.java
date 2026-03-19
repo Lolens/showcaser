@@ -5,15 +5,14 @@ import dev.architectury.utils.Env;
 import dev.ftb.mods.ftbquests.client.ClientQuestFile;
 import dev.ftb.mods.ftbquests.client.gui.quests.QuestScreen;
 import dev.ftb.mods.ftbquests.quest.Quest;
-import io.github.lolens.showcaser.Showcaser;
 import io.github.lolens.showcaser.api.ShowcaserAPI;
 import io.github.lolens.showcaser.api.handler.HandlerResult;
 import io.github.lolens.showcaser.api.resource.EmptyResource;
 import io.github.lolens.showcaser.api.resource.MessageVerification;
-import io.github.lolens.showcaser.client.ClientChatMessageBuilder;
+import io.github.lolens.showcaser.client.messagebuilder.ClientChatMessageBuilderImpl;
+import io.github.lolens.showcaser.core.impl.builder.ClientHandlerBuilderImpl;
 import io.github.lolens.showcaser.fabric.command.FabricServerCommands;
-import io.github.lolens.showcaser.core.builder.handler.ClientHandlerBuilder;
-import io.github.lolens.showcaser.core.builder.handler.ServerHandlerBuilder;
+import io.github.lolens.showcaser.core.impl.builder.ServerHandlerBuilderImpl;
 import io.github.lolens.showcaser.fabric.network.FabricNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.ClickEvent;
@@ -40,7 +39,7 @@ public class FtbQuestsHandlerImpl {
     }
 
     private static void registerServer() {
-        ServerHandlerBuilder.create(ID)
+        ServerHandlerBuilderImpl.create(ID)
                 .forContainer(null)
                 .process((player, context) -> {
                     return context;
@@ -49,7 +48,7 @@ public class FtbQuestsHandlerImpl {
     }
 
     private static void registerClient() {
-        ClientHandlerBuilder.create(ID)
+        ClientHandlerBuilderImpl.create(ID)
                 .forScreen(null)
                 .createContext((screen, contextConsumer) -> {
 
@@ -82,7 +81,7 @@ public class FtbQuestsHandlerImpl {
 
                     String clickEventString = String.format("/showcaser ftbquests open %s", questId);
 
-                    MutableText text = ClientChatMessageBuilder.create(context, player, new EmptyResource(), MessageVerification.NONE)
+                    MutableText text = ClientChatMessageBuilderImpl.create(context, player, new EmptyResource(), MessageVerification.NONE)
                             .withWidth(0)
                             .withForcedDisplayName(quest.getTitle())
                             .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, clickEventString))

@@ -1,4 +1,4 @@
-package io.github.lolens.showcaser.api.shareContext;
+package io.github.lolens.showcaser.api.sharecontext;
 
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;

@@ -14,10 +14,10 @@ import io.github.lolens.showcaser.api.resource.ShareableItemStack;
 import io.github.lolens.showcaser.api.resource.ShareableResource;
 import io.github.lolens.showcaser.client.adapter.AdapterRegistry;
 import io.github.lolens.showcaser.client.adapter.impl.fabric.EmiAdapter;
-import io.github.lolens.showcaser.client.ClientChatMessageBuilder;
+import io.github.lolens.showcaser.client.messagebuilder.ClientChatMessageBuilderImpl;
 import io.github.lolens.showcaser.command.ServerCommands;
-import io.github.lolens.showcaser.core.builder.handler.ClientHandlerBuilder;
-import io.github.lolens.showcaser.core.builder.handler.ServerHandlerBuilder;
+import io.github.lolens.showcaser.core.impl.builder.ClientHandlerBuilderImpl;
+import io.github.lolens.showcaser.core.impl.builder.ServerHandlerBuilderImpl;
 import io.github.lolens.showcaser.network.Networking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.ClickEvent;
@@ -44,7 +44,7 @@ public class EmiHandlerImpl {
     }
 
     private static void registerServer() {
-        ServerHandlerBuilder.create(ID)
+        ServerHandlerBuilderImpl.create(ID)
                 .forContainer(null)
                 .process((player, context) -> {
                     return context;
@@ -53,7 +53,7 @@ public class EmiHandlerImpl {
     }
 
     private static void registerClient() {
-        ClientHandlerBuilder.create(ID)
+        ClientHandlerBuilderImpl.create(ID)
                 .forScreen(null)
                 .createContext((screen, contextConsumer) -> {
                     EmiStackInteraction interaction = EmiApi.getHoveredStack(false);
@@ -114,7 +114,7 @@ public class EmiHandlerImpl {
                         }
                     }
 
-                    MutableText text = ClientChatMessageBuilder.create(context, player, resource, MessageVerification.NONE)
+                    MutableText text = ClientChatMessageBuilderImpl.create(context, player, resource, MessageVerification.NONE)
                             .withWidth(12)
                             .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, clickEventString))
                             .withFormatting(Formatting.UNDERLINE)

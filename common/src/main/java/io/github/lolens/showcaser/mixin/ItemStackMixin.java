@@ -1,7 +1,6 @@
 package io.github.lolens.showcaser.mixin;
 
 import io.github.lolens.showcaser.config.ConfigManager;
-import io.github.lolens.showcaser.client.ClientChatMessageBuilder;
 import io.github.lolens.showcaser.util.ResourceUtils;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;

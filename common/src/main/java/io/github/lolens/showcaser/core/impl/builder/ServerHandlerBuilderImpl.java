@@ -1,6 +1,7 @@
-package io.github.lolens.showcaser.core.builder.handler;
+package io.github.lolens.showcaser.core.impl.builder;
 
-import io.github.lolens.showcaser.api.shareContext.ShareContext;
+import io.github.lolens.showcaser.api.builder.ServerHandlerBuilder;
+import io.github.lolens.showcaser.api.sharecontext.ShareContext;
 import io.github.lolens.showcaser.api.event.HandlerRegistrationEvent;
 import io.github.lolens.showcaser.api.handler.summary.ServerSummary;
 import net.minecraft.entity.player.PlayerEntity;
@@ -9,25 +10,25 @@ import net.minecraft.util.Identifier;
 
 import java.util.function.BiFunction;
 
-public class ServerHandlerBuilder<T extends ScreenHandler> {
+public class ServerHandlerBuilderImpl<T extends ScreenHandler> implements ServerHandlerBuilder<T> {
     private final Identifier id;
     private Class<T> containerClass;
     private BiFunction<PlayerEntity, ShareContext, ShareContext> processor;
 
-    private ServerHandlerBuilder(Identifier id) {
+    private ServerHandlerBuilderImpl(Identifier id) {
         this.id = id;
     }
 
-    public static <T extends ScreenHandler> ServerHandlerBuilder<T> create(Identifier id) {
-        return new ServerHandlerBuilder<>(id);
+    public static <T extends ScreenHandler> ServerHandlerBuilderImpl<T> create(Identifier id) {
+        return new ServerHandlerBuilderImpl<>(id);
     }
 
-    public ServerHandlerBuilder<T> forContainer(Class<T> containerClass) {
+    public ServerHandlerBuilderImpl<T> forContainer(Class<T> containerClass) {
         this.containerClass = containerClass;
         return this;
     }
 
-    public ServerHandlerBuilder<T> process(BiFunction<PlayerEntity, ShareContext, ShareContext> processor) {
+    public ServerHandlerBuilderImpl<T> process(BiFunction<PlayerEntity, ShareContext, ShareContext> processor) {
         this.processor = processor;
         return this;
     }
