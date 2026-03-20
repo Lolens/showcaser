@@ -11,9 +11,11 @@ public class ShowcaserClientConfig {
     @Description("Items displayed in chat will use custom name that is set though anvil or any other way")
     public boolean ignoreCustomNames = false;
 
-    @Description("Log screen class when context is created for it")
-    public boolean logScreenClass = false;
-
+    @Description(
+            "Log screen class when context is created for it" +
+            "Print handler cache"
+    )
+    public boolean debug = false;
 
 
 }

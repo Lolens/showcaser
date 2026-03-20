@@ -2,6 +2,7 @@ package io.github.lolens.showcaser.client;
 
 import io.github.lolens.showcaser.Showcaser;
 import io.github.lolens.showcaser.api.handler.ClientShareHandler;
+import io.github.lolens.showcaser.config.ConfigManager;
 import io.github.lolens.showcaser.core.PriorityCalculator;
 import io.github.lolens.showcaser.registry.ClientHandlerRegistry;
 import net.minecraft.client.gui.screen.Screen;
@@ -148,7 +149,9 @@ public final class ClientHandlerCache {
             getClientHandlersFor(clazz);
         }
 
-        printInfo(classes);
+        if (ConfigManager.getClientConfig().debug) {
+            printInfo(classes);
+        }
     }
 
     public static void prewarmCache() {

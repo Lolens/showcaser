@@ -5,7 +5,6 @@ import io.github.lolens.showcaser.api.handler.ClientShareHandler;
 import io.github.lolens.showcaser.api.handler.HandlerResult;
 import io.github.lolens.showcaser.config.ConfigManager;
 import io.github.lolens.showcaser.network.message.c2s.ShareMessage;
-import io.github.lolens.showcaser.client.ClientHandlerCache;
 import net.minecraft.client.gui.screen.Screen;
 
 public class ClientShareDispatcher {
@@ -15,7 +14,7 @@ public class ClientShareDispatcher {
     public static void onKeyPress(Screen screen) {
         int cooldown = ConfigManager.getSyncedConfig().chatSharingCooldown;
 
-        if (ConfigManager.getClientConfig().logScreenClass) {
+        if (ConfigManager.getClientConfig().debug) {
             Showcaser.LOGGER.info("Pressed key on screen: {}", screen.getClass().getName());
         }
 
