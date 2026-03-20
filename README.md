@@ -1,0 +1,93 @@
+# Showcaser
+
+Showcaser allow you to share items, fluids, recipes and even quest with a single keybind!
+
+### Requirements:
+  - Architectury API
+
+### Supported mods:
+  - EMI
+  - Roughly Enough Items
+  - Applied Energistics 2
+  - FTB Quests
+
+  Although not many mods listed, Showcaser allows you to share items from many modded screens!
+
+## ✨ Video demonstration ✨:
+
+### Item sharing
+<details>
+  <summary>
+    Click to expand
+  </summary>
+  
+  ![Showcase demo](https://github.com/user-attachments/assets/73b0e592-16d7-49bf-9366-ba8b5bb4b2f9)
+</details>
+
+### EMI recipe sharing
+<details>
+  <summary>
+    Click to expand
+  </summary>
+  
+  ![showcase-demo-emi](https://github.com/user-attachments/assets/a9183ddc-a43c-4473-922e-7ae7ea4e7c5a)
+</details>
+
+### FTB Quest sharing
+<details>
+  <summary>
+    Click to expand
+  </summary>
+  
+  ![showcase-demo-quest](https://github.com/user-attachments/assets/b7baf478-98ae-4ba5-a2a8-2b3a55ba8a11)
+</details>
+
+
+## How to use
+
+1. To share item from inventory just hover the slot and press share keybind (Shift + X)
+
+2. To share item/fluid from REI or EMI hover that resource and use share keybind.To share specific recipe in EMI you can add it as favourite and then share.
+
+## Commands
+- /showcaser
+  - ban -> bans specified player from sharing items
+  - unban -> unbans specified player from sharing items<br>
+Banned players are "stored" in shocaser's server storage in the config folder
+  - reload -> loads server config without the need to restart the server. To reload client's configs simply rejoin the world
+
+## Configuration
+
+You can find showcaser config files at "\config\showcaser"
+### Client config
+```
+"addEmptySpaceBeforeVerifiedText": false
+```
+allows omitting empty line before verified message line on shared items, which may come in handy when sharing items with big tooltips
+```
+"ignoreCustomNames": false
+```
+sometimes shared item names can be inaproppriate and this config parameter will strip all custom names from shared items
+
+<img width="847" height="363" alt="изображение" src="https://github.com/user-attachments/assets/cea21ee7-a4d6-4340-a148-71b86658dc75" />
+
+### Server config
+Regulates share cooldown. Self-explanatory
+```
+"chatSharingCooldown": 20
+```
+By default mod adds "Verified by the server" message to all items that server can get by getting the resource for specific slot from screen's screen handler. You can hide this line if you dont need it, but that would make item flexing impossible so think twice
+```
+"hideVerifiedTooltipLine": false
+```
+Screen classes may be put here to disable sharing from them. Screen classes are printed in debug.log upon sharing. This parameter bans specified class exactly
+```
+blacklistedClassesExact": []
+```
+Works same as blacklistedClassesExact, but also bans all classes that inherit banned class 
+```
+"blacklistedClassesWithInheritors": []
+```
+
+
+
