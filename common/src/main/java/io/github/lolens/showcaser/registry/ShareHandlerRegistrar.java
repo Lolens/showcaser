@@ -108,11 +108,6 @@ public final class ShareHandlerRegistrar {
             public Class<T> getTargetClass() {
                 return summary.containerClass();
             }
-
-            @Override
-            public int getPriority() {
-                return summary.priority();
-            }
         });
     }
 
