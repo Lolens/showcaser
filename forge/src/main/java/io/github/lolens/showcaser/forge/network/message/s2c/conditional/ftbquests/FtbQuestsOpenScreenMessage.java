@@ -5,8 +5,12 @@ import dev.architectury.networking.simple.BaseS2CMessage;
 import dev.architectury.networking.simple.MessageType;
 import dev.ftb.mods.ftbquests.client.ClientQuestFile;
 import dev.ftb.mods.ftbquests.quest.Quest;
+import dev.ftb.mods.ftbquests.quest.TeamData;
 import io.github.lolens.showcaser.forge.network.ForgeNetworking;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 public class FtbQuestsOpenScreenMessage extends BaseS2CMessage {
 
@@ -34,6 +38,14 @@ public class FtbQuestsOpenScreenMessage extends BaseS2CMessage {
     public void handle(NetworkManager.PacketContext context) {
         Quest quest = ClientQuestFile.INSTANCE.getQuest(id);
         if (quest == null) return;
+
+        if (!quest.isVisible(TeamData.get(context.getPlayer()))) {
+            MinecraftClient.getInstance().player.sendMessage(
+                    Text.translatable("showcaser.chat.share_message.quest.not_visible").formatted(Formatting.RED),
+                    true
+            );
+            return;
+        }
 
         ClientQuestFile.openGui(quest, true);
     }
