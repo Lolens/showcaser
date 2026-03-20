@@ -25,7 +25,7 @@ public class ServerShareDispatcher {
 
         if (checkBanned(player)) return;
         if (checkCooldown(player)) {
-            LOGGER.info("Player tried sending share while on cooldown");
+            LOGGER.debug("Player {} tried sending share while on cooldown", player.getName().getString());
             return;
         }
 

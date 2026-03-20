@@ -21,17 +21,17 @@ public final class ShareHandlerRegistrar {
 
     public static void register(ClientShareHandler<?> clientShareHandler) {
         ClientHandlerRegistry.addClientShareHandler(clientShareHandler);
-        Showcaser.LOGGER.info("Registered client share handler with id {}", clientShareHandler.getIdentifier());
+        Showcaser.LOGGER.debug("Registered client share handler with id {}", clientShareHandler.getIdentifier());
     }
 
     public static void register(DisplayHandler clientDisplayHandler) {
         ClientHandlerRegistry.addClientDisplayHandler(clientDisplayHandler);
-        Showcaser.LOGGER.info("Registered client display handler with id {}", clientDisplayHandler.getIdentifier());
+        Showcaser.LOGGER.debug("Registered client display handler with id {}", clientDisplayHandler.getIdentifier());
     }
 
     public static void register(ServerShareHandler<?> serverShareHandler) {
         ServerHandlerRegistry.addServerHandler(serverShareHandler);
-        Showcaser.LOGGER.info("Registered server share handler with id {}", serverShareHandler.getIdentifier());
+        Showcaser.LOGGER.debug("Registered server share handler with id {}", serverShareHandler.getIdentifier());
     }
 
     // todo forgot priority......

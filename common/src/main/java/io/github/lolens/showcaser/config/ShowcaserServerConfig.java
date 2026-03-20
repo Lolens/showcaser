@@ -19,6 +19,10 @@ public class ShowcaserServerConfig {
 
     }
 
+    public static final int CURRENT_VERSION = 1;
+
+    public int version = CURRENT_VERSION;
+
     @Description("Item sharing cooldown")
     public int chatSharingCooldown = 20;
 

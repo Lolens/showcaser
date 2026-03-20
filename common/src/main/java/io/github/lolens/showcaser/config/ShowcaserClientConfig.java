@@ -5,6 +5,10 @@ import jdk.jfr.Description;
 public class ShowcaserClientConfig {
     // descriptions actually not doing anything
 
+    public static final int CURRENT_VERSION = 1;
+
+    public int version = CURRENT_VERSION;
+
     @Description("Adds empty paragraph before '(un)verified by server' tooltip text.")
     public boolean addEmptySpaceBeforeVerifiedText = false;
 

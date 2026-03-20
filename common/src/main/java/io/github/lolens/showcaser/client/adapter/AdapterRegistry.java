@@ -27,7 +27,7 @@ public class AdapterRegistry {
 
             return adapterList;
         });
-        Showcaser.LOGGER.info("Registered context adapter for handler with id {}", adapter.getHandlerId());
+        Showcaser.LOGGER.debug("Registered context adapter for handler with id {}", adapter.getHandlerId());
     }
 
     public static ShareableResource adapt(ShareContext context) {

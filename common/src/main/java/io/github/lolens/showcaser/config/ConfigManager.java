@@ -2,6 +2,8 @@ package io.github.lolens.showcaser.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import dev.architectury.platform.Platform;
 import dev.architectury.utils.Env;
 import dev.architectury.utils.GameInstance;
@@ -72,12 +74,23 @@ public class ConfigManager {
             Files.createDirectories(path.getParent());
 
             if (Files.notExists(path)) {
+                Showcaser.LOGGER.info("No config found. Creating new one!");
                 save(path, defaultValue);
                 return defaultValue;
             }
 
             try (BufferedReader reader = Files.newBufferedReader(path)) {
-                T obj = GSON.fromJson(reader, type);
+                JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
+
+                int fileVersion = json.has("version") ? json.get("version").getAsInt() : 0;
+
+                if (fileVersion < getCurrentVersion(type)) {
+                    Showcaser.LOGGER.info("Outdated config on path {}. Overwriting with default config", path);
+                    save(path, defaultValue);
+                    return defaultValue;
+                }
+
+                T obj = GSON.fromJson(json, type);
                 return obj != null ? obj : defaultValue;
             }
 
@@ -101,6 +114,17 @@ public class ConfigManager {
         }
     }
 
+    private static int getCurrentVersion(Class<?> configClass) {
+        try {
+            return configClass.getField("CURRENT_VERSION").getInt(null);
+        } catch (NoSuchFieldException e) {
+            return 0;
+        } catch (IllegalAccessException e) {
+            Showcaser.LOGGER.error("IllegalAccessException while getting current config version", e);
+            return 0;
+        }
+    }
+
     public static void saveStorage() {
         save(SERVER_PERSISTENT_STORAGE, storage);
     }
@@ -112,7 +136,7 @@ public class ConfigManager {
     }
 
     @Environment(EnvType.CLIENT)
-    public static void sync(ConfigSyncMessage configSyncMessage) {
+    public static void applySyncMessage(ConfigSyncMessage configSyncMessage) {
         if (Platform.getEnvironment() != Env.CLIENT) throw new IllegalStateException("Sync config not on the client thread");
         clientServerSyncedValues = new ShowcaserServerConfig(configSyncMessage);
         ClientConfigSyncEvent.EVENT.invoker().onConfigSync(clientServerSyncedValues);
@@ -135,16 +159,16 @@ public class ConfigManager {
     public static void loadClient() {
         if (Platform.getEnvironment() != Env.CLIENT) throw new IllegalStateException("Load client configs called not on the server thread");
         clientConfig = load(CLIENT_CONFIG, ShowcaserClientConfig.class, new ShowcaserClientConfig());
+        Showcaser.LOGGER.info("Loaded client config");
         ClientConfigLoadEvent.EVENT.invoker().onLoad(clientConfig);
     }
 
     // server config updates on /showcaser reload command or restarting the server
     public static void loadServer() {
-        Showcaser.LOGGER.info("Loaded configs");
         serverConfig = load(SERVER_CONFIG, ShowcaserServerConfig.class, new ShowcaserServerConfig());
         storage = load(SERVER_PERSISTENT_STORAGE, ShowcaserStorage.class, new ShowcaserStorage());
+        Showcaser.LOGGER.info("Loaded common config and storage");
 
-        // maybe should add server config reload event?
         syncServerConfigToAll();
     }
 
