@@ -13,15 +13,12 @@ public class ClientShareDispatcher {
             ConfigManager.getSyncedConfig().chatSharingCooldown
     );
 
-    // todo move cooldown logic to inner static class
     public static void onKeyPress(Screen screen) {
 
-        if (ConfigManager.getClientConfig().debug) {
-            Showcaser.LOGGER.info("Pressed key on screen: {}", screen.getClass().getName());
-        }
+        Showcaser.LOGGER.debug("Pressed key on screen: {}", screen.getClass().getName());
 
         if (COOLDOWN_MANAGER.isOnCooldown()) {
-            Showcaser.LOGGER.warn("Share on cooldown!");
+            Showcaser.LOGGER.debug("Tried sharing resource while on cooldown");
             return;
         }
 
@@ -30,10 +27,9 @@ public class ClientShareDispatcher {
         for (ClientShareHandler<? extends Screen> handler : handlers) {
 
             HandlerResult result = handler.createContext(screen, context -> {
-                if (ConfigManager.getClientConfig().debug) {
-                    Showcaser.LOGGER.info("Handler with target {} created context for {}",
-                            handler.getTargetClass(), context.getId());
-                }
+
+                Showcaser.LOGGER.debug("Handler with target {} created context for {}",
+                        handler.getTargetClass(), context.getId());
 
                 new ShareMessage(context).sendToServer();
                 COOLDOWN_MANAGER.updateNow();

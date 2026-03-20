@@ -18,9 +18,7 @@ public class ShareMessage extends BaseC2SMessage {
     public ShareMessage(ShareContext shareContext) {
         this.shareContext = shareContext;
 
-        if (ConfigManager.getClientConfig().debug) {
-            Showcaser.LOGGER.info("new C2S ShareMessage: {}", shareContext);
-        }
+        Showcaser.LOGGER.debug("new C2S ShareMessage: {}", shareContext);
     }
 
     public ShareMessage(PacketByteBuf buf) { // deserializer
@@ -39,9 +37,7 @@ public class ShareMessage extends BaseC2SMessage {
 
     @Override
     public void handle(NetworkManager.PacketContext context) {
-        if (ConfigManager.getClientConfig().debug) {
-            Showcaser.LOGGER.info("Server received ShareMessage: {}", shareContext);
-        }
+        Showcaser.LOGGER.debug("Server received ShareMessage: {}", shareContext);
 
         ServerShareDispatcher.dispatch(this.shareContext, context.getPlayer());
     }

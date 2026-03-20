@@ -149,9 +149,7 @@ public final class ClientHandlerCache {
             getClientHandlersFor(clazz);
         }
 
-        if (ConfigManager.getClientConfig().debug) {
-            printInfo(classes);
-        }
+        printInfo(classes);
     }
 
     public static void prewarmCache() {
@@ -224,7 +222,7 @@ public final class ClientHandlerCache {
             });
         }
 
-        Showcaser.LOGGER.info(sb.toString());
+        Showcaser.LOGGER.debug(sb.toString());
     }
 
 }
