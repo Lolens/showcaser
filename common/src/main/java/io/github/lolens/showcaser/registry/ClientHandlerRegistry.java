@@ -66,9 +66,7 @@ public final class ClientHandlerRegistry {
 
     @Nullable
     public static DisplayHandler getClientDisplayHandler(Identifier id) {
-        DisplayHandler displayHandler = CLIENT_DISPLAY_HANDLERS.get(id);
-        Showcaser.LOGGER.info("in display handler registry. handler = {}", displayHandler);
-        return displayHandler;
+        return CLIENT_DISPLAY_HANDLERS.get(id);
     }
 
     @Nullable

@@ -9,28 +9,34 @@ import net.minecraft.client.gui.screen.Screen;
 
 public class ClientShareDispatcher {
 
-    private static long lastSendAt = 0;
+    public static final ClientCooldownManager COOLDOWN_MANAGER = new ClientCooldownManager(
+            ConfigManager.getSyncedConfig().chatSharingCooldown
+    );
 
+    // todo move cooldown logic to inner static class
     public static void onKeyPress(Screen screen) {
-        int cooldown = ConfigManager.getSyncedConfig().chatSharingCooldown;
 
         if (ConfigManager.getClientConfig().debug) {
             Showcaser.LOGGER.info("Pressed key on screen: {}", screen.getClass().getName());
         }
 
-        long currentTime = System.currentTimeMillis();
-        if (currentTime - lastSendAt < cooldown) return;
+        if (COOLDOWN_MANAGER.isOnCooldown()) {
+            Showcaser.LOGGER.warn("Share on cooldown!");
+            return;
+        }
 
         var handlers = ClientHandlerCache.getClientHandlersFor(screen);
 
         for (ClientShareHandler<? extends Screen> handler : handlers) {
 
             HandlerResult result = handler.createContext(screen, context -> {
-                Showcaser.LOGGER.info("Handler with target {} created context for {}",
-                        handler.getTargetClass(), context.getId());
+                if (ConfigManager.getClientConfig().debug) {
+                    Showcaser.LOGGER.info("Handler with target {} created context for {}",
+                            handler.getTargetClass(), context.getId());
+                }
 
                 new ShareMessage(context).sendToServer();
-                lastSendAt = currentTime;
+                COOLDOWN_MANAGER.updateNow();
             });
 
             if (result != HandlerResult.PASS) return; // proceed only if passes
@@ -39,4 +45,27 @@ public class ClientShareDispatcher {
 
         Showcaser.LOGGER.warn("No valid handler found for screen: {}", screen.getClass().getSimpleName());
     }
+
+    public static class ClientCooldownManager {
+        private long lastSend = 0;
+        private int cooldownMs;
+
+        ClientCooldownManager(int cooldownTicks) {
+            setCooldown(cooldownTicks);
+        }
+
+        public void updateNow() {
+            this.lastSend = System.currentTimeMillis();
+        }
+
+        public boolean isOnCooldown() {
+            return System.currentTimeMillis() - lastSend < cooldownMs;
+        }
+
+        public void setCooldown(int cooldownTicks) {
+            this.cooldownMs = cooldownTicks * 50;
+        }
+
+    }
+
 }

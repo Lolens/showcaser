@@ -6,6 +6,7 @@ import dev.architectury.platform.Platform;
 import dev.architectury.utils.Env;
 import dev.architectury.utils.GameInstance;
 import io.github.lolens.showcaser.Showcaser;
+import io.github.lolens.showcaser.api.event.client.ClientConfigLoadEvent;
 import io.github.lolens.showcaser.api.event.client.ClientConfigSyncEvent;
 import io.github.lolens.showcaser.network.message.s2c.ConfigSyncMessage;
 import net.fabricmc.api.EnvType;
@@ -134,6 +135,7 @@ public class ConfigManager {
     public static void loadClient() {
         if (Platform.getEnvironment() != Env.CLIENT) throw new IllegalStateException("Load client configs called not on the server thread");
         clientConfig = load(CLIENT_CONFIG, ShowcaserClientConfig.class, new ShowcaserClientConfig());
+        ClientConfigLoadEvent.EVENT.invoker().onLoad(clientConfig);
     }
 
     // server config updates on /showcaser reload command or restarting the server

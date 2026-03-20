@@ -2,11 +2,13 @@ package io.github.lolens.showcaser.handler;
 
 
 import dev.architectury.utils.GameInstance;
+import io.github.lolens.showcaser.Showcaser;
 import io.github.lolens.showcaser.api.sharecontext.ShareContext;
 import io.github.lolens.showcaser.config.ConfigManager;
 import io.github.lolens.showcaser.network.message.s2c.ShareDisplayMessage;
 import io.github.lolens.showcaser.registry.ServerHandlerRegistry;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -17,12 +19,15 @@ import static io.github.lolens.showcaser.Showcaser.LOGGER;
 
 public class ServerShareDispatcher {
 
-    private static final Object2IntOpenHashMap<UUID> lastSendTimes = new Object2IntOpenHashMap<>();
+    private static final Object2LongOpenHashMap<UUID> lastSendTimes = new Object2LongOpenHashMap<>();
 
     public static void dispatch(ShareContext context, PlayerEntity player) {
 
         if (checkBanned(player)) return;
-        if (checkCooldown(player)) return;
+        if (checkCooldown(player)) {
+            LOGGER.info("Player tried sending share while on cooldown");
+            return;
+        }
 
         ShareContext out;
         if (context.hasTrustedSyncId()) {
@@ -90,11 +95,19 @@ public class ServerShareDispatcher {
         // caching cooldowns as static field and updating via ConfigUpdateEvent is overhead probably...
         int cooldown = ConfigManager.getServerConfig().chatSharingCooldown;
 
-        int time = GameInstance.getServer().getTicks();
-        int sinceSend = time - lastSendTimes.getOrDefault(player.getUuid(), -cooldown);
-        if (sinceSend <= cooldown) return true; // true -> return from dispatch
+        // dispatch should only be called only after server is loaded
+        long time = GameInstance.getServer().getOverworld().getTime();
 
-        lastSendTimes.put(player.getUuid(), time);
+        UUID uuid = player.getUuid();
+
+        long lastTime = lastSendTimes.getLong(uuid);
+        long sinceSend = time - lastTime;
+
+        if (sinceSend <= cooldown) {
+            return true;
+        }
+
+        lastSendTimes.put(uuid, time);
         return false;
     }
 

@@ -5,6 +5,7 @@ import dev.architectury.networking.simple.BaseS2CMessage;
 import dev.architectury.networking.simple.MessageType;
 import io.github.lolens.showcaser.Showcaser;
 import io.github.lolens.showcaser.api.sharecontext.ShareContext;
+import io.github.lolens.showcaser.config.ConfigManager;
 import io.github.lolens.showcaser.core.ShareContextImpl;
 import io.github.lolens.showcaser.network.Networking;
 import io.github.lolens.showcaser.registry.ClientHandlerRegistry;
@@ -23,7 +24,9 @@ public class ShareDisplayMessage extends BaseS2CMessage {
     public ShareDisplayMessage(ShareContext context, String senderName) {
         this.shareContext = context;
         this.senderName = senderName;
-        Showcaser.LOGGER.info("new S2C DisplayMessage: {}", shareContext);
+        if (ConfigManager.getClientConfig().debug) {
+            Showcaser.LOGGER.info("new S2C DisplayMessage: {}", shareContext);
+        }
     }
 
     @Override
@@ -39,7 +42,9 @@ public class ShareDisplayMessage extends BaseS2CMessage {
 
     @Override
     public void handle(NetworkManager.PacketContext context) {
-        Showcaser.LOGGER.info("Client received ShareDisplayMessage");
+        if (ConfigManager.getClientConfig().debug) {
+            Showcaser.LOGGER.info("Client received ShareDisplayMessage");
+        }
         ClientHandlerRegistry.getClientDisplayHandler(shareContext.getId()).display(senderName, shareContext);
     }
 }

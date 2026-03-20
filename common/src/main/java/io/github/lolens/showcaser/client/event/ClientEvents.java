@@ -4,6 +4,7 @@ import dev.architectury.event.EventResult;
 import dev.architectury.event.events.client.ClientPlayerEvent;
 import dev.architectury.event.events.client.ClientScreenInputEvent;
 import io.github.lolens.showcaser.api.event.AdapterRegistrationEvent;
+import io.github.lolens.showcaser.api.event.client.ClientConfigLoadEvent;
 import io.github.lolens.showcaser.api.event.client.ClientConfigSyncEvent;
 import io.github.lolens.showcaser.client.adapter.AdapterRegistry;
 import io.github.lolens.showcaser.client.ClientShareDispatcher;
@@ -32,19 +33,20 @@ public class ClientEvents {
             ConfigManager.loadClient();
         });
 
-        // prevents clients from creating context on screens that are banned on server
         ClientConfigSyncEvent.EVENT.register(config -> {
 
-            ClientHandlerCache.clearConfigBlacklistedClasses();
+            // update cooldown on client
+            ClientShareDispatcher.COOLDOWN_MANAGER.setCooldown(config.chatSharingCooldown);
 
+            ClientHandlerCache.clearConfigBlacklistedClasses();
             for (String className : config.blacklistedClassesWithInheritors) {
                 ClientHandlerCache.blacklistWithInheritors(className);
             }
             for (String className : config.blacklistedClassesExact) {
                 ClientHandlerCache.blacklistExact(className);
             }
-
             ClientHandlerCache.prewarmCache();
+
         });
 
     }

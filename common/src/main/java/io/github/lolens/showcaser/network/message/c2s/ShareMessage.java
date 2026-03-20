@@ -5,6 +5,7 @@ import dev.architectury.networking.simple.BaseC2SMessage;
 import dev.architectury.networking.simple.MessageType;
 import io.github.lolens.showcaser.Showcaser;
 import io.github.lolens.showcaser.api.sharecontext.ShareContext;
+import io.github.lolens.showcaser.config.ConfigManager;
 import io.github.lolens.showcaser.core.ShareContextImpl;
 import io.github.lolens.showcaser.handler.ServerShareDispatcher;
 import io.github.lolens.showcaser.network.Networking;
@@ -16,7 +17,10 @@ public class ShareMessage extends BaseC2SMessage {
 
     public ShareMessage(ShareContext shareContext) {
         this.shareContext = shareContext;
-        Showcaser.LOGGER.info("new C2S ShareMessage: {}", shareContext);
+
+        if (ConfigManager.getClientConfig().debug) {
+            Showcaser.LOGGER.info("new C2S ShareMessage: {}", shareContext);
+        }
     }
 
     public ShareMessage(PacketByteBuf buf) { // deserializer
@@ -35,6 +39,10 @@ public class ShareMessage extends BaseC2SMessage {
 
     @Override
     public void handle(NetworkManager.PacketContext context) {
+        if (ConfigManager.getClientConfig().debug) {
+            Showcaser.LOGGER.info("Server received ShareMessage: {}", shareContext);
+        }
+
         ServerShareDispatcher.dispatch(this.shareContext, context.getPlayer());
     }
 }
