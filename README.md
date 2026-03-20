@@ -43,11 +43,13 @@ Showcaser allow you to share items, fluids, recipes and even quest with a single
 </details>
 
 
-## How to use
+## How to share quest
 
-1. To share item from inventory just hover the slot and press share keybind (Shift + X)
+1. Item -> hover the slot and press share keybind (Shift + X)
 
-2. To share item/fluid from REI or EMI hover that resource and use share keybind.To share specific recipe in EMI you can add it as favourite and then share.
+2. EMI's / REI's recipe -> hover that resource and use share keybind.<br>To share specific recipe in EMI you can add it as favourite and then share.
+
+3. FTB Quest -> open quest in quest book and press keybind
 
 ## Commands
 - /showcaser
