@@ -43,7 +43,7 @@ Showcaser allow you to share items, fluids, recipes and even quest with a single
 </details>
 
 
-## How to share quest
+## How to share
 
 1. Item -> hover the slot and press share keybind (Shift + X)
 
