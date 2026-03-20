@@ -11,7 +11,6 @@ loom {
 
         mixinConfig "showcaser-common.mixins.json"
         mixinConfig "showcaser.mixins.json"
-        mixinConfig("showcaser-emi.mixins.json")
     }
 }
 

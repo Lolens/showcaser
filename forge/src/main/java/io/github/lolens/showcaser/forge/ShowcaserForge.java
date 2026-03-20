@@ -16,9 +16,5 @@ public final class ShowcaserForge {
 
         // Run our common setup.
         Showcaser.init();
-
-        if (PlatformUtils.isEMILoaded()) {
-            Mixins.addConfiguration("showcaser-emi.mixins.json");
-        }
     }
 }
