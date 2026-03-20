@@ -82,7 +82,7 @@ By default mod adds "Verified by the server" message to all items that server ca
 ```
 "hideVerifiedTooltipLine": false
 ```
-Screen classes may be put here to disable sharing from them. Screen classes are printed in debug.log upon sharing. This parameter bans specified class exactly
+Screen class may be put here to disable sharing from it. Screen class that player is trying to share resource from is printed in debug.log upon sharing. This parameter bans specified class exactly
 ```
 blacklistedClassesExact": []
 ```
