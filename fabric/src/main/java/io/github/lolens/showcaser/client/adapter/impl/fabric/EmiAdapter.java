@@ -25,7 +25,7 @@ import dev.architectury.fluid.FluidStack;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.FluidEmiStack;
 import dev.emi.emi.api.stack.ItemEmiStack;
-import dev.emi.emi.registry.EmiIngredientSerializers;
+import dev.emi.emi.api.stack.serializer.EmiIngredientSerializer;
 import io.github.lolens.showcaser.api.adapter.BaseShareContextAdapter;
 import io.github.lolens.showcaser.api.resource.EmptyResource;
 import io.github.lolens.showcaser.api.resource.ShareableFluidStack;
@@ -45,7 +45,7 @@ public class EmiAdapter extends BaseShareContextAdapter {
     @Override
     public ShareableResource adapt(ShareContext context) {
         JsonElement json = context.getJsonElement();
-        EmiIngredient ingredient = EmiIngredientSerializers.deserialize(json);
+        EmiIngredient ingredient = EmiIngredientSerializer.getDeserialized(json);
 
         if (ingredient instanceof ItemEmiStack emiStack) {
             return new ShareableItemStack(emiStack.getItemStack());

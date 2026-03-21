@@ -24,7 +24,7 @@ import dev.architectury.platform.Platform;
 import dev.architectury.utils.Env;
 import dev.emi.emi.api.EmiApi;
 import dev.emi.emi.api.stack.*;
-import dev.emi.emi.registry.EmiIngredientSerializers;
+import dev.emi.emi.api.stack.serializer.EmiIngredientSerializer;
 import dev.emi.emi.screen.RecipeScreen;
 import io.github.lolens.showcaser.api.event.AdapterRegistrationEvent;
 import io.github.lolens.showcaser.api.handler.HandlerResult;
@@ -100,12 +100,12 @@ public class EmiHandlerImpl {
                     ) {
                         if (recipeId == null) {
                             contextConsumer.accept(getContextFactory().create(ID)
-                                    .withJsonElement(EmiIngredientSerializers.serialize(ingredient))
+                                    .withJsonElement(EmiIngredientSerializer.getSerialized(ingredient))
                             );
                             return HandlerResult.SUCCESS;
                         }
                         contextConsumer.accept(getContextFactory().create(ID)
-                                .withJsonElement(EmiIngredientSerializers.serialize(ingredient))
+                                .withJsonElement(EmiIngredientSerializer.getSerialized(ingredient))
                                 .withIdentifier(recipeId)
                         );
                         return HandlerResult.SUCCESS;

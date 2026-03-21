@@ -22,6 +22,7 @@ package io.github.lolens.showcaser.handler.conditional.forge;
 
 import dev.architectury.platform.Platform;
 import dev.architectury.utils.Env;
+import dev.ftb.mods.ftblibrary.ui.ScreenWrapper;
 import dev.ftb.mods.ftbquests.client.ClientQuestFile;
 import dev.ftb.mods.ftbquests.client.gui.quests.QuestScreen;
 import dev.ftb.mods.ftbquests.quest.Quest;
@@ -65,17 +66,11 @@ public class FtbQuestsHandlerImpl {
     }
 
     private static void registerClient() {
-        getHandlerBuilderFactory().createClientBuilder(ID)
-                .forScreen(null)
+        getHandlerBuilderFactory().<ScreenWrapper>createClientBuilder(ID)
+                .forScreen(ScreenWrapper.class) // workaround to handle ftblib screens
                 .createContext((screen, contextConsumer) -> {
+                    if (screen.getGui() instanceof QuestScreen questScreen) {
 
-                    Optional<QuestScreen> opt = ClientQuestFile.INSTANCE.getQuestScreen();
-
-                    if (opt.isPresent()) {
-
-                        QuestScreen questScreen = opt.get();
-
-                        if (!questScreen.anyModalPanelOpen()) return HandlerResult.PASS;
                         // true if quest book is opened and no quest selected
                         if (questScreen.getViewedQuest() == null) return HandlerResult.STOP;
 
@@ -88,7 +83,6 @@ public class FtbQuestsHandlerImpl {
                         return HandlerResult.SUCCESS;
                     }
 
-                    // no other handlers should
                     return HandlerResult.PASS;
                 })
                 .display((player, context) -> {

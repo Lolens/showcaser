@@ -22,10 +22,7 @@ package io.github.lolens.showcaser.handler;
 
 import dev.architectury.platform.Platform;
 import dev.architectury.utils.Env;
-import io.github.lolens.showcaser.handler.conditional.Ae2Handler;
-import io.github.lolens.showcaser.handler.conditional.EmiHandler;
-import io.github.lolens.showcaser.handler.conditional.FtbQuestsHandler;
-import io.github.lolens.showcaser.handler.conditional.ReiHandler;
+import io.github.lolens.showcaser.handler.conditional.*;
 import io.github.lolens.showcaser.handler.vanilla.CreativeInventoryHandler;
 import io.github.lolens.showcaser.handler.vanilla.FallbackHandler;
 import io.github.lolens.showcaser.handler.vanilla.PlayerInventoryHandler;
@@ -44,6 +41,7 @@ public class Handlers {
         if (PlatformUtils.isREILoaded()) ReiHandler.register();
         if (PlatformUtils.isEMILoaded()) EmiHandler.register();
         if (PlatformUtils.isFTBQuestsLoaded()) FtbQuestsHandler.register();
+        if (PlatformUtils.isJEILoaded()) JeiHandler.register();
 
         if (Platform.getEnvironment() == Env.CLIENT) {
             // prevents sharing constantly renamed output slot item

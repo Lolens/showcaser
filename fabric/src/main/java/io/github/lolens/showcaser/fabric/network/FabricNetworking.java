@@ -21,11 +21,11 @@
 package io.github.lolens.showcaser.fabric.network;
 
 import dev.architectury.networking.simple.MessageType;
+import io.github.lolens.showcaser.fabric.network.message.s2c.conditional.jei.JeiOpenScreenMessage;
 import io.github.lolens.showcaser.network.Networking;
 import io.github.lolens.showcaser.fabric.network.message.s2c.conditional.ftbquests.FtbQuestsOpenScreenMessage;
 
 public class FabricNetworking {
-
 
 
     public static class Conditional {
@@ -49,7 +49,27 @@ public class FabricNetworking {
             }
 
 
-        }
+        } // end static class FTBQuests
+
+        public static class JEI {
+
+            public static class MessageTypes {
+
+                public static class S2C {
+                    public static MessageType JEI_OPEN_SCREEN;
+                }
+
+            }
+
+            public static void register() {
+                JEI.MessageTypes.S2C.JEI_OPEN_SCREEN = Networking.getNetworkManager().registerS2C(
+                        "s2c_jei_open_screen",
+                        JeiOpenScreenMessage::new
+                );
+
+            }
+
+        } // end static class JEI
 
     }
 

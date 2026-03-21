@@ -49,9 +49,19 @@ dependencies {
     modCompileOnly("curse.maven:ftb-quests-forge-289412:7608804")
     modCompileOnly("curse.maven:ftb-library-forge-404465:7296748")
     modCompileOnly("curse.maven:ftb-teams-forge-404468:7499810")
+    // modCompileOnly("curse.maven:ftb-xmod-compat-889915:6402486")
+
     modLocalRuntime("curse.maven:ftb-quests-forge-289412:7608804")
     modLocalRuntime("curse.maven:ftb-library-forge-404465:7296748")
     modLocalRuntime("curse.maven:ftb-teams-forge-404468:7499810")
+    modLocalRuntime("curse.maven:ftb-xmod-compat-889915:6402486")
+
+    // remapping fails if jei-suggested dependency setup is used
+//  modCompileOnlyApi("mezz.jei:jei-${minecraft_version}-fabric-api:${jei_version}")
+//  modLocalRuntime("mezz.jei:jei-${mc_version}-fabric:${jei_version}")
+
+    modCompileOnly("curse.maven:jei-238222:7391695")
+    modLocalRuntime("curse.maven:jei-238222:7391695")
 
     modCompileOnly("dev.emi:emi-forge:${emi_version}")
     modLocalRuntime("dev.emi:emi-forge:${emi_version}")

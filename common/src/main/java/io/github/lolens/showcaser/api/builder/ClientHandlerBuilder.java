@@ -36,6 +36,8 @@ public interface ClientHandlerBuilder<T extends Screen> {
 
     ClientHandlerBuilder<T> display(BiConsumer<String, ShareContext> displayHandler);
 
+    ClientHandlerBuilder<T> priority(int priority);
+
     void register();
 
 }

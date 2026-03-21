@@ -38,6 +38,9 @@ public final class PlatformUtils {
     public static boolean isFTBQuestsLoaded() {
         return Platform.isModLoaded("ftbquests");
     }
+    public static boolean isJEILoaded() {
+        return Platform.isModLoaded("jei");
+    }
 
 
 
