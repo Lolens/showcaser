@@ -8,6 +8,7 @@ Showcaser allow you to share items, fluids, recipes and even quests with a singl
 ### Supported mods:
   - EMI
   - Roughly Enough Items
+  - Just Enough Items
   - Applied Energistics 2
   - FTB Quests
 
@@ -47,7 +48,7 @@ Showcaser allow you to share items, fluids, recipes and even quests with a singl
 
 1. Item -> hover the slot and press share keybind (Shift + X)
 
-2. EMI's / REI's recipe -> hover resource and use share keybind.<br>To share specific recipe in EMI you can add it as favourite and then share it from EMI's favourites panel
+2. EMI's / REI's / JEI's recipe -> hover resource and use share keybind.<br>To share specific recipe in EMI you can add it as favourite and then share it from EMI's favourites panel
 
 3. FTB Quest -> open quest in quest book and press keybind
 
