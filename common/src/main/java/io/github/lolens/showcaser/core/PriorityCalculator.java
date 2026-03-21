@@ -20,6 +20,7 @@
 
 package io.github.lolens.showcaser.core;
 
+import io.github.lolens.showcaser.Showcaser;
 import io.github.lolens.showcaser.api.handler.ClientShareHandler;
 import io.github.lolens.showcaser.api.handler.ShareHandler;
 
@@ -71,6 +72,8 @@ public class PriorityCalculator {
 
             // in case 2 handlers target the same class they are compared by getPriority()
             if (p1 == p2) {
+//                Showcaser.LOGGER.info("priority comparison: {} against {}. -> {}:{}",
+//                        h1.getIdentifier(), h2.getIdentifier(), h1.getPriority(), h2.getPriority());
                 return Integer.compare(h1.getPriority(), h2.getPriority());
             }
 

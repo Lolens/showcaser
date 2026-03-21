@@ -77,6 +77,7 @@ public class JeiHandlerImpl {
     private static void registerClient() {
         getHandlerBuilderFactory().createClientBuilder(ID)
                 .forScreen(null)
+                .priority(200)
                 .createContext((screen, contextConsumer) -> {
                     // remapping goes wrong while compiling against api from
                     // suggested repo so curse.maven is used and project is compiled

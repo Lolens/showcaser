@@ -64,7 +64,7 @@ public class ServerShareDispatcher {
             //
             // Latency is also a reason why it can happen. Even in singleplayer if item is taken from ME network
             // simultaneously with sending a packet in will result in Items.AIR or null
-            LOGGER.warn("Player {} requested dispatch for context with id {} but it resulted in null", player.getName(), context.getId());
+            LOGGER.warn("Player {} requested dispatch for context with id {} but it resulted in null", player.getName().getString(), context.getId());
         }
     }
 
