@@ -1,6 +1,6 @@
 # Showcaser
 
-Showcaser allow you to share items, fluids, recipes and even quest with a single keybind!
+Showcaser allow you to share items, fluids, recipes and even quests with a single keybind!
 
 ### Requirements:
   - Architectury API
@@ -43,11 +43,11 @@ Showcaser allow you to share items, fluids, recipes and even quest with a single
 </details>
 
 
-## How to share quest
+## How to share
 
 1. Item -> hover the slot and press share keybind (Shift + X)
 
-2. EMI's / REI's recipe -> hover that resource and use share keybind.<br>To share specific recipe in EMI you can add it as favourite and then share.
+2. EMI's / REI's recipe -> hover resource and use share keybind.<br>To share specific recipe in EMI you can add it as favourite and then share it from EMI's favourites panel
 
 3. FTB Quest -> open quest in quest book and press keybind
 
@@ -78,11 +78,11 @@ Regulates share cooldown. Self-explanatory
 ```
 "chatSharingCooldown": 20
 ```
-By default mod adds "Verified by the server" message to all items that server can get by getting the resource for specific slot from screen's screen handler. You can hide this line if you dont need it, but that would make item flexing impossible so think twice
+By default mod adds "Verified by the server" message to all items that server can get by accessing screen's screen handler. Some mods store items that player dont actually have on the server side and they are displayed as verified. You can hide this line if you dont need it, but that would make item flexing impossible so think twice. To ban screens that contain these "ghost" items you can blacklist them using config parameters below
 ```
 "hideVerifiedTooltipLine": false
 ```
-Screen classes may be put here to disable sharing from them. Screen classes are printed in debug.log upon sharing. This parameter bans specified class exactly
+Screen class may be put here to disable sharing from it. Screen class that player is trying to share resource from is printed in debug.log upon sharing. This parameter bans specified class exactly
 ```
 blacklistedClassesExact": []
 ```
