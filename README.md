@@ -5,7 +5,7 @@ Showcaser allow you to share items, fluids, recipes and even quests with a singl
 ### Requirements:
   - Architectury API
 
-Mod must be installed on client and server side
+Showcaser must be installed on client and server side
 
 ### Supported mods:
   - EMI
