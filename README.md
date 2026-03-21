@@ -5,6 +5,8 @@ Showcaser allow you to share items, fluids, recipes and even quests with a singl
 ### Requirements:
   - Architectury API
 
+Mod must be installed on client and server side
+
 ### Supported mods:
   - EMI
   - Roughly Enough Items
@@ -92,5 +94,7 @@ Works same as blacklistedClassesExact, but also bans all classes that inherit ba
 "blacklistedClassesWithInheritors": []
 ```
 
+<br><br>
+Also you can add Showcaser to your modpack without asking me about it :)
 
 
