@@ -24,13 +24,12 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.lolens.showcaser.client.render.RenderableHoverEvent;
+import io.github.lolens.showcaser.util.PlatformUtils;
+import io.github.lolens.showcaser.util.ResourceUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.ChatHud;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.RenderLayers;
-import net.minecraft.client.render.TexturedRenderLayers;
 import net.minecraft.text.HoverEvent;
 import net.minecraft.text.OrderedText;
 import org.spongepowered.asm.mixin.Final;
@@ -77,8 +76,9 @@ public abstract class ChatHudRenderMixin {
         final float[] currentX = {0};
         final float scale = (float) getChatScale();
 
+        // render and add renderableHover width or just add char width
         originalText.accept((index, style, codePoint) -> {
-            if (codePoint == '\uE670') {
+            if (codePoint == ResourceUtils.MARKER) {
                 HoverEvent hover = style.getHoverEvent();
                 if (hover instanceof RenderableHoverEvent renderableHover) {
 
@@ -93,8 +93,9 @@ public abstract class ChatHudRenderMixin {
                 return true;
             }
 
-            currentX[0] += client.textRenderer.getWidth(String.valueOf((char) codePoint));
+            currentX[0] += PlatformUtils.measureText(String.valueOf((char) codePoint));
             return true;
+
         });
     }
 

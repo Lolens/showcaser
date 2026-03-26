@@ -118,7 +118,6 @@ public class ReiHandlerImpl {
 
                     if (entryType == VanillaEntryTypes.ITEM) {
                         text = getMessageBuilderFactory().create(context, player, resource, MessageVerification.NONE)
-                                .withWidth(12)
                                 .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
                                         String.format("/showcaser rei open %s", entryStack.wildcard().saveStack())))
                                 .withFormatting(Formatting.UNDERLINE)
@@ -128,7 +127,6 @@ public class ReiHandlerImpl {
                     if (entryType == VanillaEntryTypes.FLUID) {
                         text = getMessageBuilderFactory().create(context, player, resource, MessageVerification.NONE)
                                 .showAmount(false)
-                                .withWidth(12)
                                 .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
                                         String.format("/showcaser rei open %s", entryStack.wildcard().saveStack())))
                                 .withFormatting(Formatting.UNDERLINE)

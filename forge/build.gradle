@@ -43,8 +43,9 @@ dependencies {
     modImplementation "dev.architectury:architectury-forge:$rootProject.architectury_api_version"
 
     modCompileOnly("curse.maven:applied-energistics-2-223794:7148487")
-    modLocalRuntime("curse.maven:guideme-1173950:7127447")
-    modLocalRuntime("curse.maven:applied-energistics-2-223794:7148487")
+    // running this with MUI caused forge config read while init which resulted in crash
+//    modLocalRuntime("curse.maven:guideme-1173950:7127447")
+//    modLocalRuntime("curse.maven:applied-energistics-2-223794:7148487")
 
     modCompileOnly("curse.maven:ftb-quests-forge-289412:7608804")
     modCompileOnly("curse.maven:ftb-library-forge-404465:7296748")
@@ -71,15 +72,26 @@ dependencies {
 
     // modLocalRuntime("curse.maven:embeddium-908741:5681725")
 
+    // Modern UI
+    dependencies {
+        // modApi "fuzs.forgeconfigapiport:forgeconfigapiport-:${fcapi_version}"
+        localRuntime("icyllis.modernui:ModernUI-Core:${modernui_version}")
+        forgeRuntimeLibrary("icyllis.modernui:ModernUI-Core:${modernui_version}")
+        // Modern UI core extensions
+        // Markdown (<=3.11.1) / Markflow (>=3.12.0) is required, others are optional
+        localRuntime("icyllis.modernui:ModernUI-Markflow:${modernui_version}")
+        forgeRuntimeLibrary("icyllis.modernui:ModernUI-Markflow:${modernui_version}")
+        // Choose one of Fabric or NeoForge
+        modCompileOnly("icyllis.modernui:ModernUI-Forge:${minecraft_version}-${modernui_version}.+")
+        modLocalRuntime("icyllis.modernui:ModernUI-Forge:${minecraft_version}-${modernui_version}.+")
+    }
+
     common(project(path: ':common', configuration: 'namedElements')) { transitive = false }
     shadowBundle project(path: ':common', configuration: 'transformProductionForge')
 
     // mixin extras
     compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.3"))
     implementation(include("io.github.llamalad7:mixinextras-forge:0.5.3"))
-
-
-
 }
 
 processResources {

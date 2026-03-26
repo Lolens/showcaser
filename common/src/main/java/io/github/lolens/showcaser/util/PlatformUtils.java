@@ -20,28 +20,61 @@
 
 package io.github.lolens.showcaser.util;
 
+import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.platform.Platform;
+import net.minecraft.client.MinecraftClient;
 
 public final class PlatformUtils {
 
-    private PlatformUtils() {}
+    private PlatformUtils() {
+    }
 
     public static boolean isREILoaded() {
         return Platform.isModLoaded("roughlyenoughitems");
     }
+
     public static boolean isAE2Loaded() {
         return Platform.isModLoaded("ae2");
     }
+
     public static boolean isEMILoaded() {
         return Platform.isModLoaded("emi");
     }
+
     public static boolean isFTBQuestsLoaded() {
         return Platform.isModLoaded("ftbquests");
     }
+
     public static boolean isJEILoaded() {
         return Platform.isModLoaded("jei");
     }
 
+    public static boolean isModernUILoaded() {
+        return Platform.isModLoaded("modernui");
+    }
+
+
+    public static float measureText(String text) {
+        if (isMUIModernTextEngineActive()) {
+            return modernui$measureText(text);
+        }
+        return MinecraftClient.getInstance().textRenderer.getWidth(text);
+    }
+
+    public static boolean isMUIModernTextEngineActive() {
+        return isModernUILoaded() ? modernui$isMUIModernTextEngineActive() : false;
+    }
+
+    @ExpectPlatform
+    public static boolean modernui$isMUIModernTextEngineActive() {
+        throw new AssertionError();
+    }
+
+    // fallbacks to vanilla if modern ui is present and modern text engine is disabled
+    @ExpectPlatform
+    public static float modernui$measureText(String text) {
+        throw new AssertionError();
+    }
 
 
 }

@@ -74,6 +74,20 @@ subprojects {
             }
         }
 
+        // Forge Config API Port
+        repositories {
+            maven {
+                name = "Fuzs Mod Resources"
+                url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
+            }
+        }
+
+        // modernUI
+        maven {
+            name 'IzzelAliz Maven'
+            url 'https://maven.izzel.io/releases/'
+        }
+
 
         // Add repositories to retrieve artifacts from in here.
         // You should only use this when depending on other mods because

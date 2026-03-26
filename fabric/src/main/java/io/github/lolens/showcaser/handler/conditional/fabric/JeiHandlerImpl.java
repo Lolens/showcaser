@@ -132,7 +132,6 @@ public class JeiHandlerImpl {
                     }
 
                     MutableText text = getMessageBuilderFactory().create(context, player, resource, MessageVerification.NONE)
-                            .withWidth(12)
                             .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, clickEventString))
                             .withFormatting(Formatting.UNDERLINE)
                             .withTranslationKey("showcaser.chat.share_message.recipe")

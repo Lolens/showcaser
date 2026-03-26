@@ -20,8 +20,8 @@
 
 package io.github.lolens.showcaser.mixin;
 
-import io.github.lolens.showcaser.Showcaser;
 import io.github.lolens.showcaser.client.render.RenderableHoverEvent;
+import io.github.lolens.showcaser.util.ResourceUtils;
 import net.minecraft.text.Style;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -36,10 +36,10 @@ public class TextRendererDrawerMixin {
 
     @Inject(method = "accept", at = @At("HEAD"), cancellable = true)
     private void onAccept(int index, Style style, int codePoint, CallbackInfoReturnable<Boolean> cir) {
-        if (codePoint != '\uE670') return;
+        if (codePoint != ResourceUtils.MARKER) return;
 
         if (style.getHoverEvent() instanceof RenderableHoverEvent renderableHoverEvent) {
-            this.x += renderableHoverEvent.getWidth();
+            this.x += renderableHoverEvent.getLeftoverWidth();
         }
 
         cir.setReturnValue(true);

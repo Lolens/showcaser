@@ -131,7 +131,6 @@ public class EmiHandlerImpl {
                     }
 
                     MutableText text = getMessageBuilderFactory().create(context, player, resource, MessageVerification.NONE)
-                            .withWidth(12)
                             .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, clickEventString))
                             .withFormatting(Formatting.UNDERLINE)
                             .showAmount(false)
