@@ -125,7 +125,6 @@ public class Ae2HandlerImpl {
                     ShareableResource resource = AdapterRegistry.adapt(context);
 
                     MutableText text = getMessageBuilderFactory().create(context, player, resource, MessageVerification.VERIFIED)
-                            .withWidth(12)
                             .showAmount(true)
                             .build();
 

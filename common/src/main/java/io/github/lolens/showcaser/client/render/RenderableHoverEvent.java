@@ -20,35 +20,53 @@
 
 package io.github.lolens.showcaser.client.render;
 
+import io.github.lolens.showcaser.Showcaser;
 import io.github.lolens.showcaser.api.resource.IconRenderer;
+import io.github.lolens.showcaser.util.PlatformUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.HoverEvent;
 import net.minecraft.text.Text;
+
+import static io.github.lolens.showcaser.util.ResourceUtils.INV_CHAR_STR;
+import static io.github.lolens.showcaser.util.ResourceUtils.SPACE_STR;
 
 public class RenderableHoverEvent extends HoverEvent {
 
     public static float currentAlpha = 1.0f;
 
     private final IconRenderer iconRenderer;
-    private final int width;
+    private final float rawWidth;
 
-    public RenderableHoverEvent(int width, IconRenderer iconRenderer, Text text) {
+    public RenderableHoverEvent(float width, IconRenderer iconRenderer, Text text) {
         super(Action.SHOW_TEXT, text);
-        this.width = width;
+        this.rawWidth = width;
         this.iconRenderer = iconRenderer;
     }
 
-    public RenderableHoverEvent(int width, IconRenderer iconRenderer, ItemStack stack) {
+    public RenderableHoverEvent(float width, IconRenderer iconRenderer, ItemStack stack) {
         super(Action.SHOW_ITEM, new ItemStackContent(stack));
-        this.width = width;
+        this.rawWidth = width;
         this.iconRenderer = iconRenderer;
+    }
+
+    public int getSpacesToFill() {
+        float spaceWidth = PlatformUtils.measureText(INV_CHAR_STR);
+        Showcaser.LOGGER.error("space width: {}", spaceWidth);
+        return (int) (rawWidth / spaceWidth);
+    }
+
+    public float getLeftoverWidth() {
+        float spaceWidth = PlatformUtils.measureText(INV_CHAR_STR);
+        int spaces = (int) (rawWidth / spaceWidth);
+        return rawWidth - (spaceWidth * spaces);
     }
 
     public IconRenderer getRenderer() {
         return iconRenderer;
     }
-    public int getWidth() {
-        return this.width;
+
+    public float getRawWidth() {
+        return this.rawWidth;
     }
 
 }

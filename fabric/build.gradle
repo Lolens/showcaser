@@ -69,6 +69,17 @@ dependencies {
     modCompileOnly("dev.emi:emi-fabric:${emi_version}")
     modLocalRuntime("dev.emi:emi-fabric:${emi_version}")
 
+    // Modern UI
+    dependencies {
+        modApi "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${fcapi_version}"
+        compileOnly "icyllis.modernui:ModernUI-Core:${modernui_version}"
+        // Modern UI core extensions
+        // Markdown (<=3.11.1) / Markflow (>=3.12.0) is required, others are optional
+        compileOnly "icyllis.modernui:ModernUI-Markflow:${modernui_version}"
+        // Choose one of Fabric or NeoForge
+        modCompileOnly("icyllis.modernui:ModernUI-Fabric:${minecraft_version}-${modernui_version}.+")
+    }
+
     common(project(path: ':common', configuration: 'namedElements')) { transitive = false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
 }

@@ -20,6 +20,7 @@
 
 package io.github.lolens.showcaser.client.impl.messagebuilder;
 
+import io.github.lolens.showcaser.Showcaser;
 import io.github.lolens.showcaser.api.builder.ChatMessageBuilder;
 import io.github.lolens.showcaser.api.resource.MessageVerification;
 import io.github.lolens.showcaser.api.resource.ShareableItemStack;
@@ -27,10 +28,13 @@ import io.github.lolens.showcaser.api.sharecontext.ShareContext;
 import io.github.lolens.showcaser.api.resource.ShareableResource;
 import io.github.lolens.showcaser.client.render.RenderableHoverEvent;
 import io.github.lolens.showcaser.config.ConfigManager;
+import io.github.lolens.showcaser.util.PlatformUtils;
 import io.github.lolens.showcaser.util.ResourceUtils;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 
 import static io.github.lolens.showcaser.util.ResourceUtils.*;
 
@@ -40,7 +44,7 @@ public final class ClientChatMessageBuilderImpl implements ChatMessageBuilder {
     private final String senderName;
     private final ShareableResource resource;
 
-    private final int iconWidth;
+    private final float iconWidth;
     private final boolean useBrackets;
     private final boolean showAmount;
     private final MessageVerification messageVerification;
@@ -53,7 +57,7 @@ public final class ClientChatMessageBuilderImpl implements ChatMessageBuilder {
             ShareContext context,
             String senderName,
             ShareableResource resource,
-            int iconWidth,
+            float iconWidth,
             boolean useBrackets,
             boolean showAmount,
             MessageVerification messageVerification,
@@ -83,7 +87,7 @@ public final class ClientChatMessageBuilderImpl implements ChatMessageBuilder {
     ) {
         return new ClientChatMessageBuilderImpl(
                 context, sender, resource,
-                12,
+                8,
                 true,
                 true,
                 verified,
@@ -179,11 +183,14 @@ public final class ClientChatMessageBuilderImpl implements ChatMessageBuilder {
 
         MutableText displayText = useBrackets ? Texts.bracketed(content) : content;
 
+        String indent = INV_CHAR_STR.repeat(hoverEvent.getSpacesToFill());
         return Text.translatable(
                 translationKey,
                 senderName,
-                marker.append(displayText)
+                marker.append(indent).append(SPACE_STR).append(displayText)
         );
+        // there is already leading space in front of marker in lang "%s shared %s",
+
     }
 
     // === HELPERS ===

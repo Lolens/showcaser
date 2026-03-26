@@ -45,7 +45,16 @@ public class ResourceUtils {
             Text.translatable("showcaser.chat.share_message.tooltip.verified")
                     .formatted(Formatting.GREEN, Formatting.BOLD);
 
-    public static final char MARKER = '\uE670';
+    // PUA getting rendered in ModernUI so ZWNJ is used as marker
+    public static final char MARKER = '\u200C'; // Zero-width non-joiner (‌)   // old: '\uE670';
+
+    // as TextRendererDrawer is not used in MUI pipeline we need to change position
+    // at which next character is rendered. This is done by using HSP cuz it is
+    // invisible in Vanilla MC and MUI text renderer
+    public static final char INVISIBLE_CHAR = '\u200A'; // hair space ( )
+    public static final String INV_CHAR_STR = String.valueOf(INVISIBLE_CHAR);
+    public static final char SPACE = ' ';
+    public static final String SPACE_STR = " ";
 
     /**
      * Appends specific marker to stack nbt to display it as verified

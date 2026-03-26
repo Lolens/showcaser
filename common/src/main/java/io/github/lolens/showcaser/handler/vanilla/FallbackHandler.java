@@ -98,7 +98,6 @@ public class FallbackHandler {
                     ShareableResource resource = AdapterRegistry.adapt(context);
 
                     MutableText text = getMessageBuilderFactory().create(context, player, resource, MessageVerification.VERIFIED)
-                            .withWidth(12)
                             .build();
 
                     MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(text);
