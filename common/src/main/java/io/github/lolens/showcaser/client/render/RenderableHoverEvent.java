@@ -51,7 +51,6 @@ public class RenderableHoverEvent extends HoverEvent {
 
     public int getSpacesToFill() {
         float spaceWidth = PlatformUtils.measureText(INV_CHAR_STR);
-        Showcaser.LOGGER.error("space width: {}", spaceWidth);
         return (int) (rawWidth / spaceWidth);
     }
 
