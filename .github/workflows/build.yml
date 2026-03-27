@@ -1,0 +1,95 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - '1.20.1/main'
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      
+      - name: Setup JDK 21
+        uses: actions/setup-java@v5
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: gradle
+      
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      
+      - name: Get Mod Version
+        id: ver
+        run: echo "version=$(./gradlew -q printVersion | tail -n 1)" >> $GITHUB_OUTPUT
+
+      - name: Check if release exists
+        id: check_tag
+        run: |
+          if gh release view v${{ steps.ver.outputs.version }} > /dev/null; then
+            echo "Tag already exists for this release. Workflow will halt to prevent overwriting"
+            exit 1
+          else
+            echo "Tag does not exist for this release. It will be created with new release"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get Changelog Entry
+        id: changelog
+        uses: mindsers/changelog-reader-action@v2
+        with:
+          version: ${{ steps.ver.outputs.version }}
+          path: ./CHANGELOG.md
+          validation_level: warn
+      
+      - name: Build
+        run: ./gradlew build
+      
+      - name: Upload Fabric artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: Showcaser-Fabric-${{ steps.ver.outputs.version }}
+          path: fabric/build/libs/*.jar
+          if-no-files-found: error
+          retention-days: 90
+      
+      - name: Upload Forge artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: Showcaser-Forge-${{ steps.ver.outputs.version }}
+          path: forge/build/libs/*.jar
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Prepare release files
+        run: |
+          mkdir release
+          
+          cp fabric/build/libs/showcaser-fabric-*.jar release/
+          cp forge/build/libs/showcaser-forge-*.jar release/
+
+          rm -f release/*-dev-shadow.jar
+          rm -f release/*-sources.jar
+          
+          echo "Release files:"
+          ls -la release/
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release/*.jar
+          tag_name: v${{ steps.ver.outputs.version }}
+          name: ${{ steps.ver.outputs.version }}
+          body: ${{ steps.changelog.outputs.changes }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
