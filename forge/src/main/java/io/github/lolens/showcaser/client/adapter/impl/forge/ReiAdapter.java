@@ -33,6 +33,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 
+import java.util.Optional;
+
 public class ReiAdapter extends BaseShareContextAdapter {
 
     public ReiAdapter(Identifier identifier) {
@@ -40,19 +42,19 @@ public class ReiAdapter extends BaseShareContextAdapter {
     }
 
     @Override
-    public ShareableResource adapt(ShareContext context) {
+    public Optional<ShareableResource> adapt(ShareContext context) {
         NbtCompound entryNbt = context.getCompound("entry");
         EntryStack<?> entry = EntryStack.read(entryNbt);
 
         if (entry.getType() == VanillaEntryTypes.ITEM) {
             ItemStack stack = entry.castValue();
-            return new ShareableItemStack(stack);
+            return Optional.of(new ShareableItemStack(stack));
         }
         if (entry.getType() == VanillaEntryTypes.FLUID) {
             FluidStack fluid = entry.castValue();
-            return new ShareableFluidStack(fluid);
+            return Optional.of(new ShareableFluidStack(fluid));
         }
 
-        return new EmptyResource();
+        return Optional.empty();
     }
 }

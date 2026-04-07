@@ -76,7 +76,6 @@ public abstract class ChatHudRenderMixin {
         final float[] currentX = {0};
         final float scale = (float) getChatScale();
 
-        // render and add renderableHover width or just add char width
         originalText.accept((index, style, codePoint) -> {
             if (codePoint == ResourceUtils.MARKER) {
                 HoverEvent hover = style.getHoverEvent();

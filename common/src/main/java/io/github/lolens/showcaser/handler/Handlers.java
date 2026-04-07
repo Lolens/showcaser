@@ -42,6 +42,7 @@ public class Handlers {
         if (PlatformUtils.isEMILoaded()) EmiHandler.register();
         if (PlatformUtils.isFTBQuestsLoaded()) FtbQuestsHandler.register();
         if (PlatformUtils.isJEILoaded()) JeiHandler.register();
+        if (PlatformUtils.isPatchouliLoaded()) PatchouliHandler.register();
 
         if (Platform.getEnvironment() == Env.CLIENT) {
             // prevents sharing constantly renamed output slot item

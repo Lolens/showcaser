@@ -56,8 +56,11 @@ public interface ShareContext {
     boolean hasAmount();
 
     ShareContext withIdentifier(Identifier identifier);
+    ShareContext withIdentifier(String key, Identifier identifier);
     Identifier getIdentifier();
+    Identifier getIdentifier(String key);
     boolean hasIdentifier();
+    boolean hasIdentifier(String key);
 
     ShareContext with(String key, String value);
     ShareContext with(String key, int value);

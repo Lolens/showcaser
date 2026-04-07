@@ -4,6 +4,8 @@
 
   "showcaser.chat.share_message": "%s shared %s",
   "showcaser.chat.share_message.recipe": "%s shared recipe %s",
+  "showcaser.chat.share_message.patchouli_book": "%s shared book %s",
+  "showcaser.chat.share_message.patchouli_book_entry": "%s shared book entry %s",
   "showcaser.chat.share_message.quest": "%s shared quest %s",
   "showcaser.chat.share_message.quest.not_visible": "Quest cannot be opened as it is not visible to you",
 

@@ -22,6 +22,7 @@ package io.github.lolens.showcaser.forge.network;
 
 import dev.architectury.networking.simple.MessageType;
 import io.github.lolens.showcaser.forge.network.message.s2c.conditional.jei.JeiOpenScreenMessage;
+import io.github.lolens.showcaser.forge.network.message.s2c.conditional.patchouli.PatchouliOpenScreenMessage;
 import io.github.lolens.showcaser.network.Networking;
 import io.github.lolens.showcaser.forge.network.message.s2c.conditional.ftbquests.FtbQuestsOpenScreenMessage;
 
@@ -72,6 +73,26 @@ public class ForgeNetworking {
             }
 
         } // end static class JEI
+
+        public static class Patchouli {
+
+            public static class MessageTypes {
+
+                public static class S2C {
+                    public static MessageType PATCHOULI_OPEN_SCREEN;
+                }
+
+            }
+
+            public static void register() {
+                MessageTypes.S2C.PATCHOULI_OPEN_SCREEN = Networking.getNetworkManager().registerS2C(
+                        "s2c_patchouli_open_screen",
+                        PatchouliOpenScreenMessage::new
+                );
+
+            }
+
+        }
 
 
     }

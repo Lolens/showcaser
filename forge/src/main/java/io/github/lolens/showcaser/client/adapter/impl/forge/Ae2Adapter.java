@@ -32,6 +32,8 @@ import io.github.lolens.showcaser.api.resource.ShareableResource;
 import io.github.lolens.showcaser.api.sharecontext.ShareContext;
 import net.minecraft.util.Identifier;
 
+import java.util.Optional;
+
 public class Ae2Adapter extends BaseShareContextAdapter {
 
     public Ae2Adapter(Identifier identifier) {
@@ -39,18 +41,18 @@ public class Ae2Adapter extends BaseShareContextAdapter {
     }
 
     @Override
-    public ShareableResource adapt(ShareContext context) {
+    public Optional<ShareableResource> adapt(ShareContext context) {
         AEKey key = AEKey.fromTagGeneric(context.getCompound("key"));
         long amount = context.getAmount();
 
         if (key instanceof AEItemKey itemKey) {
-            return new ShareableItemStack(itemKey.toStack(), amount);
+            return Optional.of(new ShareableItemStack(itemKey.toStack(), amount));
         }
         if (key instanceof AEFluidKey fluidKey) {
             FluidStack fluidStack = FluidStack.create(fluidKey.getFluid(), amount);
-            return new ShareableFluidStack(fluidStack);
+            return Optional.of(new ShareableFluidStack(fluidStack));
         }
 
-        return new EmptyResource();
+        return Optional.empty();
     }
 }

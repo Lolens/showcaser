@@ -22,9 +22,9 @@ package io.github.lolens.showcaser.client.adapter;
 
 import io.github.lolens.showcaser.Showcaser;
 import io.github.lolens.showcaser.api.adapter.ShareContextAdapter;
-import io.github.lolens.showcaser.api.resource.EmptyResource;
 import io.github.lolens.showcaser.api.resource.ShareableResource;
 import io.github.lolens.showcaser.api.sharecontext.ShareContext;
+import io.github.lolens.showcaser.exception.ResourceAdapterException;
 import net.minecraft.util.Identifier;
 
 import java.util.*;
@@ -51,16 +51,16 @@ public class AdapterRegistry {
     }
 
     public static ShareableResource adapt(ShareContext context) {
-        if (context == null) return new EmptyResource();
+        if (context == null) throw new ResourceAdapterException("Context is null");
 
         Identifier handlerId = context.getId();
         List<ShareContextAdapter> adapters = ADAPTERS.get(handlerId);
 
         for (ShareContextAdapter adapter : adapters) {
             try {
-                ShareableResource resource = adapter.adapt(context);
-                if (resource != null && !(resource instanceof EmptyResource)) {
-                    return resource;
+                Optional<ShareableResource> resource = adapter.adapt(context);
+                if (resource.isPresent()) {
+                    return resource.get();
                 }
 
             } catch (Exception e) {
@@ -69,7 +69,7 @@ public class AdapterRegistry {
             }
         }
 
-        return new EmptyResource();
+        throw new ResourceAdapterException("No handlers can handle context. Context: " + context);
     }
 
 

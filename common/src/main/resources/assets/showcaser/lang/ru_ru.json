@@ -4,6 +4,8 @@
 
   "showcaser.chat.share_message": "%s поделился %s",
   "showcaser.chat.share_message.recipe": "%s поделился рецептом %s",
+  "showcaser.chat.share_message.patchouli_book": "%s поделился книгой %s",
+  "showcaser.chat.share_message.patchouli_book_entry": "%s поделился записью в книге %s",
   "showcaser.chat.share_message.quest": "%s поделился квестом %s",
   "showcaser.chat.share_message.quest.not_visible": "Квест не может быть открыт, так как он невидим для вас",
 

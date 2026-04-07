@@ -18,22 +18,15 @@
  * along Showcaser.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.lolens.showcaser.api.adapter;
+package io.github.lolens.showcaser.exception;
 
-import io.github.lolens.showcaser.api.resource.ShareableResource;
 import io.github.lolens.showcaser.api.sharecontext.ShareContext;
-import net.minecraft.util.Identifier;
+import net.minecraft.entity.player.PlayerEntity;
 
-import java.util.Optional;
+public class ResourceAdapterException extends RuntimeException {
 
-public interface ShareContextAdapter {
-
-    Identifier getHandlerId();
-
-    Optional<ShareableResource> adapt(ShareContext context);
-
-    default int getPriority() {
-        return 100;
+    public ResourceAdapterException(String message) {
+        super(message);
     }
 
 }

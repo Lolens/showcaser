@@ -21,7 +21,9 @@
 package io.github.lolens.showcaser.client.event;
 
 import dev.architectury.event.EventResult;
+import dev.architectury.event.events.client.ClientLifecycleEvent;
 import dev.architectury.event.events.client.ClientPlayerEvent;
+import dev.architectury.event.events.client.ClientRawInputEvent;
 import dev.architectury.event.events.client.ClientScreenInputEvent;
 import io.github.lolens.showcaser.api.event.AdapterRegistrationEvent;
 import io.github.lolens.showcaser.api.event.client.ClientConfigLoadEvent;
@@ -40,14 +42,21 @@ public class ClientEvents {
 
         // share on key press
         ClientScreenInputEvent.KEY_PRESSED_PRE.register((client, screen, keyCode, scanCode, modifiers) -> {
+            if (client.player == null) return EventResult.pass(); // do not dispatch when not in the world
             if (keyCode == SHARE_ITEM_IN_CHAT.getDefaultKey().getCode() && Screen.hasShiftDown()) {
                 ClientShareDispatcher.onKeyPress(screen);
-                return EventResult.interruptTrue();
+                return EventResult.interruptDefault();
             }
             return EventResult.pass();
         });
 
         AdapterRegistrationEvent.EVENT.register(AdapterRegistry::register);
+
+        // Configs are loaded twice (on game startup and upon world join)
+        // to prevent client from using share keybind before joining the world and crashing itself
+        ClientLifecycleEvent.CLIENT_STARTED.register(instance -> {
+            ConfigManager.loadClient();
+        });
 
         ClientPlayerEvent.CLIENT_PLAYER_JOIN.register(player -> {
             ConfigManager.loadClient();

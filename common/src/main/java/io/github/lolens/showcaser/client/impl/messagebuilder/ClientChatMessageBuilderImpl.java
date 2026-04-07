@@ -22,6 +22,7 @@ package io.github.lolens.showcaser.client.impl.messagebuilder;
 
 import io.github.lolens.showcaser.Showcaser;
 import io.github.lolens.showcaser.api.builder.ChatMessageBuilder;
+import io.github.lolens.showcaser.api.resource.EmptyResource;
 import io.github.lolens.showcaser.api.resource.MessageVerification;
 import io.github.lolens.showcaser.api.resource.ShareableItemStack;
 import io.github.lolens.showcaser.api.sharecontext.ShareContext;
@@ -184,12 +185,16 @@ public final class ClientChatMessageBuilderImpl implements ChatMessageBuilder {
         MutableText displayText = useBrackets ? Texts.bracketed(content) : content;
 
         String indent = INV_CHAR_STR.repeat(hoverEvent.getSpacesToFill());
+
+        // there is already leading space in front of marker in lang "%s shared %s",
         return Text.translatable(
                 translationKey,
                 senderName,
-                marker.append(indent).append(SPACE_STR).append(displayText)
+                resource instanceof EmptyResource ?
+                        marker.append(indent).append(displayText) :
+                        marker.append(indent).append(SPACE_STR).append(displayText)
+
         );
-        // there is already leading space in front of marker in lang "%s shared %s",
 
     }
 
