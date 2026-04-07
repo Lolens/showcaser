@@ -35,6 +35,8 @@ import io.github.lolens.showcaser.api.sharecontext.ShareContext;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.util.Identifier;
 
+import java.util.Optional;
+
 public class EmiAdapter extends BaseShareContextAdapter {
 
     public EmiAdapter(Identifier identifier) {
@@ -43,18 +45,18 @@ public class EmiAdapter extends BaseShareContextAdapter {
 
     @SuppressWarnings("UnstableApiUsage")
     @Override
-    public ShareableResource adapt(ShareContext context) {
+    public Optional<ShareableResource> adapt(ShareContext context) {
         JsonElement json = context.getJsonElement();
         EmiIngredient ingredient = EmiIngredientSerializer.getDeserialized(json);
 
         if (ingredient instanceof ItemEmiStack emiStack) {
-            return new ShareableItemStack(emiStack.getItemStack());
+            return Optional.of(new ShareableItemStack(emiStack.getItemStack()));
         }
         if (ingredient instanceof FluidEmiStack emiStack) {
             FluidStack fluidStackArch = FluidStack.create((Fluid) emiStack.getKey(), 1000);
-            return new ShareableFluidStack(fluidStackArch);
+            return Optional.of(new ShareableFluidStack(fluidStackArch));
         }
 
-        return new EmptyResource();
+        return Optional.empty();
     }
 }

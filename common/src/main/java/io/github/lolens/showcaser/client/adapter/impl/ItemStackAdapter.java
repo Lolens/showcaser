@@ -28,6 +28,8 @@ import io.github.lolens.showcaser.api.sharecontext.ShareContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
+import java.util.Optional;
+
 public class ItemStackAdapter extends BaseShareContextAdapter {
 
     public ItemStackAdapter(Identifier identifier) {
@@ -35,9 +37,9 @@ public class ItemStackAdapter extends BaseShareContextAdapter {
     }
 
     @Override
-    public ShareableResource adapt(ShareContext context) {
+    public Optional<ShareableResource> adapt(ShareContext context) {
         ItemStack stack = context.getItemStack("stack");
-        if (stack == null) return new EmptyResource();
-        return new ShareableItemStack(stack);
+        if (stack == ItemStack.EMPTY) return Optional.empty();
+        return Optional.of(new ShareableItemStack(stack));
     }
 }

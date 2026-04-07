@@ -53,6 +53,10 @@ public final class PlatformUtils {
         return Platform.isModLoaded("modernui");
     }
 
+    public static boolean isPatchouliLoaded() {
+        return Platform.isModLoaded("patchouli");
+    }
+
 
     public static float measureText(String text) {
         if (isMUIModernTextEngineActive()) {

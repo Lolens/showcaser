@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.7.3] - 2026-04-07
+
+### Added
+- Patchouli support. (book entry / book sharing)
+
+### Fixed
+- Crash when using share keybind after mod is loaded and configs are not
+- Fixed indentation in message when sharing resources that do not require render
+
 ## [1.7.2] - 2026-03-26
 
 ### Added

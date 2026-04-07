@@ -20,6 +20,7 @@
 
 package io.github.lolens.showcaser.forge.command;
 
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -27,6 +28,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.architectury.event.events.common.CommandRegistrationEvent;
 import io.github.lolens.showcaser.forge.network.message.s2c.conditional.ftbquests.FtbQuestsOpenScreenMessage;
 import io.github.lolens.showcaser.forge.network.message.s2c.conditional.jei.JeiOpenScreenMessage;
+import io.github.lolens.showcaser.forge.network.message.s2c.conditional.patchouli.PatchouliOpenScreenMessage;
 import net.minecraft.command.argument.IdentifierArgumentType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
@@ -100,6 +102,56 @@ public class ForgeServerCommands {
                     default -> throw new IllegalArgumentException("Unexpected value: " + type);
                 };
                 new JeiOpenScreenMessage(id, targetType).sendTo(player);
+                return 1;
+            }
+
+        }
+
+        public static class Patchouli {
+
+            public static void register() {
+                CommandRegistrationEvent.EVENT.register((dispatcher, registry, selection) -> {
+                    dispatcher.register(
+                            CommandManager.literal("showcaser")
+                                    .then(CommandManager.literal("patchouli")
+                                            .then(CommandManager.literal("open")
+                                                    .then(CommandManager.argument("book", IdentifierArgumentType.identifier())
+                                                            .executes(Patchouli::executeOpenBook)
+                                                            .then(CommandManager.argument("entry", IdentifierArgumentType.identifier())
+                                                                    .then(CommandManager.argument("page", IntegerArgumentType.integer())
+                                                                            .executes(Patchouli::executeOpenEntry)
+                                                                    )
+                                                            )
+                                                    )
+                                            )
+                                    )
+                    );
+                });
+            }
+
+            private static int executeOpenBook(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+                ServerPlayerEntity player = context.getSource().getPlayer();
+                if (player == null) return 1;
+
+                Identifier book = IdentifierArgumentType.getIdentifier(context, "book");
+
+                new PatchouliOpenScreenMessage(book).sendTo(player);
+                return 1;
+            }
+
+            private static int executeOpenEntry(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+                ServerPlayerEntity player = context.getSource().getPlayer();
+                if (player == null) return 1;
+
+                Identifier book = IdentifierArgumentType.getIdentifier(context, "book");
+                Identifier entry = IdentifierArgumentType.getIdentifier(context, "entry");
+                int page = IntegerArgumentType.getInteger(context, "page");
+
+                // could use PatchouliAPI.get().openBookEntry(player, book, entry, page);
+                // but other command already use client -> server -> client native impl
+                // so it is preferable to retain this "pipeline"
+
+                new PatchouliOpenScreenMessage(book, entry, page).sendTo(player);
                 return 1;
             }
 

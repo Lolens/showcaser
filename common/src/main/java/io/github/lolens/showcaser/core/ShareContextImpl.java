@@ -46,6 +46,7 @@ public class ShareContextImpl implements ShareContext {
     public static ShareContext of(Identifier id, int syncId, NbtCompound data) {
         return new ShareContextImpl(id, syncId, data);
     }
+
     public static ShareContext of(Identifier id, NbtCompound data) {
         return new ShareContextImpl(id, -1, data);
     }
@@ -142,7 +143,7 @@ public class ShareContextImpl implements ShareContext {
 
     @Override
     public String toString() {
-        return "ShareContext{" +
+        return "ShareContextImpl{" +
                 "id=" + id +
                 ", syncId=" + syncId +
                 ", data=" + data +
@@ -195,12 +196,29 @@ public class ShareContextImpl implements ShareContext {
         return this;
     }
 
+    public ShareContext withIdentifier(String key, Identifier id) {
+        data.putString(String.format("id-%s-namespace", key), id.getNamespace());
+        data.putString(String.format("id-%s-path", key), id.getPath());
+        return this;
+    }
+
     public Identifier getIdentifier() {
         return Identifier.of(data.getString("id-namespace"), data.getString("id-path"));
     }
 
+    public Identifier getIdentifier(String key) {
+        return Identifier.of(
+                data.getString(String.format("id-%s-namespace", key)),
+                data.getString(String.format("id-%s-path", key))
+        );
+    }
+
     public boolean hasIdentifier() {
         return !data.getString("id-namespace").isEmpty();
+    }
+
+    public boolean hasIdentifier(String key) {
+        return !data.getString(String.format("id-%s-namespace", key)).isEmpty();
     }
 
     public ShareContext withJsonElement(JsonElement jsonElement) {

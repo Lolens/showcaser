@@ -26,6 +26,9 @@ import net.minecraft.text.Text;
 
 import java.util.List;
 
+/**
+ * EmptyResource is used when no resource to render is present, and we want to share some message
+ */
 public class EmptyResource implements ShareableResource {
 
     @Override
@@ -60,6 +63,10 @@ public class EmptyResource implements ShareableResource {
 
     @Override
     public void render(DrawContext context, float x, float y, float scale, float alpha) {
-        // context.drawItem(Items.BARRIER.getDefaultStack(), (int) x, (int) y);
+
+    }
+
+    public static ShareableResource create() {
+        return new EmptyResource();
     }
 }

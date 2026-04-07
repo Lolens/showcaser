@@ -18,22 +18,15 @@
  * along Showcaser.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.lolens.showcaser.api.adapter;
+package io.github.lolens.showcaser.handler.conditional;
 
-import io.github.lolens.showcaser.api.resource.ShareableResource;
-import io.github.lolens.showcaser.api.sharecontext.ShareContext;
-import net.minecraft.util.Identifier;
+import dev.architectury.injectables.annotations.ExpectPlatform;
 
-import java.util.Optional;
+public class PatchouliHandler {
 
-public interface ShareContextAdapter {
-
-    Identifier getHandlerId();
-
-    Optional<ShareableResource> adapt(ShareContext context);
-
-    default int getPriority() {
-        return 100;
+    @ExpectPlatform
+    public static void register() {
+        throw new AssertionError();
     }
 
 }

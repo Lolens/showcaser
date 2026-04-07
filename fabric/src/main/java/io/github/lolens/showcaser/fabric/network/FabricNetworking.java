@@ -22,6 +22,7 @@ package io.github.lolens.showcaser.fabric.network;
 
 import dev.architectury.networking.simple.MessageType;
 import io.github.lolens.showcaser.fabric.network.message.s2c.conditional.jei.JeiOpenScreenMessage;
+import io.github.lolens.showcaser.fabric.network.message.s2c.conditional.patchouli.PatchouliOpenScreenMessage;
 import io.github.lolens.showcaser.network.Networking;
 import io.github.lolens.showcaser.fabric.network.message.s2c.conditional.ftbquests.FtbQuestsOpenScreenMessage;
 
@@ -62,7 +63,7 @@ public class FabricNetworking {
             }
 
             public static void register() {
-                JEI.MessageTypes.S2C.JEI_OPEN_SCREEN = Networking.getNetworkManager().registerS2C(
+                MessageTypes.S2C.JEI_OPEN_SCREEN = Networking.getNetworkManager().registerS2C(
                         "s2c_jei_open_screen",
                         JeiOpenScreenMessage::new
                 );
@@ -71,6 +72,26 @@ public class FabricNetworking {
 
         } // end static class JEI
 
-    }
+        public static class Patchouli {
+
+            public static class MessageTypes {
+
+                public static class S2C {
+                    public static MessageType PATCHOULI_OPEN_SCREEN;
+                }
+
+            }
+
+            public static void register() {
+                MessageTypes.S2C.PATCHOULI_OPEN_SCREEN = Networking.getNetworkManager().registerS2C(
+                        "s2c_patchouli_open_screen",
+                        PatchouliOpenScreenMessage::new
+                );
+
+            }
+
+        }
+
+    } // end static class Conditional
 
 }

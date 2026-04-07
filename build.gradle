@@ -55,7 +55,7 @@ subprojects {
             }
         }
 
-        // JEI
+        // JEI | Patchouli (maven.blamejared.com)
         repositories {
             maven {
                 // location of the maven that hosts JEI files before January 2023
@@ -113,6 +113,13 @@ subprojects {
 
     tasks.withType(JavaCompile).configureEach {
         it.options.release = 17
+    }
+
+    // from GTCEu
+    tasks.register("printVersion") {
+        doLast {
+            println(mod_version)
+        }
     }
 
     // Configure Maven publishing.

@@ -80,6 +80,13 @@ dependencies {
         modCompileOnly("icyllis.modernui:ModernUI-Fabric:${minecraft_version}-${modernui_version}.+")
     }
 
+    // Patchouli
+    modLocalRuntime("me.zeroeightsix:fiber:${fiber_version}") // required by patchouli when on Fabric
+    modLocalRuntime("maven.modrinth:patchouli:${patchouli_version}-fabric")
+    modCompileOnly("maven.modrinth:patchouli:${patchouli_version}-fabric")
+    // to test patchouli
+    modLocalRuntime("maven.modrinth:lexicon:v.1.5.2-fabric")
+
     common(project(path: ':common', configuration: 'namedElements')) { transitive = false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
 }

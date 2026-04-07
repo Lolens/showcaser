@@ -37,7 +37,6 @@ import net.minecraft.text.MutableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
-import java.util.Optional;
 
 import static io.github.lolens.showcaser.Showcaser.MOD_ID;
 import static io.github.lolens.showcaser.api.ShowcaserAPI.*;

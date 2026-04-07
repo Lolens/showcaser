@@ -94,8 +94,6 @@ public class WrappedVertexConsumer implements VertexConsumer {
 
     @Override
     public VertexConsumer color(float red, float green, float blue, float alpha) {
-        int newAlpha = (int) (alpha * RenderableHoverEvent.currentAlpha);
-        System.out.println("Color: alpha=" + alpha + " newAlpha=" + newAlpha + " currentAlpha=" + RenderableHoverEvent.currentAlpha);
         return delegate.color(red, green, blue, alpha * RenderableHoverEvent.currentAlpha);
     }
 
@@ -168,7 +166,6 @@ public class WrappedVertexConsumer implements VertexConsumer {
                 float n = byteBuffer.getFloat(20);
                 Vector4f vector4f = matrix4f.transform(new Vector4f(f, g, h, 1.0F));
                 // 1.0f constant to RenderableHoverEvent.currentAlpha
-                System.out.println("drawed vertex with current alpha: " + RenderableHoverEvent.currentAlpha);
                 delegate.vertex(vector4f.x(), vector4f.y(), vector4f.z(), o, p, q, RenderableHoverEvent.currentAlpha, m, n, overlay, r, vector3f.x(), vector3f.y(), vector3f.z());
             }
         }

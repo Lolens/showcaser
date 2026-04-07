@@ -11,6 +11,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 
+import java.util.Optional;
+
 public class JeiAdapter extends BaseShareContextAdapter {
 
     public JeiAdapter(Identifier identifier) {
@@ -18,7 +20,7 @@ public class JeiAdapter extends BaseShareContextAdapter {
     }
 
     @Override
-    public ShareableResource adapt(ShareContext context) {
+    public Optional<ShareableResource> adapt(ShareContext context) {
         NbtCompound entryNbt = context.getCompound("entry");
 
         String type = context.getString("type");
@@ -26,13 +28,13 @@ public class JeiAdapter extends BaseShareContextAdapter {
         switch (type) {
             case "minecraft:item" -> {
                 ItemStack stack = ItemStack.fromNbt(entryNbt);
-                return new ShareableItemStack(stack);
+                return Optional.of(new ShareableItemStack(stack));
             }
             case "minecraft:fluid" -> {
                 FluidStack stack = FluidStack.read(entryNbt);
-                return new ShareableFluidStack(stack);
+                return Optional.of(new ShareableFluidStack(stack));
             }
         }
-        return new EmptyResource();
+        return Optional.empty();
     }
 }
