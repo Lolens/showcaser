@@ -14,8 +14,12 @@
 
   "showcaser.chat.banned": "Server has restricted resource sharing for you",
 
-  "showcaser.commands.sharing.ban": "Player %s is now banned from sharing things",
-  "showcaser.commands.sharing.unban": "Player %s can share things again",
+  "showcaser.commands.sharing.ban.success": "Player %s is now banned from sharing things",
+  "showcaser.commands.sharing.ban.player_already_banned": "Player %s is already banned",
+
+  "showcaser.commands.sharing.unban.success": "Player %s can share things again",
+  "showcaser.commands.sharing.unban.player_not_banned": "Player %s is not banned",
+
   "showcaser.commands.reload": "Showcaser storage and config reloaded successfully"
 
 }

@@ -14,8 +14,10 @@
 
   "showcaser.chat.banned": "Сервер запретил вам делиться предметами в чате",
 
-  "showcaser.commands.sharing.ban": "Игрок %s больше не может делиться в чате",
-  "showcaser.commands.sharing.unban": "Игрок %s снова может делиться в чате",
-  "showcaser.commands.reload": "Хранилище и конфигурация Showcaser успешно перезагружена"
+  "showcaser.commands.reload": "Хранилище и конфигурация Showcaser успешно перезагружена",
+  "showcaser.commands.sharing.ban.success": "Игрок %s больше не может делиться в чате",
+  "showcaser.commands.sharing.ban.player_already_banned": "Игрок %s уже заблокирован",
+  "showcaser.commands.sharing.unban.success": "Игрок %s снова может делиться в чате",
+  "showcaser.commands.sharing.unban.player_not_banned": "Игрок %s не заблокирован"
 
 }

@@ -42,27 +42,30 @@ import java.util.function.Predicate;
 
 public class ServerCommands {
 
-    public static void register() {
+    static Predicate<ServerCommandSource> spOrOP = source -> source.hasPermissionLevel(2) || source.getServer().isSingleplayer();
 
-        Predicate<ServerCommandSource> spOrOP = source -> source.getServer().isSingleplayer() || source.hasPermissionLevel(2);
+    public static void register() {
 
         CommandRegistrationEvent.EVENT.register((dispatcher, registry, selection) -> {
             dispatcher.register(
                     CommandManager.literal("showcaser")
-                            .requires(spOrOP)
                             .then(CommandManager.literal("ban")
+                                    .requires(spOrOP)
                                     .then(CommandManager.argument("player", EntityArgumentType.player())
                                             .suggests((context, builder) -> EntityArgumentType.players().listSuggestions(context, builder))
                                             .executes(ServerCommands::executeBan)
                                     )
                             )
+
                             .then(CommandManager.literal("unban")
+                                    .requires(spOrOP)
                                     .then(CommandManager.argument("player", EntityArgumentType.player())
                                             .suggests((context, builder) -> EntityArgumentType.players().listSuggestions(context, builder))
                                             .executes(ServerCommands::executeUnban)
                                     )
                             )
                             .then(CommandManager.literal("reload")
+                                    .requires(spOrOP)
                                     .executes(ServerCommands::reloadConfigs))
             );
         });
@@ -78,25 +81,34 @@ public class ServerCommands {
     private static int executeBan(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         PlayerEntity player = EntityArgumentType.getPlayer(context, "player");
 
-        ConfigManager.getStorage().shareBannedPlayer.put(
+        String previous = ConfigManager.getStorage().shareBannedPlayer.put(
                 player.getUuid(),
                 player.getDisplayName().getString()
         );
-        ConfigManager.saveStorage();
 
-        context.getSource().sendMessage(Text.translatable("showcaser.commands.sharing.ban", player.getDisplayName()).formatted(Formatting.GREEN));
+        if (previous == null) { // there wasn't a record
+            ConfigManager.saveStorage();
+            context.getSource().sendMessage(Text.translatable("showcaser.commands.sharing.ban.success", player.getDisplayName()).formatted(Formatting.GREEN));
+        } else {
+            context.getSource().sendMessage(Text.translatable("showcaser.commands.sharing.ban.player_already_banned", player.getDisplayName()).formatted(Formatting.YELLOW));
+        }
         return 1;
     }
 
     private static int executeUnban(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         PlayerEntity player = EntityArgumentType.getPlayer(context, "player");
 
-        ConfigManager.getStorage().shareBannedPlayer.remove(
+        String previous = ConfigManager.getStorage().shareBannedPlayer.remove(
                 player.getUuid()
         );
-        ConfigManager.saveStorage();
 
-        context.getSource().sendMessage(Text.translatable("showcaser.commands.sharing.unban", player.getDisplayName()).formatted(Formatting.GREEN));
+        if (previous != null) {
+            context.getSource().sendMessage(Text.translatable("showcaser.commands.sharing.unban.success", player.getDisplayName()).formatted(Formatting.GREEN));
+            ConfigManager.saveStorage();
+        } else { // there wasn't a record
+            context.getSource().sendMessage(Text.translatable("showcaser.commands.sharing.unban.player_not_banned", player.getDisplayName()).formatted(Formatting.YELLOW));
+
+        }
         return 1;
     }
 
