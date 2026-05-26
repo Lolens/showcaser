@@ -92,6 +92,7 @@ jobs:
           tag_name: v${{ steps.ver.outputs.version }}
           name: ${{ steps.ver.outputs.version }}
           body: ${{ steps.changelog.outputs.changes }}
+          target_commitish: ${{ github.ref_name }}
           draft: false
           prerelease: false
         env:
