@@ -115,7 +115,7 @@ public class ConfigManager {
             }
 
         } catch (IOException e) {
-            Showcaser.LOGGER.error("Failed to load file. Path: " + path, e);
+            Showcaser.LOGGER.error("Failed to load file. Path: {}", path, e);
             return defaultValue;
         }
     }
@@ -130,7 +130,7 @@ public class ConfigManager {
             }
 
         } catch (IOException e) {
-            Showcaser.LOGGER.error("Failed to save file. Path: " + path, e);
+            Showcaser.LOGGER.error("Failed to save file. Path: {}", path, e);
         }
     }
 
