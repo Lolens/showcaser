@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.7.4] - 2026-05-26
+
+### Added
+- More info on ban/unban commands
+
+### Fixed
+- Permissions not getting checked on command usage
+
 ## [1.7.3] - 2026-04-07
 
 ### Added
